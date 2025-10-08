@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeerWereld</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- ALGEMENE STIJLEN EN CSS VARIABELEN --- */
+        :root {
+            --font-family: 'Poppins', sans-serif;
+            
+            /* Standaard Thema: Zee */
+            --bg-color: #e0f7fa;
+            --primary-color: #0077c2;
+            --secondary-color: #004d7a;
+            --accent-color: #ffc107;
+            --text-color: #0d47a1;
+            --card-bg: #ffffff;
+            --card-shadow: rgba(0, 77, 122, 0.2);
+            --highlight-border: 6px solid #ffeb3b;
+            
+            --bg-image: url('https://www.transparenttextures.com/patterns/wavecut.png');
+        }
+
+        /* Thema: Jungle */
+        body[data-theme="jungle"] {
+            --bg-color: #e8f5e9;
+            --primary-color: #2e7d32;
+            --secondary-color: #1b5e20;
+            --accent-color: #ff6f00;
+            --text-color: #1b5e20;
+            --card-bg: #ffffff;
+            --card-shadow: rgba(46, 125, 50, 0.2);
+            --bg-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
+        }
+        
+        /* Thema: Boerderij */
+        body[data-theme="farm"] {
+            --bg-color: #fffde7;
+            --primary-color: #c62828;
+            --secondary-color: #8e0000;
+            --accent-color: #4caf50;
+            --text-color: #bf360c;
+            --card-bg: #ffffff;
+            --card-shadow: rgba(198, 40, 40, 0.2);
+            --bg-image: url('https://www.transparenttextures.com/patterns/checkered-pattern.png');
+        }
+        
+        /* Thema: Ruimte */
+        body[data-theme="space"] {
+            --bg-color: #1a237e;
+            --primary-color: #bbdefb;
+            --secondary-color: #e3f2fd;
+            --accent-color: #fdd835;
+            --text-color: #ffffff;
+            --card-bg: #3f51b5;
+            --card-shadow: rgba(255, 255, 255, 0.1);
+            --bg-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+        }
+
+        /* Hoog Contrast Modus */
+        body[data-contrast="high"] {
+            --bg-color: #000000;
+            --primary-color: #ffffff;
+            --secondary-color: #000000;
+            --accent-color: #ffff00;
+            --text-color: #ffffff;
+            --card-bg: #000000;
+            --card-shadow: rgba(255, 255, 255, 0.5);
+            --highlight-border: 8px solid #00ffff;
+            --bg-image: none;
+        }
+
+        /* --- BASISSTRUCTUUR --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            background-image: var(--bg-image);
+            color: var(--text-color);
+            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+            padding: 2vmin;
+        }
+
+        .view {
+            display: none;
+            flex-grow: 1;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .view.active {
+            display: flex;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 4vmin;
+        }
+
+        .main-header h1 {
+            font-size: clamp(2.5rem, 8vmin, 5rem);
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+        body[data-contrast="high"] .main-header h1 {
+             color: var(--text-color);
+        }
+
+
+        /* --- HOOFDMENU (SPEL KIEZEN) --- */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(clamp(150px, 25vmin, 250px), 1fr));
+            gap: 4vmin;
+            width: 100%;
+            max-width: 1200px;
+            padding: 2vmin;
+        }
+
+        .game-card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 20px var(--card-shadow);
+            aspect-ratio: 1 / 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 6px solid transparent;
+            text-align: center;
+            padding: 1vmin;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px var(--card-shadow);
+        }
+
+        .game-card .icon {
+            font-size: clamp(3rem, 10vmin, 6rem);
+            margin-bottom: 1vmin;
+        }
+
+        .game-card h2 {
+            font-size: clamp(1rem, 3.5vmin, 1.8rem);
+            font-weight: 600;
+        }
+        
+        /* --- SCAN HIGHLIGHT --- */
+        .scannable.scan-highlight {
+            outline: var(--highlight-border);
+            outline-offset: 4px;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--accent-color);
+        }
+
+        /* --- ALGEMENE UI ELEMENTEN (Knoppen, etc.) --- */
+        .ui-button {
+            background-color: var(--primary-color);
+            color: var(--card-bg);
+            border: none;
+            border-radius: 50%;
+            width: clamp(50px, 10vmin, 80px);
+            height: clamp(50px, 10vmin, 80px);
+            font-size: clamp(24px, 5vmin, 40px);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px var(--card-shadow);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            border: 4px solid transparent;
+        }
+        body[data-contrast="high"] .ui-button {
+            border: 2px solid var(--accent-color);
+            color: var(--bg-color);
+        }
+
+
+        .ui-button:hover {
+            transform: scale(1.1);
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 2vmin;
+            right: 2vmin;
+            left: 2vmin;
+            display: flex;
+            justify-content: space-between;
+            z-index: 100;
+        }
+
+        /* --- INSTELLINGEN MENU --- */
+        #settings-view .settings-container {
+            background-color: var(--card-bg);
+            padding: 4vmin;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        #settings-view h2 {
+            text-align: center;
+            margin-bottom: 3vmin;
+            font-size: clamp(1.8rem, 5vmin, 2.5rem);
+        }
+
+        .setting-group {
+            margin-bottom: 3vmin;
+        }
+
+        .setting-group h3 {
+            font-size: clamp(1.2rem, 4vmin, 1.8rem);
+            margin-bottom: 1.5vmin;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 1vmin;
+        }
+
+        .setting-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2vmin;
+        }
+
+        .setting-button {
+            flex-grow: 1;
+            padding: 1.5vmin 2.5vmin;
+            border: 3px solid var(--primary-color);
+            background-color: transparent;
+            color: var(--primary-color);
+            border-radius: 12px;
+            font-size: clamp(1rem, 2.5vmin, 1.4rem);
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        
+        body[data-contrast="high"] .setting-button {
+            color: var(--text-color);
+            border-color: var(--text-color);
+        }
+
+        .setting-button.active {
+            background-color: var(--primary-color);
+            color: var(--card-bg);
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 2vmin;
+        }
+        .slider-container label {
+             font-size: clamp(1rem, 2.5vmin, 1.4rem);
+        }
+        .slider-container input[type="range"] {
+            width: 100%;
+        }
+
+
+        /* --- SPEL VIEW --- */
+        #game-view {
+            padding-top: calc(10vmin + 2vmin); /* Ruimte voor top-bar */
+        }
+        
+        .game-area {
+            flex-grow: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .game-feedback {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            font-size: 20vmin;
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .game-feedback.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+
+        /* --- SPEL: HETZELFDE OF ANDERS --- */
+        #sod-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5vmin;
+        }
+        
+        #sod-reference-area {
+            border: 5px dashed var(--primary-color);
+            padding: 2vmin;
+            border-radius: 20px;
+        }
+
+        .sod-object {
+            width: clamp(100px, 20vmin, 200px);
+            height: clamp(100px, 20vmin, 200px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(4rem, 12vmin, 8rem);
+        }
+        
+        #sod-choice-area {
+            display: flex;
+            gap: 4vmin;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .sod-choice-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 20px var(--card-shadow);
+            cursor: pointer;
+            border: 6px solid transparent;
+            transition: transform 0.2s ease;
+        }
+        .sod-choice-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Decoraties voor Focus Modus */
+        .decoration {
+            position: absolute;
+            font-size: 10vmin;
+            opacity: 0.1;
+            z-index: -1;
+            transition: opacity 0.5s ease;
+        }
+        body[data-focus-mode="true"] .decoration {
+            opacity: 0;
+        }
+
+    </style>
+</head>
+<body data-theme="sea" data-contrast="normal" data-focus-mode="false">
+    <div class="app-container">
+        
+        <!-- === VIEW: HOOFDMENU === -->
+        <div id="main-menu-view" class="view active">
+            <header class="main-header">
+                <h1>LeerWereld</h1>
+            </header>
+            <div class="game-grid">
+                <div class="game-card scannable" data-game="same-or-different">
+                    <div class="icon">🎨</div>
+                    <h2>Hetzelfde of Anders</h2>
+                </div>
+                <div class="game-card scannable" data-game="moving-targets">
+                    <div class="icon">🎯</div>
+                    <h2>Doelen Vangen</h2>
+                </div>
+                <div class="game-card scannable" data-game="counting">
+                    <div class="icon">🔢</div>
+                    <h2>Tellen tot 10</h2>
+                </div>
+                 <div class="game-card scannable" data-game="math">
+                    <div class="icon">➕</div>
+                    <h2>Rekenen</h2>
+                </div>
+                <div class="game-card scannable" data-game="memory">
+                    <div class="icon">🧠</div>
+                    <h2>Memory</h2>
+                </div>
+                <div class="game-card scannable" id="open-settings-from-main">
+                    <div class="icon">⚙️</div>
+                    <h2>Instellingen</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- === VIEW: SPEL === -->
+        <div id="game-view" class="view">
+            <div class="top-bar">
+                <button id="back-to-main-button" class="ui-button scannable" aria-label="Terug naar hoofdmenu">◀</button>
+                <button id="open-settings-from-game" class="ui-button scannable" aria-label="Open instellingen">⚙️</button>
+            </div>
+            <div class="game-area">
+                <!-- Spelinhoud wordt hier dynamisch geladen -->
+            </div>
+            <div class="game-feedback"></div>
+        </div>
+
+        <!-- === VIEW: INSTELLINGEN === -->
+        <div id="settings-view" class="view">
+             <div class="top-bar">
+                <button id="close-settings-button" class="ui-button scannable" aria-label="Sluit instellingen">◀</button>
+            </div>
+            <div class="settings-container">
+                <h2>Instellingen</h2>
+                
+                <div class="setting-group">
+                    <h3>Thema</h3>
+                    <div id="theme-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="theme" data-value="sea">Zee</button>
+                        <button class="setting-button scannable" data-setting="theme" data-value="jungle">Jungle</button>
+                        <button class="setting-button scannable" data-setting="theme" data-value="farm">Boerderij</button>
+                        <button class="setting-button scannable" data-setting="theme" data-value="space">Ruimte</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Toegankelijkheid</h3>
+                    <div id="input-mode-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="inputMode" data-value="touch">Touch/Muis</button>
+                        <button class="setting-button scannable" data-setting="inputMode" data-value="one-button">Eénknops</button>
+                        <button class="setting-button scannable" data-setting="inputMode" data-value="two-button">Tweeknops</button>
+                    </div>
+                    <div class="slider-container" style="margin-top: 2vmin;">
+                        <label for="scan-speed-slider">Scansnelheid:</label>
+                        <input type="range" id="scan-speed-slider" class="scannable" min="1" max="5" step="0.5" data-setting="scanSpeed">
+                        <span id="scan-speed-value">3.0s</span>
+                    </div>
+                </div>
+
+                 <div class="setting-group">
+                    <h3>Visueel</h3>
+                    <div id="visual-options" class="setting-options">
+                         <button class="setting-button scannable" data-setting="focusMode" data-value="false">Standaard</button>
+                         <button class="setting-button scannable" data-setting="focusMode" data-value="true">Focus Modus</button>
+                         <button class="setting-button scannable" data-setting="contrast" data-value="normal">Normaal Contrast</button>
+                         <button class="setting-button scannable" data-setting="contrast" data-value="high">Hoog Contrast</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Feedback</h3>
+                    <div id="feedback-options" class="setting-options">
+                         <button class="setting-button scannable" data-setting="feedbackMode" data-value="both">Visueel & Auditief</button>
+                         <button class="setting-button scannable" data-setting="feedbackMode" data-value="visual">Alleen Visueel</button>
+                         <button class="setting-button scannable" data-setting="feedbackMode" data-value="audio">Alleen Auditief</button>
+                    </div>
+                </div>
+                
+                 <div class="setting-group">
+                    <h3>Stem (TTS)</h3>
+                    <div id="tts-voice-options" class="setting-options">
+                         <button class="setting-button scannable" data-setting="voice" data-value="female">Vrouwenstem</button>
+                         <button class="setting-button scannable" data-setting="voice" data-value="male">Mannenstem</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decoratieve elementen -->
+        <div class="decoration" style="top: 10%; left: 5%;">🌊</div>
+        <div class="decoration" style="bottom: 15%; right: 10%;">🐠</div>
+        <div class="decoration" style="top: 20%; right: 20%;">🐙</div>
+        <div class="decoration" style="bottom: 5%; left: 25%;">⭐</div>
+
+    </div>
+
+    <script type="module">
+        // --- APPLICATIE STATE EN CONSTANTEN ---
+        const AppState = {
+            currentView: 'main-menu-view',
+            previousView: null,
+            activeGame: null,
+        };
+
+        const DOM = {
+            views: document.querySelectorAll('.view'),
+            mainMenuView: document.getElementById('main-menu-view'),
+            gameView: document.getElementById('game-view'),
+            settingsView: document.getElementById('settings-view'),
+            gameArea: document.querySelector('.game-area'),
+            gameFeedback: document.querySelector('.game-feedback'),
+            body: document.body
+        };
+
+        // --- 1. SETTINGS MODULE ---
+        const Settings = {
+            state: {
+                theme: 'sea',
+                inputMode: 'touch', // 'touch', 'one-button', 'two-button'
+                scanSpeed: 3.0, // seconds
+                focusMode: false,
+                contrast: 'normal',
+                feedbackMode: 'both', // 'both', 'visual', 'audio'
+                voice: 'female',
+            },
+
+            init() {
+                this.load();
+                this.applyAll();
+                this.updateUI();
+                
+                document.getElementById('theme-options').addEventListener('click', e => this.handleButtonClick(e, 'theme'));
+                document.getElementById('input-mode-options').addEventListener('click', e => this.handleButtonClick(e, 'inputMode'));
+                document.getElementById('visual-options').addEventListener('click', e => {
+                    const key = e.target.dataset.setting;
+                    if(key) this.handleButtonClick(e, key);
+                });
+                document.getElementById('feedback-options').addEventListener('click', e => this.handleButtonClick(e, 'feedbackMode'));
+                document.getElementById('tts-voice-options').addEventListener('click', e => this.handleButtonClick(e, 'voice'));
+
+                const scanSlider = document.getElementById('scan-speed-slider');
+                scanSlider.addEventListener('input', e => {
+                    this.state.scanSpeed = parseFloat(e.target.value);
+                    document.getElementById('scan-speed-value').textContent = `${this.state.scanSpeed.toFixed(1)}s`;
+                });
+                scanSlider.addEventListener('change', () => this.save());
+            },
+            
+            handleButtonClick(event, key) {
+                const button = event.target.closest('.setting-button');
+                if (!button) return;
+                
+                const value = button.dataset.value;
+                // Convert boolean strings to actual booleans
+                const finalValue = value === 'true' ? true : (value === 'false' ? false : value);
+                this.state[key] = finalValue;
+
+                this.apply(key);
+                this.updateUI();
+                this.save();
+                TTS.speak(button.textContent);
+                Accessibility.restartScanIfActive();
+            },
+
+            save() {
+                localStorage.setItem('leerwereld_settings', JSON.stringify(this.state));
+            },
+
+            load() {
+                const saved = localStorage.getItem('leerwereld_settings');
+                if (saved) {
+                    this.state = { ...this.state, ...JSON.parse(saved) };
+                }
+            },
+            
+            apply(key) {
+                switch (key) {
+                    case 'theme':
+                        DOM.body.dataset.theme = this.state.theme;
+                        break;
+                    case 'contrast':
+                         DOM.body.dataset.contrast = this.state.contrast;
+                        break;
+                    case 'focusMode':
+                        DOM.body.dataset.focusMode = this.state.focusMode;
+                        break;
+                    case 'inputMode':
+                        Accessibility.setInputMode(this.state.inputMode);
+                        break;
+                }
+            },
+
+            applyAll() {
+                for (const key in this.state) {
+                    this.apply(key);
+                }
+            },
+
+            updateUI() {
+                // Update buttons
+                document.querySelectorAll('.setting-button').forEach(btn => {
+                    const key = btn.dataset.setting;
+                    const val = btn.dataset.value;
+                    const isActive = String(this.state[key]) === val;
+                    btn.classList.toggle('active', isActive);
+                });
+
+                // Update slider
+                const scanSlider = document.getElementById('scan-speed-slider');
+                scanSlider.value = this.state.scanSpeed;
+                document.getElementById('scan-speed-value').textContent = `${this.state.scanSpeed.toFixed(1)}s`;
+            }
+        };
+      // --- 2. ACCESSIBILITY MODULE ---
+        const Accessibility = {
+            scanInterval: null,
+            scannableElements: [],
+            currentIndex: -1,
+            inputMode: 'touch',
+
+            init() {
+                this.setInputMode(Settings.state.inputMode);
+                window.addEventListener('keydown', this.handleKeyPress.bind(this));
+            },
+
+            setInputMode(mode) {
+                this.inputMode = mode;
+                this.stopScan();
+                if (mode === 'one-button' || mode === 'two-button') {
+                    this.startScan();
+                }
+            },
+            
+            restartScanIfActive() {
+                if(this.inputMode !== 'touch') {
+                    this.stopScan();
+                    this.startScan();
+                }
+            },
+
+            startScan() {
+                if (this.inputMode === 'touch') return;
+                
+                this.scannableElements = Array.from(document.querySelector('.view.active').querySelectorAll('.scannable'));
+                if (this.scannableElements.length === 0) return;
+
+                this.currentIndex = 0;
+                this.highlightCurrent();
+
+                if (this.inputMode === 'one-button') {
+                    this.scanInterval = setInterval(() => {
+                        this.scanNext();
+                    }, Settings.state.scanSpeed * 1000);
+                }
+            },
+
+            stopScan() {
+                clearInterval(this.scanInterval);
+                this.scanInterval = null;
+                this.scannableElements.forEach(el => el.classList.remove('scan-highlight'));
+                this.currentIndex = -1;
+            },
+
+            highlightCurrent() {
+                this.scannableElements.forEach((el, index) => {
+                    el.classList.toggle('scan-highlight', index === this.currentIndex);
+                });
+            },
+
+            scanNext() {
+                this.currentIndex = (this.currentIndex + 1) % this.scannableElements.length;
+                this.highlightCurrent();
+            },
+
+
+            activateCurrent() {
+                if (this.currentIndex > -1 && this.scannableElements[this.currentIndex]) {
+                    this.scannableElements[this.currentIndex].click();
+                }
+            },
+
+            handleKeyPress(e) {
+                if (this.inputMode === 'one-button') {
+                    if (e.code === 'Space') {
+                        e.preventDefault();
+                        this.activateCurrent();
+                    }
+                } else if (this.inputMode === 'two-button') {
+                    if (e.code === 'ArrowRight') {
+                        e.preventDefault();
+                        this.scanNext();
+                    } else if (e.code === 'Enter' || e.code === 'Space') {
+                        e.preventDefault();
+                        this.activateCurrent();
+                    }
+                }
+            }
+        };
+      
+        // --- 3. TEXT-TO-SPEECH (TTS) MODULE ---
+        const TTS = {
+            voices: [],
+            init() {
+                speechSynthesis.onvoiceschanged = () => {
+                    this.voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith('nl'));
+                };
+            },
+            speak(text) {
+                if (Settings.state.feedbackMode === 'visual' || !text) return;
+
+                speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                
+                const desiredVoice = Settings.state.voice === 'male' ? 
+                    this.voices.find(v => v.name.includes('Maarten') || v.name.includes('Ruben') || v.gender === 'male') :
+                    this.voices.find(v => v.name.includes('Lotte') || v.name.includes('Xander') || v.gender === 'female');
+                
+                utterance.voice = desiredVoice || this.voices[0];
+                utterance.lang = 'nl-NL';
+                speechSynthesis.speak(utterance);
+            }
+        };
+
+        // --- 4. NAVIGATION / VIEW MANAGER ---
+        const Navigation = {
+            init() {
+                // Main Menu -> Game
+                document.querySelector('.game-grid').addEventListener('click', e => {
+                    const card = e.target.closest('.game-card');
+                    if (!card) return;
+                    
+                    if(card.id === 'open-settings-from-main') {
+                        this.showView('settings-view');
+                        return;
+                    }
+
+                    const gameId = card.dataset.game;
+                    if (gameId) {
+                        GameController.loadGame(gameId, 1); // Start op level 1
+                        this.showView('game-view');
+                    }
+                });
+                
+                // Game -> Main Menu
+                document.getElementById('back-to-main-button').addEventListener('click', () => {
+                    this.showView('main-menu-view');
+                    GameController.unloadGame();
+                });
+
+                // Game -> Settings
+                document.getElementById('open-settings-from-game').addEventListener('click', () => {
+                    this.showView('settings-view');
+                });
+                
+                // Settings -> Previous View
+                document.getElementById('close-settings-button').addEventListener('click', () => {
+                    this.showView(AppState.previousView || 'main-menu-view');
+                });
+            },
+
+            showView(viewId) {
+                AppState.previousView = AppState.currentView;
+                AppState.currentView = viewId;
+
+                DOM.views.forEach(view => {
+                    view.classList.toggle('active', view.id === viewId);
+                });
+                
+                Accessibility.stopScan();
+                // Een kleine vertraging om de view te laten renderen voordat we scannen
+                setTimeout(() => Accessibility.startScan(), 100); 
+            }
+        };
+      
+      // --- 5. GAME CONTROLLER ---
+        const GameController = {
+            loadGame(gameId, level) {
+                AppState.activeGame = gameId;
+                DOM.gameArea.innerHTML = '';
+                
+                const game = Games[gameId];
+                if (game) {
+                    game.create(level);
+                    TTS.speak(`Spel gestart: ${game.name}.`);
+                } else {
+                    DOM.gameArea.innerHTML = `<p>Spel "${gameId}" niet gevonden.</p>`;
+                }
+            },
+            unloadGame() {
+                 AppState.activeGame = null;
+                 DOM.gameArea.innerHTML = '';
+            },
+            showFeedback(isCorrect) {
+                const symbol = isCorrect ? '👍' : '🤔';
+                if (Settings.state.feedbackMode !== 'audio') {
+                    DOM.gameFeedback.textContent = symbol;
+                    DOM.gameFeedback.classList.add('show');
+                    setTimeout(() => DOM.gameFeedback.classList.remove('show'), 1000);
+                }
+                
+                const text = isCorrect ? 'Goed zo!' : 'Probeer het nog eens.';
+                TTS.speak(text);
+            }
+        };
+
+        // --- 6. GAME DEFINITIES ---
+        const Games = {
+            'same-or-different': {
+                name: "Hetzelfde of Anders",
+                currentLevel: 1,
+                correctAnswer: null,
+                
+                create(level) {
+                    this.currentLevel = level;
+                    const container = document.createElement('div');
+                    container.id = 'sod-container';
+                    
+                    container.innerHTML = `
+                        <div id="sod-reference-area"></div>
+                        <div id="sod-choice-area"></div>
+                    `;
+                    DOM.gameArea.appendChild(container);
+                    
+                    this.setupLevel();
+                    
+                    document.getElementById('sod-choice-area').addEventListener('click', e => {
+                        const choiceCard = e.target.closest('.sod-choice-card');
+                        if(choiceCard) {
+                            this.checkAnswer(choiceCard.dataset.value);
+                        }
+                    });
+                },
+
+                setupLevel() {
+                    const objects = this.getObjectsForTheme();
+                    
+                    // Kies een willekeurig object als referentie
+                    const refIndex = Math.floor(Math.random() * objects.items.length);
+                    this.correctAnswer = objects.items[refIndex];
+                    
+                    document.getElementById('sod-reference-area').innerHTML = `
+                        <div class="sod-object">${this.correctAnswer}</div>
+                    `;
+                    
+                    // Maak de keuzes
+                    const choices = [this.correctAnswer];
+                    const numChoices = 3; // 3 keuzes voor dit spel
+                    while (choices.length < numChoices) {
+                        const randomIndex = Math.floor(Math.random() * objects.items.length);
+                        const randomObject = objects.items[randomIndex];
+                        if (!choices.includes(randomObject)) {
+                            choices.push(randomObject);
+                        }
+                    }
+
+                    // Shuffle keuzes
+                    choices.sort(() => Math.random() - 0.5);
+                    
+                    const choiceArea = document.getElementById('sod-choice-area');
+                    choiceArea.innerHTML = choices.map(choice => `
+                        <div class="sod-choice-card scannable" data-value="${choice}">
+                           <div class="sod-object">${choice}</div>
+                        </div>
+                    `).join('');
+                    
+                    TTS.speak(`Zoek de ${objects.name}.`);
+                    Accessibility.restartScanIfActive();
+                },
+
+                checkAnswer(selectedValue) {
+                    if (selectedValue === this.correctAnswer) {
+                        GameController.showFeedback(true);
+                        // Wacht even voor feedback en start dan een nieuw level
+                        setTimeout(() => this.setupLevel(), 1500);
+                    } else {
+                        GameController.showFeedback(false);
+                    }
+                },
+                
+                getObjectsForTheme() {
+                    const theme = Settings.state.theme;
+                    const themes = {
+                        sea: { name: 'vis', items: ['🐠', '🦀', '🐙', '🐳', '🐬', '⭐'] },
+                        jungle: { name: 'aap', items: ['🐵', '🦁', '🐘', '🐍', '🦜', '🍌'] },
+                        farm: { name: 'koe', items: ['🐮', '🐷', '🐔', '🐑', '🐴', ' tractor'] },
+                        space: { name: 'raket', items: ['🚀', '👽', '🪐', '⭐', '☄️', '🛰️'] }
+                    };
+                    return themes[theme];
+                }
+            },
+            // Definities voor andere spellen komen hier...
+            'moving-targets': { name: "Doelen Vangen", create(level) { DOM.gameArea.innerHTML = `<h2>Doelen Vangen komt binnenkort!</h2>`} },
+            'counting': { name: "Tellen tot 10", create(level) { DOM.gameArea.innerHTML = `<h2>Tellen komt binnenkort!</h2>`} },
+            'math': { name: "Rekenen", create(level) { DOM.gameArea.innerHTML = `<h2>Rekenen komt binnenkort!</h2>`} },
+            'memory': { name: "Memory", create(level) { DOM.gameArea.innerHTML = `<h2>Memory komt binnenkort!</h2>`} },
+        };
+
+
+        // --- ALLES INITIALISEREN ---
+        function initialize() {
+            Settings.init();
+            TTS.init();
+            Accessibility.init();
+            Navigation.init();
+            Navigation.showView('main-menu-view');
+        }
+
+        // Wacht tot de pagina volledig is geladen
+        window.addEventListener('load', initialize);
+    </script>
+</body>
+</html>
