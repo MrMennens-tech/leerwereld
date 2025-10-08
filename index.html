@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeerKracht - Toegankelijk Educatief Spelplatform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Main Menu View -->
+    <div id="main-menu" class="view active">
+        <div class="container">
+            <header class="main-header">
+                <h1>LeerKracht</h1>
+                <p>Leren door spelen</p>
+            </header>
+            
+            <div class="game-grid">
+                <button class="game-card scannable" data-game="discover-tap">
+                    <span class="game-icon">👆</span>
+                    <h3>Ontdek en Tik</h3>
+                    <p>Tik op objecten en zie wat er gebeurt</p>
+                </button>
+                
+                <button class="game-card scannable" data-game="flying-catchers">
+                    <span class="game-icon">🎯</span>
+                    <h3>Vliegende Vangers</h3>
+                    <p>Vang de bewegende objecten</p>
+                </button>
+                
+                <button class="game-card scannable" data-game="same-different">
+                    <span class="game-icon">🔍</span>
+                    <h3>Hetzelfde of Anders</h3>
+                    <p>Vind het object dat hetzelfde is</p>
+                </button>
+                
+                <button class="game-card scannable" data-game="counting">
+                    <span class="game-icon">🔢</span>
+                    <h3>Tellen</h3>
+                    <p>Tel de objecten</p>
+                </button>
+                
+                <button class="game-card scannable" data-game="math">
+                    <span class="game-icon">➕</span>
+                    <h3>Rekenen</h3>
+                    <p>Los de som op</p>
+                </button>
+                
+                <button class="game-card scannable" data-game="memory">
+                    <span class="game-icon">🧠</span>
+                    <h3>Memory</h3>
+                    <p>Vind de paren</p>
+                </button>
+                
+                <button class="game-card scannable settings-card" id="settings-btn">
+                    <span class="game-icon">⚙️</span>
+                    <h3>Instellingen</h3>
+                    <p>Pas de app aan</p>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game View -->
+    <div id="game-view" class="view">
+        <div class="game-header">
+            <button class="btn btn--secondary scannable" id="back-btn">← Terug</button>
+            <div class="game-title">
+                <h2 id="current-game-title">Spel</h2>
+            </div>
+            <button class="btn btn--secondary scannable" id="game-settings-btn">⚙️</button>
+        </div>
+        
+        <div class="level-selector">
+            <button class="btn btn--outline scannable level-btn" data-level="1">Niveau 1</button>
+            <button class="btn btn--outline scannable level-btn" data-level="2">Niveau 2</button>
+            <button class="btn btn--outline scannable level-btn" data-level="3">Niveau 3</button>
+        </div>
+        
+        <div class="game-area" id="game-area">
+            <!-- Game content will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Settings View -->
+    <div id="settings-view" class="view">
+        <div class="container">
+            <div class="settings-header">
+                <button class="btn btn--secondary scannable" id="settings-back-btn">← Terug</button>
+                <h2>Instellingen</h2>
+            </div>
+            
+            <div class="settings-grid">
+                <div class="settings-section">
+                    <h3>Thema</h3>
+                    <div class="theme-selector">
+                        <button class="theme-btn scannable" data-theme="sea">
+                            <span class="theme-icon">🌊</span>
+                            <span>Zee</span>
+                        </button>
+                        <button class="theme-btn scannable" data-theme="jungle">
+                            <span class="theme-icon">🌿</span>
+                            <span>Jungle</span>
+                        </button>
+                        <button class="theme-btn scannable" data-theme="farm">
+                            <span class="theme-icon">🚜</span>
+                            <span>Boerderij</span>
+                        </button>
+                        <button class="theme-btn scannable" data-theme="space">
+                            <span class="theme-icon">🚀</span>
+                            <span>Ruimte</span>
+                        </button>
+                        <button class="theme-btn scannable" data-theme="seasons">
+                            <span class="theme-icon">🌸</span>
+                            <span>Seizoenen</span>
+                        </button>
+                        <button class="theme-btn scannable" data-theme="sports">
+                            <span class="theme-icon">⚽</span>
+                            <span>Sport</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Bediening</h3>
+                    <select class="form-control scannable" id="control-mode">
+                        <option value="touch">Aanraken/Muis</option>
+                        <option value="oneButton">Eén Knop</option>
+                        <option value="twoButton">Twee Knoppen</option>
+                    </select>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Scansnelheid</h3>
+                    <select class="form-control scannable" id="scan-speed">
+                        <option value="1">1 seconde</option>
+                        <option value="2">2 seconden</option>
+                        <option value="3">3 seconden</option>
+                        <option value="4">4 seconden</option>
+                        <option value="5">5 seconden</option>
+                    </select>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Scanmodus</h3>
+                    <select class="form-control scannable" id="scan-mode">
+                        <option value="full">Volledige Controle</option>
+                        <option value="gameOnly">Enkel Spel</option>
+                    </select>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Visuele Opties</h3>
+                    <label class="checkbox-label">
+                        <input type="checkbox" class="scannable" id="high-contrast"> Hoog Contrast
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" class="scannable" id="focus-mode"> Focusmodus
+                    </label>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Audio</h3>
+                    <select class="form-control scannable" id="voice-gender">
+                        <option value="female">Vrouwenstem</option>
+                        <option value="male">Mannenstem</option>
+                    </select>
+                    <label class="checkbox-label">
+                        <input type="checkbox" class="scannable" id="audio-feedback" checked> Audio Feedback
+                    </label>
+                </div>
+            </div>
+            
+            <div class="settings-actions">
+                <button class="btn btn--secondary scannable" id="reset-settings">Reset naar Standaard</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scan Indicator -->
+    <div id="scan-indicator" class="scan-indicator hidden">
+        <div class="scan-progress"></div>
+    </div>
+
+    <!-- Audio Context (hidden) -->
+    <div id="audio-context" class="hidden">
+        <audio id="feedback-audio" preload="auto"></audio>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
