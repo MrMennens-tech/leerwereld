@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
-    <link href="https://github.com/tetunori/fluent-emoji-webfont/tree/v0.8.5/dist/fluent-emoji.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/tetunori/fluent-emoji-webfont@latest/dist/fluent-emoji-hc.css" rel="stylesheet">
     <style>
         /* --- ALGEMENE STIJLEN EN CSS VARIABELEN --- */
         :root {
@@ -89,25 +89,25 @@
         body[data-emoji-style="noto"] .math-object {
             font-family: "Noto Color Emoji", sans-serif;
         }
-        body[data-emoji-style="fluent"] .icon,
-        body[data-emoji-style="fluent"] .interactive-object,
-        body[data-emoji-style="fluent"] .moving-target,
-        body[data-emoji-style="fluent"] .memory-card-face,
-        body[data-emoji-style="fluent"] .sod-object,
-        body[data-emoji-style="fluent"] .counting-object,
-        body[data-emoji-style="fluent"] .math-object {
-            font-family: "Fluent Emoji", sans-serif;
+        body[data-emoji-style="fluent-hc"] .icon,
+        body[data-emoji-style="fluent-hc"] .interactive-object,
+        body[data-emoji-style="fluent-hc"] .moving-target,
+        body[data-emoji-style="fluent-hc"] .memory-card-face,
+        body[data-emoji-style="fluent-hc"] .sod-object,
+        body[data-emoji-style="fluent-hc"] .counting-object,
+        body[data-emoji-style="fluent-hc"] .math-object {
+            font-family: "Fluent Emoji HC", sans-serif;
         }
         
-        /* Automatische hoog-contrast iconen wanneer de algemene modus aan staat */
-        body[data-contrast="high"] .icon,
-        body[data-contrast="high"] .interactive-object,
-        body[data-contrast="high"] .moving-target,
-        body[data-contrast="high"] .memory-card-face,
-        body[data-contrast="high"] .sod-object,
-        body[data-contrast="high"] .counting-object,
-        body[data-contrast="high"] .math-object {
-            filter: grayscale(1) invert(1);
+        /* Automatische inversie voor Fluent HC in hoog-contrast modus */
+        body[data-contrast="high"][data-emoji-style="fluent-hc"] .icon,
+        body[data-contrast="high"][data-emoji-style="fluent-hc"] .interactive-object,
+        body[data-contrast="high"][data-emoji-style="fluent-hc"] .moving-target,
+        body[data-contrast="high"][data-emoji-style="fluent-hc"] .memory-card-face,
+        body[data-contrast="high"][data-emoji-style="fluent-hc"] .sod-object,
+        body[data-contrast="high"][data-emoji-style="fluent-hc"] .counting-object,
+        body[data-contrast="high"][data-emoji-style="fluent-hc"] .math-object {
+            filter: invert(1);
         }
 
 
@@ -236,7 +236,7 @@
                     <div id="emoji-style-options" class="setting-options">
                         <button class="setting-button scannable" data-setting="emojiStyle" data-value="default">Standaard <span style="font-family: sans-serif;">🙂</span></button>
                         <button class="setting-button scannable" data-setting="emojiStyle" data-value="noto">Duidelijk <span style="font-family: 'Noto Color Emoji', sans-serif;">🙂</span></button>
-                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="fluent">Fluent <span style="font-family: 'Fluent Emoji', sans-serif;">🙂</span></button>
+                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="fluent-hc">Fluent HC <span style="font-family: 'Fluent Emoji HC', sans-serif;">🙂</span></button>
                     </div>
                 </div>
                 <div class="setting-group">
