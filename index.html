@@ -6,7 +6,8 @@
     <title>LeerWereld</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/tetunori/fluent-emoji-webfont@latest/dist/fluent-emoji.css" rel="stylesheet">
     <style>
         /* --- ALGEMENE STIJLEN EN CSS VARIABELEN --- */
         :root {
@@ -77,16 +78,16 @@
 
         /* --- ICOON STIJLEN --- */
         .icon, .interactive-object, .moving-target, .memory-card-face, .sod-object, .counting-object, .math-object {
-            font-family: inherit; /* Standaard erft de body font */
+            font-family: var(--font-family), sans-serif; /* Fallback */
         }
-        body[data-emoji-style="openmoji"] .icon,
-        body[data-emoji-style="openmoji"] .interactive-object,
-        body[data-emoji-style="openmoji"] .moving-target,
-        body[data-emoji-style="openmoji"] .memory-card-face,
-        body[data-emoji-style="openmoji"] .sod-object,
-        body[data-emoji-style="openmoji"] .counting-object,
-        body[data-emoji-style="openmoji"] .math-object {
-            font-family: "OpenMoji", "Noto Color Emoji", sans-serif;
+        body[data-emoji-style="noto"] .icon,
+        body[data-emoji-style="noto"] .interactive-object,
+        body[data-emoji-style="noto"] .moving-target,
+        body[data-emoji-style="noto"] .memory-card-face,
+        body[data-emoji-style="noto"] .sod-object,
+        body[data-emoji-style="noto"] .counting-object,
+        body[data-emoji-style="noto"] .math-object {
+            font-family: "Noto Color Emoji", sans-serif;
         }
         body[data-emoji-style="fluent"] .icon,
         body[data-emoji-style="fluent"] .interactive-object,
@@ -95,7 +96,18 @@
         body[data-emoji-style="fluent"] .sod-object,
         body[data-emoji-style="fluent"] .counting-object,
         body[data-emoji-style="fluent"] .math-object {
-            font-family: "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+            font-family: "Fluent Emoji", sans-serif;
+        }
+        
+        /* Automatische hoog-contrast iconen wanneer de algemene modus aan staat */
+        body[data-contrast="high"] .icon,
+        body[data-contrast="high"] .interactive-object,
+        body[data-contrast="high"] .moving-target,
+        body[data-contrast="high"] .memory-card-face,
+        body[data-contrast="high"] .sod-object,
+        body[data-contrast="high"] .counting-object,
+        body[data-contrast="high"] .math-object {
+            filter: grayscale(1) invert(1);
         }
 
 
@@ -155,8 +167,7 @@
         <p>LeerWereld wordt geladen...</p>
     </div>
     <div class="app-container">
-        <!-- VIEWS -->
-        <div id="main-menu-view" class="view active">
+        <!-- VIEWS --><div id="main-menu-view" class="view active">
             <header class="main-header"> <h1>LeerWereld</h1> </header>
             <div class="game-grid">
                 <div class="game-card scannable" data-game="interactive-scene"> <div class="icon">👆</div> <h2>Ontdek en Tik</h2> </div>
@@ -221,11 +232,11 @@
                 </div>
                 <div class="setting-group">
                     <h3>Icoon Stijl</h3>
-                    <p>Beschikbaarheid hangt af van lettertypen op het systeem.</p>
+                    <p>Wisselt de stijl van de iconen voor betere zichtbaarheid.</p>
                     <div id="emoji-style-options" class="setting-options">
                         <button class="setting-button scannable" data-setting="emojiStyle" data-value="default">Standaard <span style="font-family: sans-serif;">🙂</span></button>
-                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="openmoji">OpenMoji <span style="font-family: 'OpenMoji', 'Noto Color Emoji', sans-serif;">🙂</span></button>
-                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="fluent">Fluent <span style="font-family: 'Segoe UI Emoji', sans-serif;">🙂</span></button>
+                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="noto">Duidelijk <span style="font-family: 'Noto Color Emoji', sans-serif;">🙂</span></button>
+                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="fluent">Fluent <span style="font-family: 'Fluent Emoji', sans-serif;">🙂</span></button>
                     </div>
                 </div>
                 <div class="setting-group">
