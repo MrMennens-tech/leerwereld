@@ -103,7 +103,6 @@
 
 
         /* --- SPELSPECIFIEKE STIJLEN --- */
-        /* Ontdek en Tik */
         #interactive-scene-container { width: 100%; height: 100%; position: relative; }
         .interactive-object { position: absolute; font-size: calc(12vmin * var(--element-size-multiplier)); cursor: pointer; transition: opacity 0.5s ease, transform 0.5s ease; }
         .interactive-object.hidden { opacity: 0; transform: scale(0.8); pointer-events: none; }
@@ -113,36 +112,26 @@
         .interactive-object.animate-pop { animation: pop 0.5s ease-out forwards; }
         @keyframes drive-off { 0% { transform: translateX(0); } 100% { transform: translateX(100vw); } }
         .interactive-object.animate-drive-off { animation: drive-off 2s linear forwards; }
-
-        /* Vliegende Vangers */
         .moving-target { position: absolute; font-size: calc(10vmin * var(--element-size-multiplier)); cursor: pointer; transition: transform 0.2s ease; }
         .moving-target.caught { transform: scale(0); }
-        
-        /* Memory */
         #memory-grid { display: grid; gap: calc(2vmin * var(--element-size-multiplier)); }
         .memory-card { background-color: var(--primary-color); border-radius: 15px; cursor: pointer; aspect-ratio: 1 / 1; position: relative; transform-style: preserve-3d; transition: transform 0.5s; width: calc(15vmin * var(--element-size-multiplier)); }
         .memory-card.flipped, .memory-card.matched { transform: rotateY(180deg); pointer-events: none; }
         .memory-card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-size: calc(10vmin * var(--element-size-multiplier)); }
         .memory-card-back { background-color: var(--primary-color); }
         .memory-card-front { background-color: var(--card-bg); transform: rotateY(180deg); }
-        
-        /* Hetzelfde of Anders */
         #sod-container { display: flex; flex-direction: column; align-items: center; gap: 5vmin; }
         #sod-reference-area { border: 5px dashed var(--primary-color); padding: 2vmin; border-radius: 20px; }
         .sod-object { font-size: clamp(calc(8rem * var(--element-size-multiplier)), calc(15vmin * var(--element-size-multiplier)), calc(12rem * var(--element-size-multiplier))); width: auto; height: auto; }
         #sod-choice-area { display: flex; gap: 4vmin; flex-wrap: wrap; justify-content: center; }
         .sod-choice-card { background: var(--card-bg); border-radius: 20px; box-shadow: 0 10px 20px var(--card-shadow); cursor: pointer; border: 6px solid transparent; transition: transform 0.2s ease; padding: calc(1vmin * var(--element-size-multiplier)); }
         .sod-choice-card:hover { transform: translateY(-5px); }
-
-        /* Tellen */
         #counting-container { display: flex; flex-direction: column; align-items: center; gap: 3vmin; }
         #counting-display { font-size: calc(15vmin * var(--element-size-multiplier)); font-weight: 700; }
         #counting-target-area { border: 5px dashed var(--primary-color); border-radius: 20px; min-height: 25vmin; width: 80%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; padding: 2vmin; gap: 2vmin; }
         #counting-source-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 2vmin; margin-top: 2vmin; }
         .counting-object { font-size: calc(8vmin * var(--element-size-multiplier)); cursor: pointer; transition: transform 0.2s ease; }
         .counting-object:hover { transform: scale(1.1); }
-
-        /* Rekenen */
         #math-container { text-align: center; }
         #math-problem-area { display: flex; align-items: center; justify-content: center; gap: 2vmin; font-size: calc(8vmin * var(--element-size-multiplier)); font-weight: 600; margin-bottom: 4vmin; flex-wrap: wrap;}
         .math-object-group { display: flex; flex-wrap: wrap; gap: 1vmin; }
@@ -274,21 +263,24 @@
             settingsContainer: document.querySelector('#settings-view .settings-container')
         };
         
+        // --- JSFXR ---
+        const jsfxr = function(p){var f,i,b,c,h,j,k,l,m,g,n,o,d,q,r,s,e,t,u,v,w,x,y;f=p.length;i=8;b=44100;p[0]||(p[0]=0);c=p[0];p[1]||(p[1]=0);h=p[1];p[2]||(p[2]=0);j=p[2];p[3]||(p[3]=.3);k=p[3];p[4]||(p[4]=0);l=p[4];p[5]||(p[5]=0);m=p[5];p[6]||(p[6]=0);g=p[6];p[7]||(p[7]=0);n=p[7];p[8]||(p[8]=0);o=p[8];p[9]||(p[9]=0);d=p[9];p[10]||(p[10]=0);q=p[10];p[11]||(p[11]=0);r=p[11];p[12]||(p[12]=0);s=p[12];p[13]||(p[13]=0);e=p[13];p[14]||(p[14]=0);t=p[14];p[15]||(p[15]=0);u=p[15];p[16]||(p[16]=0);v=p[16];p[17]||(p[17]=0);w=p[17];p[18]||(p[18]=0);x=p[18];p[19]||(p[19]=0);y=p[19];var z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,$,aa,ab,ac,ad,ae,af,ag,ah;c=p[0];h=p[1];j=p[2];k=p[3];l=p[4];m=p[5];g=p[6];n=p[7];o=p[8];d=p[9];q=p[10];r=p[11];s=p[12];e=p[13];t=p[14];u=p[15];v=p[16];w=p[17];x=p[18];y=p[19];f>20&&(b=p[20]);f>21&&(i=p[21]);z=.5-u;A=t*t*.01;B=g*g*g*100;C=n*n*n*100;D=o*o;E=d<0?-1:1;F=d*d;G=d>0?1-d:1+d;H=1-d;I=1-d*d;J=Math.exp(1-H)-H;K=(1-I)/(H>1?-.01:H<0?0:H);L=-k;M=l<0?1+l:1-l;N=-l;O=m*m*m;P=m<0?-1:1;Q=1-m*m;R=(Math.exp(m)-1)/(Math.exp(1)-1);S=-s*Math.PI;T=v*b;U=w*b;V=x*b;W=y*y;X=function(a){return a<0?-1:1};Y=k+j;Z=Y*Y;$=aa=0;ab=Math.pow(10,20*h-10);ac=Math.pow(2,16*j/1200);ad=4*w/b;ae=c==3?1:0;af=-Math.PI*s*s*1.0E-4;ag=-Math.PI*e*e*1.0E-4;ah=new Float32Array(Math.ceil((Y+Z+W)*b));for(var f=0,p=0;p<ah.length;p++){$=++$%(T|0);aa=++aa%(V|0);if(s){z+=Math.cos(f*S)*A;f+=1}if(e){M+=Math.cos(f*ag)*A;N+=Math.cos(f*af)*A;f+=1}g=B*Math.exp(-p*B/b);n=C*Math.exp(-p*C/b);o=D*Math.sin(p*D*Math.PI/b);d=p<U?p/U:1;d=1-Math.pow(1-d,E*F);d=G+d*H;d=d<0?.001:d;q=q>0?q*Math.exp(-p*q/b):0;r=r?1-Math.pow(p/((Y+Z+W)*b),r):1;L+=1-M*Math.exp(-p*M/b);M=0;N+=1-L*Math.exp(-p*L/b);L=0;O&&(Q+=O*P,O=0);v=c==1?4*z:c==2?X(Math.sin(p/v)):c==3?X(Math.random()*2-1):0;t=(g+n)*(Math.random()-.5);v=(ae*(.9*v+.1*t)+(1-ae)*v*d+t)*ab;ah[p]=v}for(p=f=0;p<ah.length*i/8;p++){for(var ai=0,v=0,aj=i;aj--;){ai+=ah[f++]}v=255*ai/i;b=String.fromCharCode(v<0?0:v>255?255:v);h="data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YV"+(ah.length*i/8).toString(16);for(p=0;p<ah.length;p++)h+=btoa(String.fromCharCode(ah[p]*255&255,ah[p]*255>>8&255));return h};
+
         // --- HULPFUNCTIES ---
         const Utils = {
              themes: {
-                sea: { name: 'vis', background: 'linear-gradient(to bottom, #89cff0, #005c99)', items: [{i:'🐠',n:'vis',s:'plons'}, {i:'🦀',n:'krab',s:'schaar'}, {i:'🐙',n:'octopus',s:'bubbel'}, {i:'🐳',n:'walvis',s:'walvis_geluid'}, {i:'🐬',n:'dolfijn',s:'dolfijn_geluid'}, {i:'⭐',n:'zeesster',s:'glinstering'}] },
-                jungle: { name: 'aap', background: 'linear-gradient(to bottom, #298c1f, #0f3d0a)', items: [{i:'🐵',n:'aap',s:'aap_geluid'}, {i:'🦁',n:'leeuw',s:'leeuw_brul'}, {i:'🐘',n:'olifant',s:'olifant_trompet'}, {i:'🐍',n:'slang',s:'slang_sis'}, {i:'🦜',n:'papegaai',s:'papegaai_praat'}, {i:'🍌',n:'banaan',s:'hap'}] },
-                farm: { name: 'koe', background: 'linear-gradient(to bottom, #a1d48c, #5c9145)', items: [{i:'🐮',n:'koe',s:'koe_boe'}, {i:'🐷',n:'varken',s:'varken_knor'}, {i:'🐔',n:'kip',s:'kip_tok'}, {i:'🐑',n:'schaap',s:'schaap_blaat'}, {i:'🐴',n:'paard',s:'paard_hinnik'}, {i:'🚜',n:'tractor',s:'tractor_motor'}] },
-                space: { name: 'raket', background: 'radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%)', items: [{i:'🚀',n:'raket',s:'lancering'}, {i:'👽',n:'alien',s:'alien_geluid'}, {i:'🪐',n:'planeet',s:'space_swoosh'}, {i:'⭐',n:'ster',s:'glinstering'}, {i:'☄️',n:'komeet',s:'swoosh'}, {i:'🛰️',n:'satelliet',s:'beep'}] },
-                christmas: { name: 'kerstboom', background: 'radial-gradient(circle, #fff, #d4e4f3)', items: [{i:'🎄',n:'kerstboom',s:'kerst_jingle'}, {i:'🎅',n:'kerstman',s:'kerstman_hohoho'}, {i:'🦌',n:'rendier',s:'rendier_bel'}, {i:'🎁',n:'cadeau',s:'cadeau_uitpak'}, {i:'🔔',n:'kerstbel',s:'kerstbel_ring'}, {i:'⛄',n:'sneeuwpop',s:'magisch'}] },
-                autumn: { name: 'blad', background: 'linear-gradient(to bottom, #d2a679, #8c5a2b)', items: [{i:'🍁',n:'esdoornblad',s:'blad_ritsel'}, {i:'🍂',n:'blad',s:'blad_ritsel'}, {i:'🍄',n:'paddenstoel',s:'pop'}, {i:'🎃',n:'pompoen',s:'plof'}, {i:'🐿️',n:'eekhoorn',s:'eekhoorn_piep'}, {i:'🌰',n:'kastanje',s:'tik'}] },
-                spring: { name: 'bloem', background: 'linear-gradient(to bottom, #c1f1ac, #78c48a)', items: [{i:'🌸',n:'bloesem',s:'lente_bries'}, {i:'🌷',n:'tulp',s:'lente_bries'}, {i:'🦋',n:'vlinder',s:'vlinder_fladder'}, {i:'🐞',n:'lieveheersbeestje',s:'pop'}, {i:'🌱',n:'plantje',s:'groei_geluid'}, {i:'🐣',n:'kuiken',s:'kuiken_piep'}] },
-                summer: { name: 'zon', background: 'linear-gradient(to bottom, #ffeca7, #ffb13d)', items: [{i:'☀️',n:'zon',s:'glinstering'}, {i:'🍦',n:'ijsje',s:'hap'}, {i:'🏖️',n:'strand',s:'golfslag'}, {i:'🍉',n:'watermeloen',s:'hap'}, {i:'🕶️',n:'zonnebril',s:'klik'}, {i:'⛵',n:'zeilboot',s:'plons'}] },
-                winter: { name: 'sneeuwvlok', background: '#ffffff', items: [{i:'❄️',n:'sneeuwvlok',s:'winter_wind'}, {i:'🧤',n:'wanten',s:'stof_geluid'}, {i:'🧣',n:'sjaal',s:'stof_geluid'}, {i:'⛸️',n:'schaats',s:'schaats_ijs'}, {i:'🥶',n:'koud',s:'bibber'}, {i:'🧥',n:'jas',s:'rits'}] },
-                sport: { name: 'bal', background: 'linear-gradient(to bottom, #63d471, #238b32)', items: [{i:'⚽',n:'voetbal',s:'schot'}, {i:'🏀',n:'basketbal',s:'basketbal_stuit'}, {i:'🏈',n:'rugbybal',s:'swoosh'}, {i:'⚾',n:'honkbal',s:'honkbal_slag'}, {i:'🎾',n:'tennisbal',s:'tennis_slag'}, {i:'🏆',n:'beker',s:'applaus'}] },
-                colors: { name: 'kleur', background: 'linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3)', items: [{i:'🔴', n:'rood',s:'toon_1'}, {i:'🟠', n:'oranje',s:'toon_2'}, {i:'🟡', n:'geel',s:'toon_3'}, {i:'🟢', n:'groen',s:'toon_4'}, {i:'🔵', n:'blauw',s:'toon_5'}, {i:'🟣', n:'paars',s:'toon_6'}] },
-                shapes: { name: 'vorm', background: 'linear-gradient(to right, #e0e0e0, #f5f5f5, #e0e0e0)', items: [{i:'🟥', n:'vierkant',s:'vorm_1'}, {i:'🔺', n:'driehoek',s:'vorm_2'}, {i:'🔵', n:'cirkel',s:'vorm_3'}, {i:'⭐', n:'ster',s:'glinstering'}, {i:'🔶', n:'ruit',s:'vorm_4'}, {i:'💚', n:'hart',s:'vorm_5'}] }
+                sea: { name: 'vis', background: 'linear-gradient(to bottom, #89cff0, #005c99)', items: [{i:'🐠',n:'vis',s:[3,,.12,.52,.1,.26,,,,,,,,,,,1,,,] }, {i:'🦀',n:'krab',s:[3,.1,.01,.8,,.24,,,,,,,,,.3,.8,,-.4,.1,1,,,] }, {i:'🐙',n:'octopus',s:[3,,.05,.8,,.59,,.2,,,,,,,,,.4,,,.1,1,,,] }, {i:'🐳',n:'walvis',s:[0,.3,.32,.2,.5,.7,,,,,,,,,,,1,,,] }, {i:'🐬',n:'dolfijn',s:[0,.1,.4,.4,.5,.8,,,,,,,,,,,1,,,] }, {i:'⭐',n:'zeesster',s:[1,,.02,.8,,.57,,,,,,,,,,.4,,,.2,1,,,] }] },
+                jungle: { name: 'aap', background: 'linear-gradient(to bottom, #298c1f, #0f3d0a)', items: [{i:'🐵',n:'aap',s:[0,.1,.2,.3,.4,.5] }, {i:'🦁',n:'leeuw',s:[2,0.3,0.3,0.2,0.5,0.7,,,,,,,,,,,1,,,] }, {i:'🐘',n:'olifant',s:[0,.5,.4,.1,.8,.4,,,-.1] }, {i:'🐍',n:'slang',s:[2,0,.2,0.7,0.3,0.8,,,,,,,,0.3,,,,,1,,,] }, {i:'🦜',n:'papegaai',s:[0,0,.1,.6,.2,.4,,,,,,,,,,,,,,1,,,] }, {i:'🍌',n:'banaan',s:[0,,.14,.8,,.25] }] },
+                farm: { name: 'koe', background: 'linear-gradient(to bottom, #a1d48c, #5c9145)', items: [{i:'🐮',n:'koe',s:[0,.3,.2,.1,.4,.5] }, {i:'🐷',n:'varken',s:[0,.2,.1,.1,.3,.6] }, {i:'🐔',n:'kip',s:[0,0,.01,.8,.1,.2] }, {i:'🐑',n:'schaap',s:[0,.1,.1,.2,.3,.4] }, {i:'🐴',n:'paard',s:[0,.4,.3,.2,.5,.6] }, {i:'🚜',n:'tractor',s:[2,0,.1,0.8,0.2,0.1,,,,,,,,0.8,,,,,1,,,] }] },
+                space: { name: 'raket', background: 'radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%)', items: [{i:'🚀',n:'raket',s:[2,,.42,.6,.42,.1,,.32,,,,,,.23,,.34,-.1,1,,,] }, {i:'👽',n:'alien',s:[1,,.1,.1,.5,.5] }, {i:'🪐',n:'planeet',s:[2,,.5,.4,.3,.1] }, {i:'⭐',n:'ster',s:[1,,.02,.8,,.57] }, {i:'☄️',n:'komeet',s:[2,,.8,.5,.4,.3] }, {i:'🛰️',n:'satelliet',s:[0,0,.1,.8,.1,.1] }] },
+                christmas: { name: 'kerstboom', background: 'radial-gradient(circle, #fff, #d4e4f3)', items: [{i:'🎄',n:'kerstboom',s:[1,,.2,.4,.3,.5] }, {i:'🎅',n:'kerstman',s:[0,.2,.2,.2,.6,.6] }, {i:'🦌',n:'rendier',s:[1,0,.1,.8,.2,.3] }, {i:'🎁',n:'cadeau',s:[3,,.1,.8,,.1] }, {i:'🔔',n:'kerstbel',s:[1,,.3,.4,.5,.6] }, {i:'⛄',n:'sneeuwpop',s:[1,,.4,.3,.2,.1] }] },
+                autumn: { name: 'blad', background: 'linear-gradient(to bottom, #d2a679, #8c5a2b)', items: [{i:'🍁',n:'esdoornblad',s:[3,,.05,.8,,.1] }, {i:'🍂',n:'blad',s:[3,,.05,.8,,.1] }, {i:'🍄',n:'paddenstoel',s:[0,,.1,.8,,.2] }, {i:'🎃',n:'pompoen',s:[3,,.3,.4,.2,.1] }, {i:'🐿️',n:'eekhoorn',s:[0,0,.01,.9,.1,.2] }, {i:'🌰',n:'kastanje',s:[3,,.01,.8,,.1] }] },
+                spring: { name: 'bloem', background: 'linear-gradient(to bottom, #c1f1ac, #78c48a)', items: [{i:'🌸',n:'bloesem',s:[1,,.1,.8,.2,.3] }, {i:'🌷',n:'tulp',s:[1,,.1,.8,.2,.3] }, {i:'🦋',n:'vlinder',s:[1,,.01,.9,.1,.1] }, {i:'🐞',n:'lieveheersbeestje',s:[0,0,.01,.8,.1,.2] }, {i:'🌱',n:'plantje',s:[0,,.2,.8,.1,.3] }, {i:'🐣',n:'kuiken',s:[0,0,.01,.8,.1,.4] }] },
+                summer: { name: 'zon', background: 'linear-gradient(to bottom, #ffeca7, #ffb13d)', items: [{i:'☀️',n:'zon',s:[1,,.4,.5,.6,.7] }, {i:'🍦',n:'ijsje',s:[0,,.1,.8,,.1] }, {i:'🏖️',n:'strand',s:[3,,.8,.1,.2,.3] }, {i:'🍉',n:'watermeloen',s:[0,,.2,.8,,.2] }, {i:'🕶️',n:'zonnebril',s:[3,,.01,.8,,.1] }, {i:'⛵',n:'zeilboot',s:[3,,.3,.5,.2,.3] }] },
+                winter: { name: 'sneeuwvlok', background: '#ffffff', items: [{i:'❄️',n:'sneeuwvlok',s:[1,,.5,.6,.7,.8] }, {i:'🧤',n:'wanten',s:[3,,.1,.8,,.1] }, {i:'🧣',n:'sjaal',s:[3,,.1,.8,,.1] }, {i:'⛸️',n:'schaats',s:[3,,.2,.8,,.2] }, {i:'🥶',n:'koud',s:[1,,.3,.8,,.3] }, {i:'🧥',n:'jas',s:[3,,.1,.8,,.1] }] },
+                sport: { name: 'bal', background: 'linear-gradient(to bottom, #63d471, #238b32)', items: [{i:'⚽',n:'voetbal',s:[0,,.2,.8,,.2] }, {i:'🏀',n:'basketbal',s:[0,,.3,.8,,.3] }, {i:'🏈',n:'rugbybal',s:[2,,.4,.5,.3,.1] }, {i:'⚾',n:'honkbal',s:[3,,.1,.9,,.1] }, {i:'🎾',n:'tennisbal',s:[0,,.1,.8,,.1] }, {i:'🏆',n:'beker',s:[1,,.5,.6,.7,.8] }] },
+                colors: { name: 'kleur', background: 'linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3)', items: [{i:'🔴', n:'rood',s:[0,,.1,.4,.5,.1] }, {i:'🟠', n:'oranje',s:[0,,.2,.4,.5,.2] }, {i:'🟡', n:'geel',s:[0,,.3,.4,.5,.3] }, {i:'🟢', n:'groen',s:[0,,.4,.4,.5,.4] }, {i:'🔵', n:'blauw',s:[0,,.5,.4,.5,.5] }, {i:'🟣', n:'paars',s:[0,,.6,.4,.5,.6] }] },
+                shapes: { name: 'vorm', background: 'linear-gradient(to right, #e0e0e0, #f5f5f5, #e0e0e0)', items: [{i:'🟥', n:'vierkant',s:[0,,.1,.8,,.1] }, {i:'🔺', n:'driehoek',s:[0,,.2,.8,,.2] }, {i:'🔵', n:'cirkel',s:[0,,.3,.8,,.3] }, {i:'⭐', n:'ster',s:[1,,.5,.6,.7,.8] }, {i:'🔶', n:'ruit',s:[0,,.4,.8,,.4] }, {i:'💚', n:'hart',s:[1,,.3,.4,.5,.6] }] }
             },
             getThemeItems: function() {
                 const theme = this.themes[Settings.state.theme] || this.themes['sea'];
@@ -303,22 +295,12 @@
         };
         
         const SoundController = {
-            sounds: {},
-            getAllSoundNames() {
-                const soundNames = new Set();
-                for (const themeKey in Utils.themes) {
-                    Utils.themes[themeKey].items.forEach(item => {
-                        if (item.s) soundNames.add(item.s);
-                    });
-                }
-                return Array.from(soundNames);
-            },
-            preload() {
-                // Not needed with jsfxr, but kept for potential future use
-            },
-            play(soundName) {
-                // This part would need to be replaced by a jsfxr implementation.
-                // For now, it does nothing as we are focusing on visuals.
+            play(soundParams) {
+                if (Settings.state.feedbackMode === 'visual' || !soundParams) return;
+                const soundData = jsfxr(soundParams);
+                const audio = new Audio();
+                audio.src = soundData;
+                audio.play().catch(e => console.error("Audio playback failed", e));
             }
         };
 
@@ -379,13 +361,13 @@
                     const positions = Utils.shuffleArray([ {top: '20%', left: '15%'}, {top: '50%', left: '60%'}, {top: '30%', left: '40%'}, {top: '65%', left: '10%'}, {top: '15%', left: '70%'}, {top: '70%', left: '80%'} ]); 
 
                     itemsToDisplay.forEach((item, index) => {
-                        const type = item.s === 'lancering' ? 'launch' : (item.s === 'tractor_motor' ? 'drive-off' : 'pop');
+                        const type = item.s[0] === 2 ? 'launch' : (item.s[0] === 3 ? 'pop' : 'drive-off');
                         const pos = positions[index % positions.length]; 
                         const el = document.createElement('div'); 
                         el.className = 'interactive-object scannable'; 
                         el.textContent = item.i; 
                         el.dataset.name = item.n; 
-                        el.dataset.sound = item.s || ''; 
+                        el.dataset.sound = JSON.stringify(item.s); 
                         el.style.top = pos.top; 
                         el.style.left = pos.left; 
                         el.dataset.animation = `animate-${type}`; 
@@ -396,7 +378,7 @@
                 handleClick(e) { 
                     const target = e.target.closest('.interactive-object'); 
                     if (!target || target.classList.contains('hidden')) return; 
-                    SoundController.play(target.dataset.sound);
+                    SoundController.play(JSON.parse(target.dataset.sound));
                     setTimeout(() => TTS.speak(target.dataset.name), 100); 
                     target.classList.add(target.dataset.animation); 
                     target.classList.add('hidden'); 
@@ -407,16 +389,16 @@
                 }
             },
             'moving-targets': { name: "Vliegende Vangers", levels: [{n: 3, spd: 1}, {n: 5, spd: 2}, {n: 7, spd: 3}], targets: [], animationFrameId: null, create(level) { this.config = this.levels[level - 1]; requestAnimationFrame(() => { for (let i = 0; i < this.config.n; i++) this.addTarget(); this.gameLoop(); }); }, destroy() { cancelAnimationFrame(this.animationFrameId); this.targets = []; }, addTarget() { const el = document.createElement('div'); el.className = 'moving-target scannable'; const item = Utils.getThemeItems().items[Math.floor(Math.random() * 6)]; el.textContent = item.i; const size = DOM.gameArea.getBoundingClientRect(); if(size.width < 80) { setTimeout(() => this.addTarget(), 100); return; } el.style.left = `${Math.random() * (size.width - 80)}px`; el.style.top = `${Math.random() * (size.height - 80)}px`; DOM.gameArea.appendChild(el); const target = { el, x: parseFloat(el.style.left), y: parseFloat(el.style.top), dx: (Math.random() - 0.5) * this.config.spd, dy: (Math.random() - 0.5) * this.config.spd }; el.addEventListener('click', () => { SoundController.play(item.s); TTS.speak(item.n); el.classList.add('caught'); setTimeout(() => { if(el.parentElement) { el.remove(); this.targets.splice(this.targets.indexOf(target), 1); this.addTarget(); Accessibility.restartScanIfActive(); } }, 300); }); this.targets.push(target); }, gameLoop() { const size = DOM.gameArea.getBoundingClientRect(); this.targets.forEach(t => { t.x += t.dx; t.y += t.dy; if (t.x <= 0 || t.x >= size.width - 80) t.dx *= -1; if (t.y <= 0 || t.y >= size.height - 80) t.dy *= -1; t.el.style.left = `${t.x}px`; t.el.style.top = `${t.y}px`; }); this.animationFrameId = requestAnimationFrame(this.gameLoop.bind(this)); } },
-            'same-or-different': { name: "Hetzelfde of Anders", levels: [{}, {}, {}], create() { DOM.gameArea.innerHTML = `<div id="sod-container"><div id="sod-reference-area"></div><div id="sod-choice-area"></div></div>`; this.setupLevel(); this.boundClickHandler = e => { const card = e.target.closest('.sod-choice-card'); if(card) this.checkAnswer(card); }; DOM.gameArea.addEventListener('click', this.boundClickHandler); }, destroy(){ DOM.gameArea.removeEventListener('click', this.boundClickHandler);}, setupLevel() { const items = Utils.shuffleArray([...Utils.getThemeItems().items]); this.correctAnswer = items[0]; document.getElementById('sod-reference-area').innerHTML = `<div class="sod-object">${this.correctAnswer.i}</div>`; const choices = [items[0], items[1], items[2]]; document.getElementById('sod-choice-area').innerHTML = Utils.shuffleArray(choices).map(c => `<div class="sod-choice-card scannable" data-name="${c.n}" data-sound="${c.s}" data-icon="${c.i}"><div class="sod-object">${c.i}</div></div>`).join(''); Accessibility.restartScanIfActive(); }, checkAnswer(card) { SoundController.play(card.dataset.sound); if (card.dataset.icon === this.correctAnswer.i) { GameController.showFeedback(true); setTimeout(() => this.setupLevel(), 1500); } else { setTimeout(() => TTS.speak(`Dit is ${card.dataset.name}. Probeer het nog eens.`), 100); GameController.showFeedback(false); } } },
-            'counting': { name: "Tellen", levels: [{max: 3}, {max: 5}, {max: 10}], create(level) { this.config = this.levels[level - 1]; DOM.gameArea.innerHTML = `<div id="counting-container"><h2>Tel tot: <span id="counting-display"></span></h2><div id="counting-target-area"></div><div id="counting-source-area"></div></div>`; this.setupLevel(); this.boundClickHandler = e => this.handleSourceClick(e); DOM.gameArea.addEventListener('click', this.boundClickHandler); }, destroy(){ DOM.gameArea.removeEventListener('click', this.boundClickHandler);}, setupLevel() { this.targetNumber = Math.floor(Math.random() * this.config.max) + 1; this.currentCount = 0; document.getElementById('counting-display').textContent = this.targetNumber; document.getElementById('counting-target-area').innerHTML = ''; const sourceArea = document.getElementById('counting-source-area'); sourceArea.innerHTML = ''; const item = Utils.getThemeItems().items[0]; for (let i = 0; i < this.config.max; i++) sourceArea.innerHTML += `<div class="counting-object scannable" data-sound="${item.s}">${item.i}</div>`; TTS.speak(`Tel ${this.targetNumber} ${Utils.getThemeItems().name}s.`); Accessibility.restartScanIfActive(); }, handleSourceClick(e) { const target = e.target.closest('.counting-object'); if (!target || this.currentCount >= this.targetNumber) return; SoundController.play(target.dataset.sound); target.remove(); document.getElementById('counting-target-area').innerHTML += `<div class="counting-object">${target.textContent}</div>`; this.currentCount++; setTimeout(() => TTS.speak(this.currentCount), 200); if (this.currentCount === this.targetNumber) { GameController.showFeedback(true); setTimeout(() => this.setupLevel(), 1500); } Accessibility.restartScanIfActive(); } },
-            'math': { name: "Rekenen", levels: [{max: 5}, {max: 10}, {max: 20}], create(level) { this.config = this.levels[level - 1]; DOM.gameArea.innerHTML = `<div id="math-container"><div id="math-problem-area"></div><div id="math-answer-area"></div></div>`; this.setupLevel(); this.boundClickHandler = e => { const btn = e.target.closest('.math-answer-btn'); if(btn) this.checkAnswer(parseInt(btn.textContent)); }; DOM.gameArea.addEventListener('click', this.boundClickHandler); }, destroy(){ DOM.gameArea.removeEventListener('click', this.boundClickHandler);}, setupLevel() { const n1 = Math.ceil(Math.random() * this.config.max); const n2 = Math.ceil(Math.random() * (this.config.max - n1)); this.answer = n1 + n2; const item = Utils.getThemeItems().items[0]; const createGroup = n => `<div class="math-object-group">${Array(n).fill(`<div class="math-object">${item.i}</div>`).join('')}</div>`; document.getElementById('math-problem-area').innerHTML = `${createGroup(n1)}<span>+</span>${createGroup(n2)}<span>=</span><span>?</span>`; const answers = [this.answer]; while (answers.length < 3) { const wrong = Math.floor(Math.random() * this.config.max) + 1; if (wrong > 0 && !answers.includes(wrong)) answers.push(wrong); } document.getElementById('math-answer-area').innerHTML = Utils.shuffleArray(answers).map(a => `<button class="math-answer-btn scannable">${a}</button>`).join(''); TTS.speak(`${n1} plus ${n2} is?`); Accessibility.restartScanIfActive(); }, checkAnswer(val) { SoundController.play('pop'); if (val === this.answer) { GameController.showFeedback(true); setTimeout(() => this.setupLevel(), 1500); } else GameController.showFeedback(false); } },
+            'same-or-different': { name: "Hetzelfde of Anders", levels: [{}, {}, {}], create() { DOM.gameArea.innerHTML = `<div id="sod-container"><div id="sod-reference-area"></div><div id="sod-choice-area"></div></div>`; this.setupLevel(); this.boundClickHandler = e => { const card = e.target.closest('.sod-choice-card'); if(card) this.checkAnswer(card); }; DOM.gameArea.addEventListener('click', this.boundClickHandler); }, destroy(){ DOM.gameArea.removeEventListener('click', this.boundClickHandler);}, setupLevel() { const items = Utils.shuffleArray([...Utils.getThemeItems().items]); this.correctAnswer = items[0]; document.getElementById('sod-reference-area').innerHTML = `<div class="sod-object">${this.correctAnswer.i}</div>`; const choices = [items[0], items[1], items[2]]; document.getElementById('sod-choice-area').innerHTML = Utils.shuffleArray(choices).map(c => `<div class="sod-choice-card scannable" data-name="${c.n}" data-sound='${JSON.stringify(c.s)}' data-icon="${c.i}"><div class="sod-object">${c.i}</div></div>`).join(''); Accessibility.restartScanIfActive(); }, checkAnswer(card) { SoundController.play(JSON.parse(card.dataset.sound)); if (card.dataset.icon === this.correctAnswer.i) { GameController.showFeedback(true); setTimeout(() => this.setupLevel(), 1500); } else { setTimeout(() => TTS.speak(`Dit is ${card.dataset.name}. Probeer het nog eens.`), 100); GameController.showFeedback(false); } } },
+            'counting': { name: "Tellen", levels: [{max: 3}, {max: 5}, {max: 10}], create(level) { this.config = this.levels[level - 1]; DOM.gameArea.innerHTML = `<div id="counting-container"><h2>Tel tot: <span id="counting-display"></span></h2><div id="counting-target-area"></div><div id="counting-source-area"></div></div>`; this.setupLevel(); this.boundClickHandler = e => this.handleSourceClick(e); DOM.gameArea.addEventListener('click', this.boundClickHandler); }, destroy(){ DOM.gameArea.removeEventListener('click', this.boundClickHandler);}, setupLevel() { this.targetNumber = Math.floor(Math.random() * this.config.max) + 1; this.currentCount = 0; document.getElementById('counting-display').textContent = this.targetNumber; document.getElementById('counting-target-area').innerHTML = ''; const sourceArea = document.getElementById('counting-source-area'); sourceArea.innerHTML = ''; const item = Utils.getThemeItems().items[0]; for (let i = 0; i < this.config.max; i++) sourceArea.innerHTML += `<div class="counting-object scannable" data-sound='${JSON.stringify(item.s)}'>${item.i}</div>`; TTS.speak(`Tel ${this.targetNumber} ${Utils.getThemeItems().name}s.`); Accessibility.restartScanIfActive(); }, handleSourceClick(e) { const target = e.target.closest('.counting-object'); if (!target || this.currentCount >= this.targetNumber) return; SoundController.play(JSON.parse(target.dataset.sound)); target.remove(); document.getElementById('counting-target-area').innerHTML += `<div class="counting-object">${target.textContent}</div>`; this.currentCount++; setTimeout(() => TTS.speak(this.currentCount), 200); if (this.currentCount === this.targetNumber) { GameController.showFeedback(true); setTimeout(() => this.setupLevel(), 1500); } Accessibility.restartScanIfActive(); } },
+            'math': { name: "Rekenen", levels: [{max: 5}, {max: 10}, {max: 20}], create(level) { this.config = this.levels[level - 1]; DOM.gameArea.innerHTML = `<div id="math-container"><div id="math-problem-area"></div><div id="math-answer-area"></div></div>`; this.setupLevel(); this.boundClickHandler = e => { const btn = e.target.closest('.math-answer-btn'); if(btn) this.checkAnswer(parseInt(btn.textContent)); }; DOM.gameArea.addEventListener('click', this.boundClickHandler); }, destroy(){ DOM.gameArea.removeEventListener('click', this.boundClickHandler);}, setupLevel() { const n1 = Math.ceil(Math.random() * this.config.max); const n2 = Math.ceil(Math.random() * (this.config.max - n1)); this.answer = n1 + n2; const item = Utils.getThemeItems().items[0]; const createGroup = n => `<div class="math-object-group">${Array(n).fill(`<div class="math-object">${item.i}</div>`).join('')}</div>`; document.getElementById('math-problem-area').innerHTML = `${createGroup(n1)}<span>+</span>${createGroup(n2)}<span>=</span><span>?</span>`; const answers = [this.answer]; while (answers.length < 3) { const wrong = Math.floor(Math.random() * this.config.max) + 1; if (wrong > 0 && !answers.includes(wrong)) answers.push(wrong); } document.getElementById('math-answer-area').innerHTML = Utils.shuffleArray(answers).map(a => `<button class="math-answer-btn scannable">${a}</button>`).join(''); TTS.speak(`${n1} plus ${n2} is?`); Accessibility.restartScanIfActive(); }, checkAnswer(val) { SoundController.play([0,,.1,.8,,.1]); if (val === this.answer) { GameController.showFeedback(true); setTimeout(() => this.setupLevel(), 1500); } else GameController.showFeedback(false); } },
             'memory': {
                 name: "Memory", levels: [{pairs: 2, cols: 2}, {pairs: 4, cols: 4}, {pairs: 6, cols: 4}],
                 flippedCards: [], matchedPairs: 0, lockBoard: false,
                 create(level) { this.config = this.levels[level-1]; this.setupLevel(); },
                 destroy() { if(this.boundCardClickHandler) DOM.gameArea.removeEventListener('click', this.boundCardClickHandler); },
-                setupLevel() { this.matchedPairs = 0; this.flippedCards = []; this.lockBoard = false; const items = Utils.shuffleArray([...Utils.getThemeItems().items]).slice(0, this.config.pairs); const cards = Utils.shuffleArray([...items, ...items]); const grid = document.createElement('div'); grid.id = 'memory-grid'; grid.style.gridTemplateColumns = `repeat(${this.config.cols}, 1fr)`; DOM.gameArea.innerHTML = ''; DOM.gameArea.appendChild(grid); grid.innerHTML = cards.map(item => `<div class="memory-card scannable" data-item="${item.i}" data-name="${item.n}" data-sound="${item.s}"><div class="memory-card-face memory-card-back"></div><div class="memory-card-face memory-card-front">${item.i}</div></div>`).join(''); this.boundCardClickHandler = this.handleCardClick.bind(this); DOM.gameArea.addEventListener('click', this.boundCardClickHandler); TTS.speak('Zoek de paren.'); Accessibility.restartScanIfActive(); },
-                handleCardClick(e) { const card = e.target.closest('.memory-card'); if (this.lockBoard || !card || card.classList.contains('flipped')) return; SoundController.play(card.dataset.sound); setTimeout(() => TTS.speak(card.dataset.name), 100); card.classList.add('flipped'); this.flippedCards.push(card); if (this.flippedCards.length === 2) { this.lockBoard = true; setTimeout(this.checkMatch.bind(this), 1200); } },
+                setupLevel() { this.matchedPairs = 0; this.flippedCards = []; this.lockBoard = false; const items = Utils.shuffleArray([...Utils.getThemeItems().items]).slice(0, this.config.pairs); const cards = Utils.shuffleArray([...items, ...items]); const grid = document.createElement('div'); grid.id = 'memory-grid'; grid.style.gridTemplateColumns = `repeat(${this.config.cols}, 1fr)`; DOM.gameArea.innerHTML = ''; DOM.gameArea.appendChild(grid); grid.innerHTML = cards.map(item => `<div class="memory-card scannable" data-item="${item.i}" data-name="${item.n}" data-sound='${JSON.stringify(item.s)}'><div class="memory-card-face memory-card-back"></div><div class="memory-card-face memory-card-front">${item.i}</div></div>`).join(''); this.boundCardClickHandler = this.handleCardClick.bind(this); DOM.gameArea.addEventListener('click', this.boundCardClickHandler); TTS.speak('Zoek de paren.'); Accessibility.restartScanIfActive(); },
+                handleCardClick(e) { const card = e.target.closest('.memory-card'); if (this.lockBoard || !card || card.classList.contains('flipped')) return; SoundController.play(JSON.parse(card.dataset.sound)); setTimeout(() => TTS.speak(card.dataset.name), 100); card.classList.add('flipped'); this.flippedCards.push(card); if (this.flippedCards.length === 2) { this.lockBoard = true; setTimeout(this.checkMatch.bind(this), 1200); } },
                 checkMatch() { 
                     try {
                         const [c1, c2] = this.flippedCards; 
@@ -444,7 +426,6 @@
 
         // --- ALLES INITIALISEREN ---
         window.addEventListener('load', () => { 
-            // SoundController.preload() is not needed with jsfxr
             Settings.init(); 
             TTS.init(); 
             Accessibility.init(); 
