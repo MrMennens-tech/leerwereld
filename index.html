@@ -74,8 +74,10 @@
             <div class="settings-container">
                 <h2>Instellingen</h2>
                 
+                <!-- UITERLIJK SECTIE -->
                 <div class="setting-group">
-                    <h3>Thema</h3>
+                    <h3>🎨 Uiterlijk</h3>
+                    <p><strong>Thema</strong></p>
                     <div id="theme-options" class="setting-options">
                         <button class="setting-button scannable" data-setting="theme" data-value="sea">Zee</button>
                         <button class="setting-button scannable" data-setting="theme" data-value="jungle">Jungle</button>
@@ -93,49 +95,24 @@
                 </div>
 
                 <div class="setting-group">
-                    <h3>Toegankelijkheid</h3>
-                    <div id="input-mode-options" class="setting-options">
-                        <button class="setting-button scannable" data-setting="inputMode" data-value="touch">Touch/Muis</button>
-                        <button class="setting-button scannable" data-setting="inputMode" data-value="one-button">Eénknops</button>
-                        <button class="setting-button scannable" data-setting="inputMode" data-value="two-button">Tweeknops</button>
-                    </div>
-                    <div class="slider-container" style="margin-top:2vmin;">
-                        <label for="scan-speed-slider">Scansnelheid:</label>
-                        <input type="range" id="scan-speed-slider" class="scannable" min="1" max="5" step="0.5" data-setting="scanSpeed">
-                        <span id="scan-speed-value">3.0s</span>
-                    </div>
-                </div>
-
-                <div class="setting-group">
-                    <h3>Grootte Elementen</h3>
-                    <div class="slider-container">
-                        <label for="element-size-slider">Schaal:</label>
-                        <input type="range" id="element-size-slider" class="scannable" min="0.8" max="2.0" step="0.1" data-setting="elementSize">
-                        <span id="element-size-value">1.0x</span>
-                    </div>
-                </div>
-
-                <div class="setting-group">
-                    <h3>Icoon Stijl</h3>
-                    <p>Wisselt de stijl van de iconen voor betere zichtbaarheid.</p>
+                    <p><strong>Icoon Stijl</strong></p>
                     <div id="emoji-style-options" class="setting-options">
-                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="default">Standaard <span style="font-family: sans-serif;">🙂</span></button>
+                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="default">Standaard 🙂</button>
                         <button class="setting-button scannable" data-setting="emojiStyle" data-value="noto">Duidelijk <span style="font-family: 'Noto Color Emoji', sans-serif;">🙂</span></button>
                         <button class="setting-button scannable" data-setting="emojiStyle" data-value="fluent-hc">Fluent HC <span style="font-family: 'Fluent Emoji High Contrast', sans-serif;">🙂</span></button>
                     </div>
                 </div>
 
                 <div class="setting-group">
-                    <h3>Scan Modus</h3>
-                    <p>Kies welke elementen worden opgenomen in de scan.</p>
-                    <div id="scan-scope-options" class="setting-options">
-                        <button class="setting-button scannable" data-setting="scanScope" data-value="full">Volledige Controle</button>
-                        <button class="setting-button scannable" data-setting="scanScope" data-value="game-only">Enkel Spel</button>
+                    <p><strong>Grootte</strong></p>
+                    <div class="slider-container">
+                        <input type="range" id="element-size-slider" class="scannable" min="0.8" max="2.0" step="0.1" data-setting="elementSize">
+                        <span id="element-size-value">1.0x</span>
                     </div>
                 </div>
 
                 <div class="setting-group">
-                    <h3>Visueel</h3>
+                    <p><strong>Contrast</strong></p>
                     <div id="visual-options" class="setting-options">
                         <button class="setting-button scannable" data-setting="focusMode" data-value="false">Standaard</button>
                         <button class="setting-button scannable" data-setting="focusMode" data-value="true">Focus</button>
@@ -144,27 +121,10 @@
                     </div>
                 </div>
 
+                <!-- GELUID SECTIE -->
                 <div class="setting-group">
-                    <h3>Feedback</h3>
-                    <div id="feedback-options" class="setting-options">
-                        <button class="setting-button scannable" data-setting="feedbackMode" data-value="both">Alles</button>
-                        <button class="setting-button scannable" data-setting="feedbackMode" data-value="visual">Visueel</button>
-                        <button class="setting-button scannable" data-setting="feedbackMode" data-value="audio">Auditief</button>
-                    </div>
-                </div>
-
-                <div class="setting-group">
-                    <h3>Audio Engine</h3>
-                    <p>Kies het type geluidseffecten voor de spelletjes.</p>
-                    <div id="audio-engine-options" class="setting-options">
-                        <button class="setting-button scannable" data-setting="audioEngine" data-value="webaudio">Synthetisch</button>
-                        <button class="setting-button scannable" data-setting="audioEngine" data-value="jsfxr">8-bit Retro</button>
-                    </div>
-                </div>
-
-                <div class="setting-group">
-                    <h3>Audio Modus</h3>
-                    <p>Kies tussen stem, geluidseffecten of beide.</p>
+                    <h3>🔊 Geluid</h3>
+                    <p><strong>Audio Modus</strong></p>
                     <div id="audio-mode-options" class="setting-options">
                         <button class="setting-button scannable" data-setting="audioMode" data-value="both">Stem + Geluid</button>
                         <button class="setting-button scannable" data-setting="audioMode" data-value="soundOnly">Alleen Geluid</button>
@@ -173,10 +133,54 @@
                 </div>
 
                 <div class="setting-group">
-                    <h3>Stem (TTS)</h3>
+                    <p><strong>Geluidseffecten</strong></p>
+                    <div id="audio-engine-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="audioEngine" data-value="webaudio">Synthetisch</button>
+                        <button class="setting-button scannable" data-setting="audioEngine" data-value="jsfxr">8-bit Retro</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <p><strong>Stem</strong></p>
                     <div id="tts-voice-options" class="setting-options">
                         <button class="setting-button scannable" data-setting="voice" data-value="female">Vrouw</button>
                         <button class="setting-button scannable" data-setting="voice" data-value="male">Man</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <p><strong>Feedback</strong></p>
+                    <div id="feedback-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="feedbackMode" data-value="both">Alles</button>
+                        <button class="setting-button scannable" data-setting="feedbackMode" data-value="visual">Visueel</button>
+                        <button class="setting-button scannable" data-setting="feedbackMode" data-value="audio">Auditief</button>
+                    </div>
+                </div>
+
+                <!-- TOEGANKELIJKHEID SECTIE -->
+                <div class="setting-group">
+                    <h3>♿ Toegankelijkheid</h3>
+                    <p><strong>Besturing</strong></p>
+                    <div id="input-mode-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="inputMode" data-value="touch">Touch/Muis</button>
+                        <button class="setting-button scannable" data-setting="inputMode" data-value="one-button">Eénknops</button>
+                        <button class="setting-button scannable" data-setting="inputMode" data-value="two-button">Tweeknops</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <p><strong>Scansnelheid</strong></p>
+                    <div class="slider-container">
+                        <input type="range" id="scan-speed-slider" class="scannable" min="1" max="5" step="0.5" data-setting="scanSpeed">
+                        <span id="scan-speed-value">3.0s</span>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <p><strong>Scan Bereik</strong></p>
+                    <div id="scan-scope-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="scanScope" data-value="full">Volledige Controle</button>
+                        <button class="setting-button scannable" data-setting="scanScope" data-value="game-only">Enkel Spel</button>
                     </div>
                 </div>
             </div>
@@ -192,4 +196,3 @@
     </script>
 </body>
 </html>
-

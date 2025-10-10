@@ -236,159 +236,185 @@ export function createSoundController(settingsGetter) {
         // Verschillende audio engine mappings
         soundMaps: {
                 // 1. Web Audio API - Geavanceerde synthetische geluiden
+                // Elk icoon heeft een UNIEK geluid!
                 webaudio: {
-                    // Speciale effecten (gebruik nieuwe methodes)
-                    'plons': { type: 'splash' },
-                    'schaar': { type: 'click' },
-                    'bubbel': { type: 'bubble' },
-                    'swoosh': { type: 'whoosh' },
-                    'space_swoosh': { type: 'whoosh' },
-                    'klik': { type: 'click' },
-                    'pop': { type: 'click' },
+                    // === ZEE THEMA ===
+                    'plons': { type: 'splash' },  // 🐠 vis
+                    'schaar': { type: 'click' },  // 🦀 krab
+                    'bubbel': { type: 'bubble' },  // 🐙 octopus
+                    'walvis_geluid': { type: 'tone', freq: 60, duration: 1.2, wave: 'sine' },  // 🐳 walvis - zeer lage toon
+                    'dolfijn_geluid': { type: 'sequence', notes: [523, 659, 784, 1047], duration: 0.08 },  // 🐬 dolfijn - hoge piep
+                    'glinstering': { type: 'sequence', notes: [1047, 1319, 1568, 1760], duration: 0.08 },  // ⭐ zeesster
                     
-                    // Toon-gebaseerde geluiden
-                    'walvis_geluid': { type: 'tone', freq: 80, duration: 0.8, wave: 'sine' },
-                    'dolfijn_geluid': { type: 'sequence', notes: [523, 659, 784], duration: 0.1 },
-                    'glinstering': { type: 'sequence', notes: [1047, 1319, 1568, 1760], duration: 0.08 },
-                    'aap_geluid': { type: 'sequence', notes: [330, 262, 330], duration: 0.15 },
-                    'leeuw_brul': { type: 'tone', freq: 110, duration: 0.6, wave: 'sawtooth' },
-                    'olifant_trompet': { type: 'tone', freq: 165, duration: 0.5, wave: 'triangle' },
-                    'slang_sis': { type: 'tone', freq: 4000, duration: 0.3, wave: 'square' },
-                    'papegaai_praat': { type: 'sequence', notes: [523, 440, 659], duration: 0.1 },
-                    'hap': { type: 'click' },
-                    'koe_boe': { type: 'tone', freq: 147, duration: 0.5, wave: 'sawtooth' },
-                    'varken_knor': { type: 'tone', freq: 196, duration: 0.3, wave: 'square' },
-                    'kip_tok': { type: 'tone', freq: 1760, duration: 0.05, wave: 'square' },
-                    'schaap_blaat': { type: 'tone', freq: 220, duration: 0.4, wave: 'triangle' },
-                    'paard_hinnik': { type: 'sequence', notes: [330, 247, 330, 247], duration: 0.12 },
-                    'tractor_motor': { type: 'tone', freq: 98, duration: 0.4, wave: 'sawtooth' },
-                    'lancering': { type: 'sequence', notes: [110, 165, 220, 330, 440], duration: 0.2 },
-                    'alien_geluid': { type: 'sequence', notes: [880, 440, 1760, 220], duration: 0.1 },
-                    'beep': { type: 'tone', freq: 880, duration: 0.1, wave: 'square' },
-                    'schot': { type: 'click' },
-                    'basketbal_stuit': { type: 'click' },
-                    'honkbal_slag': { type: 'click' },
-                    'tennis_slag': { type: 'click' },
-                    'applaus': { type: 'whoosh' },
-                    'blad_ritsel': { type: 'whoosh' },
-                    'plof': { type: 'click' },
-                    'eekhoorn_piep': { type: 'tone', freq: 2000, duration: 0.08, wave: 'sine' },
-                    'tik': { type: 'click' },
-                    'lente_bries': { type: 'whoosh' },
-                    'vlinder_fladder': { type: 'sequence', notes: [1760, 2093, 1760, 2093], duration: 0.06 },
-                    'groei_geluid': { type: 'sequence', notes: [220, 330, 440, 523], duration: 0.15 },
-                    'kuiken_piep': { type: 'tone', freq: 1760, duration: 0.08, wave: 'sine' },
-                    'golfslag': { type: 'splash' },
-                    'winter_wind': { type: 'whoosh' },
-                    'stof_geluid': { type: 'whoosh' },
-                    'schaats_ijs': { type: 'whoosh' },
-                    'bibber': { type: 'sequence', notes: [440, 523, 440, 523], duration: 0.08 },
-                    'rits': { type: 'whoosh' },
-                    'kerst_jingle': { type: 'chord', frequencies: [523, 659, 784], duration: 0.3 },
-                    'kerstman_hohoho': { type: 'sequence', notes: [294, 220, 294], duration: 0.2 },
-                    'rendier_bel': { type: 'chord', frequencies: [1047, 1319], duration: 0.2 },
-                    'cadeau_uitpak': { type: 'click' },
-                    'kerstbel_ring': { type: 'sequence', notes: [1568, 1760, 1568], duration: 0.15 },
-                    'magisch': { type: 'sequence', notes: [523, 659, 784, 1047], duration: 0.1 },
-                    'toon_1': { type: 'tone', freq: 261, duration: 0.3, wave: 'sine' },
-                    'toon_2': { type: 'tone', freq: 294, duration: 0.3, wave: 'sine' },
-                    'toon_3': { type: 'tone', freq: 329, duration: 0.3, wave: 'sine' },
-                    'toon_4': { type: 'tone', freq: 349, duration: 0.3, wave: 'sine' },
-                    'toon_5': { type: 'tone', freq: 392, duration: 0.3, wave: 'sine' },
-                    'toon_6': { type: 'tone', freq: 440, duration: 0.3, wave: 'sine' },
-                    'vorm_1': { type: 'tone', freq: 523, duration: 0.2, wave: 'square' },
-                    'vorm_2': { type: 'chord', frequencies: [523, 659], duration: 0.2 },
-                    'vorm_3': { type: 'tone', freq: 784, duration: 0.2, wave: 'sine' },
-                    'vorm_4': { type: 'chord', frequencies: [523, 659, 784], duration: 0.2 },
-                    'vorm_5': { type: 'sequence', notes: [523, 659, 784, 1047], duration: 0.1 }
+                    // === JUNGLE THEMA ===
+                    'aap_geluid': { type: 'sequence', notes: [330, 220, 330, 440], duration: 0.12 },  // 🐵 aap
+                    'leeuw_brul': { type: 'tone', freq: 90, duration: 0.8, wave: 'sawtooth' },  // 🦁 leeuw
+                    'olifant_trompet': { type: 'tone', freq: 180, duration: 0.6, wave: 'triangle' },  // 🐘 olifant
+                    'slang_sis': { type: 'tone', freq: 5000, duration: 0.4, wave: 'square' },  // 🐍 slang
+                    'papegaai_praat': { type: 'sequence', notes: [880, 523, 784, 659], duration: 0.09 },  // 🦜 papegaai
+                    'hap': { type: 'click' },  // 🍌 banaan
+                    
+                    // === BOERDERIJ THEMA ===
+                    'koe_boe': { type: 'tone', freq: 120, duration: 0.7, wave: 'sawtooth' },  // 🐮 koe
+                    'varken_knor': { type: 'tone', freq: 220, duration: 0.4, wave: 'square' },  // 🐷 varken
+                    'kip_tok': { type: 'tone', freq: 2000, duration: 0.04, wave: 'square' },  // 🐔 kip
+                    'schaap_blaat': { type: 'tone', freq: 260, duration: 0.5, wave: 'triangle' },  // 🐑 schaap
+                    'paard_hinnik': { type: 'sequence', notes: [440, 330, 440, 330, 440], duration: 0.1 },  // 🐴 paard
+                    'tractor_motor': { type: 'tone', freq: 75, duration: 0.5, wave: 'sawtooth' },  // 🚜 tractor
+                    
+                    // === RUIMTE THEMA ===
+                    'lancering': { type: 'sequence', notes: [110, 165, 220, 330, 440, 659], duration: 0.15 },  // 🚀 raket
+                    'alien_geluid': { type: 'sequence', notes: [1320, 660, 1980, 440], duration: 0.1 },  // 👽 alien
+                    'space_swoosh': { type: 'whoosh' },  // 🪐 planeet
+                    'swoosh': { type: 'whoosh' },  // ☄️ komeet
+                    'beep': { type: 'tone', freq: 1320, duration: 0.08, wave: 'square' },  // 🛰️ satelliet
+                    
+                    // === KERST THEMA ===
+                    'kerst_jingle': { type: 'chord', frequencies: [523, 659, 784], duration: 0.4 },  // 🎄 kerstboom
+                    'kerstman_hohoho': { type: 'sequence', notes: [330, 294, 330], duration: 0.25 },  // 🎅 kerstman
+                    'rendier_bel': { type: 'chord', frequencies: [1047, 1319, 1568], duration: 0.3 },  // 🦌 rendier
+                    'cadeau_uitpak': { type: 'click' },  // 🎁 cadeau
+                    'kerstbel_ring': { type: 'sequence', notes: [1568, 1760, 1568, 1319], duration: 0.12 },  // 🔔 kerstbel
+                    'magisch': { type: 'sequence', notes: [523, 659, 784, 1047, 1319], duration: 0.08 },  // ⛄ sneeuwpop
+                    
+                    // === HERFST THEMA ===
+                    'blad_ritsel': { type: 'whoosh' },  // 🍁🍂 bladeren
+                    'pop': { type: 'click' },  // 🍄 paddenstoel
+                    'plof': { type: 'tone', freq: 180, duration: 0.2, wave: 'triangle' },  // 🎃 pompoen
+                    'eekhoorn_piep': { type: 'tone', freq: 2400, duration: 0.1, wave: 'sine' },  // 🐿️ eekhoorn
+                    'tik': { type: 'click' },  // 🌰 kastanje
+                    
+                    // === LENTE THEMA ===
+                    'lente_bries': { type: 'whoosh' },  // 🌸🌷 bloemen
+                    'vlinder_fladder': { type: 'sequence', notes: [1760, 2093, 1980, 2217], duration: 0.05 },  // 🦋 vlinder
+                    'groei_geluid': { type: 'sequence', notes: [220, 330, 440, 523, 659], duration: 0.12 },  // 🌱 plantje
+                    'kuiken_piep': { type: 'tone', freq: 1980, duration: 0.09, wave: 'sine' },  // 🐣 kuiken
+                    
+                    // === ZOMER THEMA ===
+                    'golfslag': { type: 'splash' },  // 🏖️ strand
+                    
+                    // === WINTER THEMA ===
+                    'winter_wind': { type: 'whoosh' },  // ❄️ sneeuwvlok
+                    'stof_geluid': { type: 'whoosh' },  // 🧤🧣 wanten/sjaal
+                    'schaats_ijs': { type: 'tone', freq: 3300, duration: 0.3, wave: 'sine' },  // ⛸️ schaats
+                    'bibber': { type: 'sequence', notes: [440, 523, 440, 523, 440], duration: 0.06 },  // 🥶 koud
+                    'rits': { type: 'tone', freq: 2200, duration: 0.15, wave: 'square' },  // 🧥 jas
+                    
+                    // === SPORT THEMA ===
+                    'schot': { type: 'tone', freq: 100, duration: 0.15, wave: 'square' },  // ⚽ voetbal
+                    'basketbal_stuit': { type: 'tone', freq: 200, duration: 0.12, wave: 'sine' },  // 🏀 basketbal
+                    'honkbal_slag': { type: 'click' },  // ⚾ honkbal
+                    'tennis_slag': { type: 'tone', freq: 1500, duration: 0.05, wave: 'square' },  // 🎾 tennisbal
+                    'applaus': { type: 'whoosh' },  // 🏆 beker
+                    
+                    // === KLEUREN THEMA (elke kleur eigen frequentie) ===
+                    'toon_1': { type: 'tone', freq: 261, duration: 0.3, wave: 'sine' },  // 🔴 rood - C
+                    'toon_2': { type: 'tone', freq: 294, duration: 0.3, wave: 'sine' },  // 🟠 oranje - D
+                    'toon_3': { type: 'tone', freq: 329, duration: 0.3, wave: 'sine' },  // 🟡 geel - E
+                    'toon_4': { type: 'tone', freq: 349, duration: 0.3, wave: 'sine' },  // 🟢 groen - F
+                    'toon_5': { type: 'tone', freq: 392, duration: 0.3, wave: 'sine' },  // 🔵 blauw - G
+                    'toon_6': { type: 'tone', freq: 440, duration: 0.3, wave: 'sine' },  // 🟣 paars - A
+                    
+                    // === VORMEN THEMA (elke vorm eigen akkoord/patroon) ===
+                    'vorm_1': { type: 'tone', freq: 523, duration: 0.25, wave: 'square' },  // 🟥 vierkant
+                    'vorm_2': { type: 'chord', frequencies: [523, 659], duration: 0.25 },  // 🔺 driehoek
+                    'vorm_3': { type: 'tone', freq: 784, duration: 0.25, wave: 'sine' },  // 🔵 cirkel
+                    'vorm_4': { type: 'chord', frequencies: [523, 659, 784], duration: 0.25 },  // 🔶 ruit
+                    'vorm_5': { type: 'sequence', notes: [523, 659, 784, 1047], duration: 0.1 },  // 💚 hart
+                    
+                    // === ALGEMEEN ===
+                    'klik': { type: 'click' },  // 🕶️ zonnebril enz
                 },
             
                 // 2. JSFXR - 8-bit retro geluiden
+                // Elk icoon heeft een UNIEK 8-bit geluid!
                 jsfxr: {
-                    // Zee thema
-                    'plons': [3,,.12,.52,.1,.26,,,,,,,,,,,1,,,],
-                    'schaar': [3,.1,.01,.8,,.24,,,,,,,,,.3,.8,,-.4,.1,1,,,],
-                    'bubbel': [3,,.05,.8,,.59,,.2,,,,,,,,,.4,,,.1,1,,,],
-                    'walvis_geluid': [0,.3,.32,.2,.5,.7,,,,,,,,,,,1,,,],
-                    'dolfijn_geluid': [0,.1,.4,.4,.5,.8,,,,,,,,,,,1,,,],
-                    'glinstering': [1,,.02,.8,,.57,,,,,,,,,,.4,,,.2,1,,,],
+                    // === ZEE THEMA ===
+                    'plons': [3,,.12,.52,.1,.26,,,,,,,,,,,1,,,],  // 🐠 vis
+                    'schaar': [3,.1,.01,.8,,.24,,,,,,,,,.3,.8,,-.4,.1,1,,,],  // 🦀 krab
+                    'bubbel': [3,,.05,.8,,.59,,.2,,,,,,,,,.4,,,.1,1,,,],  // 🐙 octopus
+                    'walvis_geluid': [0,.5,.15,.1,.7,.2,,.1,,,,,,,,,1,,,],  // 🐳 walvis - lage 8-bit
+                    'dolfijn_geluid': [0,.1,.08,.9,.5,.4,,,,,,,,,,,1,,,],  // 🐬 dolfijn - hoge piep
+                    'glinstering': [1,,.02,.8,,.57,,,,,,,,,,.4,,,.2,1,,,],  // ⭐ zeesster
                     
-                    // Jungle thema
-                    'aap_geluid': [0,.1,.2,.3,.4,.5],
-                    'leeuw_brul': [2,0.3,0.3,0.2,0.5,0.7,,,,,,,,,,,1,,,],
-                    'olifant_trompet': [0,.5,.4,.1,.8,.4,,,-.1],
-                    'slang_sis': [2,0,.2,0.7,0.3,0.8,,,,,,,,0.3,,,,,1,,,],
-                    'papegaai_praat': [0,0,.1,.6,.2,.4,,,,,,,,,,,,,,1,,,],
-                    'hap': [0,,.14,.8,,.25],
+                    // === JUNGLE THEMA ===
+                    'aap_geluid': [0,.15,.18,.3,.4,.5,,.05,,,,,,,,,1,,,],  // 🐵 aap - uniek patroon
+                    'leeuw_brul': [2,.4,.25,.15,.6,.8,,,-.1,,,,,,,,,1,,,],  // 🦁 leeuw - diepe brul
+                    'olifant_trompet': [0,.6,.35,.1,.9,.3,,,-.2,,,,,,,,,1,,,],  // 🐘 olifant - trompet
+                    'slang_sis': [3,,.18,.7,.25,.85,,,,,,,,,.35,,,,,1,,,],  // 🐍 slang - hoog sis
+                    'papegaai_praat': [0,.05,.09,.6,.15,.45,,,,,,,,,,,,,1,,,],  // 🦜 papegaai - vrolijk
+                    'hap': [0,,.14,.8,,.25,,,,,,,,,,,,,,,],  // 🍌 banaan
                     
-                    // Boerderij thema
-                    'koe_boe': [0,.3,.2,.1,.4,.5],
-                    'varken_knor': [0,.2,.1,.1,.3,.6],
-                    'kip_tok': [0,0,.01,.8,.1,.2],
-                    'schaap_blaat': [0,.1,.1,.2,.3,.4],
-                    'paard_hinnik': [0,.4,.3,.2,.5,.6],
-                    'tractor_motor': [2,0,.1,0.8,0.2,0.1,,,,,,,,0.8,,,,,1,,,],
+                    // === BOERDERIJ THEMA ===
+                    'koe_boe': [0,.35,.22,.12,.45,.55,,.08,,,,,,,,,1,,,],  // 🐮 koe - laag
+                    'varken_knor': [0,.25,.13,.15,.35,.65,,.1,,,,,,,,,1,,,],  // 🐷 varken - mid
+                    'kip_tok': [0,,.008,.9,.08,.18,,,,,,,,,,,,,,,],  // 🐔 kip - kort hoog
+                    'schaap_blaat': [0,.12,.11,.25,.32,.42,,.06,,,,,,,,,1,,,],  // 🐑 schaap
+                    'paard_hinnik': [0,.45,.28,.2,.55,.62,,.12,,,,,,,,,1,,,],  // 🐴 paard - herhalend
+                    'tractor_motor': [2,,.08,.85,.18,.12,,,,,,,,,.75,,,,,1,,,],  // 🚜 tractor
                     
-                    // Ruimte thema
-                    'lancering': [2,,.42,.6,.42,.1,,.32,,,,,,.23,,.34,-.1,1,,,],
-                    'alien_geluid': [1,,.1,.1,.5,.5],
-                    'space_swoosh': [2,,.5,.4,.3,.1],
-                    'swoosh': [2,,.8,.5,.4,.3],
-                    'beep': [0,0,.1,.8,.1,.1],
+                    // === RUIMTE THEMA ===
+                    'lancering': [2,,.42,.6,.42,.1,,.32,,,,,,.23,,.34,-.1,1,,,],  // 🚀 raket
+                    'alien_geluid': [1,,.09,.12,.52,.48,,-.05,,,,,,,,,,,1,,,],  // 👽 alien - weird
+                    'space_swoosh': [2,,.48,.38,.28,.15,,.05,,,,,,,,,,,1,,,],  // 🪐 planeet
+                    'swoosh': [2,,.75,.45,.35,.25,,.08,,,,,,,,,,,1,,,],  // ☄️ komeet
+                    'beep': [0,,.08,.85,.09,.12,,,,,,,,,,,,,,,],  // 🛰️ satelliet - beep
                     
-                    // Sport thema
-                    'schot': [3,,.05,.8,,.2],
-                    'basketbal_stuit': [0,,.2,.1,.1,.1],
-                    'honkbal_slag': [3,,.1,.8,,.15],
-                    'tennis_slag': [0,,.05,.8,,.1],
-                    'applaus': [3,,.5,.1,.8,.3],
+                    // === KERST THEMA ===
+                    'kerst_jingle': [0,,.18,.38,.48,.28,,.04,,,,,,,,,1,,,],  // 🎄 kerstboom
+                    'kerstman_hohoho': [0,.25,.28,.18,.38,.32,,.06,,,,,,,,,1,,,],  // 🎅 kerstman
+                    'rendier_bel': [1,,.04,.75,,.18,,,,,,,,,,,,,.15,1,,,],  // 🦌 rendier - bel
+                    'cadeau_uitpak': [3,,.18,.35,.25,.15,,,,,,,,,,,,,,,],  // 🎁 cadeau
+                    'kerstbel_ring': [1,,.09,.78,,.22,,,.05,,,,,,,,,,.12,1,,,],  // 🔔 kerstbel
+                    'magisch': [1,,.12,.48,.35,.28,,.03,,,,,,,,.25,,,,.18,1,,,],  // ⛄ sneeuwpop
                     
-                    // Herfst thema
-                    'blad_ritsel': [2,,.1,.8,,.15],
-                    'plof': [3,,.3,.4,.2,.1],
-                    'eekhoorn_piep': [0,,.1,.9,,.2],
-                    'tik': [0,,.01,.8,,.05],
+                    // === HERFST THEMA ===
+                    'blad_ritsel': [3,,.08,.75,,.12,,,,,,,,,.15,,,,,1,,,],  // 🍁🍂 bladeren
+                    'plof': [3,,.25,.35,.18,.08,,,,,,,,,,,,,,,],  // 🎃 pompoen - dof
+                    'eekhoorn_piep': [0,,.08,.92,,.18,,,,,,,,,,,,,,1,,,],  // 🐿️ eekhoorn
+                    'tik': [0,,.005,.85,,.04,,,,,,,,,,,,,,,],  // 🌰 kastanje - hard
                     
-                    // Lente thema
-                    'lente_bries': [2,,.3,.5,,.4],
-                    'vlinder_fladder': [0,,.05,.9,,.1],
-                    'groei_geluid': [0,,.2,.3,.5,.4],
-                    'kuiken_piep': [0,,.05,.9,,.15],
+                    // === LENTE THEMA ===
+                    'lente_bries': [3,,.25,.45,,.35,,,,,,,,,.18,,,,,1,,,],  // 🌸🌷 bloemen
+                    'vlinder_fladder': [0,,.04,.95,,.08,,.02,,,,,,,,,,,,.08,1,,,],  // 🦋 vlinder - licht
+                    'groei_geluid': [0,,.18,.28,.48,.38,,.05,,,,,,,,.15,,,,.12,1,,,],  // 🌱 plantje - groei
+                    'kuiken_piep': [0,,.04,.92,,.13,,,,,,,,,,,,,,1,,,],  // 🐣 kuiken
                     
-                    // Zomer thema
-                    'golfslag': [2,,.4,.2,.6,.5],
+                    // === ZOMER THEMA ===
+                    'golfslag': [3,,.35,.18,.55,.45,,,,,,,,,,.25,,,,,1,,,],  // 🏖️ strand
                     
-                    // Winter thema
-                    'winter_wind': [2,,.5,.1,.7,.4],
-                    'stof_geluid': [0,,.1,.8,,.1],
-                    'schaats_ijs': [2,,.2,.8,,.15],
-                    'bibber': [0,,.05,.8,,.1],
-                    'rits': [2,,.05,.8,,.1],
+                    // === WINTER THEMA ===
+                    'winter_wind': [3,,.45,.08,.68,.35,,,,,,,,,.22,,,,,1,,,],  // ❄️ sneeuwvlok
+                    'stof_geluid': [3,,.08,.72,,.08,,,,,,,,,.12,,,,,1,,,],  // 🧤🧣 wanten/sjaal
+                    'schaats_ijs': [0,,.15,.85,,.12,,-.05,,,,,,,,,,,,.08,1,,,],  // ⛸️ schaats - scherp
+                    'bibber': [0,,.04,.78,,.09,,.04,,,,,,,,,,,,.05,1,,,],  // 🥶 koud - trilling
+                    'rits': [3,,.04,.82,,.08,,,,,,,,,.15,,,,,1,,,],  // 🧥 jas - rits
                     
-                    // Kerst thema
-                    'kerst_jingle': [0,,.2,.4,.5,.3],
-                    'kerstman_hohoho': [0,.2,.3,.2,.4,.3],
-                    'rendier_bel': [1,,.05,.8,,.2],
-                    'cadeau_uitpak': [3,,.2,.4,.3,.2],
-                    'kerstbel_ring': [1,,.1,.8,,.2],
-                    'magisch': [1,,.15,.5,.4,.3],
+                    // === SPORT THEMA ===
+                    'schot': [3,,.04,.78,,.15,,,,,,,,,,.25,,,,,1,,,],  // ⚽ voetbal - trap
+                    'basketbal_stuit': [0,,.15,.08,.09,.08,,,,,,,,,,,,,,,],  // 🏀 basketbal - stuit
+                    'honkbal_slag': [3,,.08,.82,,.12,,,,,,,,,,.35,,,,,1,,,],  // ⚾ honkbal - slag
+                    'tennis_slag': [3,,.03,.88,,.08,,,,,,,,,,.15,,,,,1,,,],  // 🎾 tennisbal - kort
+                    'applaus': [3,,.42,.08,.72,.25,,,,,,,,,,.45,,,,,1,,,],  // 🏆 beker - applaus
                     
-                    // Kleuren/Vormen thema
-                    'toon_1': [0,,.1,.4,.5,.1],
-                    'toon_2': [0,,.2,.4,.5,.2],
-                    'toon_3': [0,,.3,.4,.5,.3],
-                    'toon_4': [0,,.4,.4,.5,.4],
-                    'toon_5': [0,,.5,.4,.5,.5],
-                    'toon_6': [0,,.6,.4,.5,.6],
-                    'vorm_1': [0,,.2,.5,.4,.2],
-                    'vorm_2': [0,,.3,.5,.4,.3],
-                    'vorm_3': [0,,.4,.5,.4,.4],
-                    'vorm_4': [0,,.5,.5,.4,.5],
-                    'vorm_5': [0,,.6,.5,.4,.6],
+                    // === KLEUREN THEMA (elke kleur unieke 8-bit toon) ===
+                    'toon_1': [0,,.08,.35,.45,.08,,,,,,,,,,,,,,,],  // 🔴 rood - C
+                    'toon_2': [0,,.12,.35,.45,.15,,,,,,,,,,,,,,,],  // 🟠 oranje - D
+                    'toon_3': [0,,.18,.35,.45,.22,,,,,,,,,,,,,,,],  // 🟡 geel - E
+                    'toon_4': [0,,.25,.35,.45,.28,,,,,,,,,,,,,,,],  // 🟢 groen - F
+                    'toon_5': [0,,.32,.35,.45,.35,,,,,,,,,,,,,,,],  // 🔵 blauw - G
+                    'toon_6': [0,,.42,.35,.45,.42,,,,,,,,,,,,,,,],  // 🟣 paars - A
                     
-                    // Algemeen
-                    'klik': [3,,.01,.8,,.1],
-                    'pop': [3,,.3,.4,.2,.1]
+                    // === VORMEN THEMA (elke vorm uniek 8-bit patroon) ===
+                    'vorm_1': [0,,.15,.45,.35,.15,,,,,,,,,,,,,,,],  // 🟥 vierkant
+                    'vorm_2': [0,,.22,.45,.35,.22,,.05,,,,,,,,,,,,.08,1,,,],  // 🔺 driehoek
+                    'vorm_3': [0,,.32,.45,.35,.32,,,,,,,,,,,,,,,],  // 🔵 cirkel
+                    'vorm_4': [0,,.42,.45,.35,.42,,.08,,,,,,,,.12,,,,.15,1,,,],  // 🔶 ruit
+                    'vorm_5': [0,,.52,.45,.35,.52,,.12,,,,,,,,.18,,,,.22,1,,,],  // 💚 hart
+                    
+                    // === ALGEMEEN ===
+                    'klik': [3,,.008,.82,,.08,,,,,,,,,,,,,,,],  // 🕶️ zonnebril enz
+                    'pop': [3,,.25,.35,.15,.08,,,,,,,,,,,,,,,]  // algemene pop
                 }
         },
         
