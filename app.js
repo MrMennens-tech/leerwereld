@@ -53,7 +53,8 @@ export const Settings = {
         voice: 'female',
         elementSize: 1.0,
         emojiStyle: 'default',
-        audioEngine: 'webaudio'
+        audioEngine: 'webaudio',
+        audioMode: 'both' // 'both', 'soundOnly', 'voiceOnly'
     },
     
     init() {
@@ -257,6 +258,7 @@ export const TTS = {
     
     speak(text) {
         if (Settings.state.feedbackMode === 'visual' || !text) return;
+        if (Settings.state.audioMode === 'soundOnly') return; // Alleen geluidseffecten, geen stem
         
         speechSynthesis.cancel();
         const utt = new SpeechSynthesisUtterance(text);
