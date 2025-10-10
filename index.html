@@ -23,15 +23,7 @@
             --bg-image: url('https://www.transparenttextures.com/patterns/wavecut.png');
             --element-size-multiplier: 1.0; /* Variabele voor grootte */
         }
-
-        /* --- PRELOADER STIJLEN --- */
-        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
-        #preloader.hidden { opacity: 0; pointer-events: none; }
-        .spinner { width: 60px; height: 60px; border: 8px solid var(--secondary-color); border-top-color: var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; }
-        #preloader p { margin-top: 20px; font-size: 1.2rem; color: var(--text-color); }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-
+        
         /* --- THEMA'S --- */
         body[data-theme="jungle"] { --bg-color: #e8f5e9; --primary-color: #2e7d32; --secondary-color: #1b5e20; --accent-color: #ff6f00; --text-color: #1b5e20; --card-shadow: rgba(46, 125, 50, 0.2); --bg-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); }
         body[data-theme="farm"] { --bg-color: #fffde7; --primary-color: #c62828; --secondary-color: #8e0000; --accent-color: #4caf50; --text-color: #bf360c; --card-shadow: rgba(198, 40, 40, 0.2); --bg-image: url('https://www.transparenttextures.com/patterns/checkered-pattern.png'); }
@@ -99,15 +91,14 @@
             font-family: "Fluent Emoji High Contrast", sans-serif;
         }
         
-        /* Automatische inversie voor Fluent HC in hoog-contrast modus */
-        body[data-contrast="high"][data-emoji-style="fluent-hc"] .icon,
-        body[data-contrast="high"][data-emoji-style="fluent-hc"] .interactive-object,
-        body[data-contrast="high"][data-emoji-style="fluent-hc"] .moving-target,
-        body[data-contrast="high"][data-emoji-style="fluent-hc"] .memory-card-face,
-        body[data-contrast="high"][data-emoji-style="fluent-hc"] .sod-object,
-        body[data-contrast="high"][data-emoji-style="fluent-hc"] .counting-object,
-        body[data-contrast="high"][data-emoji-style="fluent-hc"] .math-object {
-            filter: invert(1);
+        body[data-contrast="high"] .icon,
+        body[data-contrast="high"] .interactive-object,
+        body[data-contrast="high"] .moving-target,
+        body[data-contrast="high"] .memory-card-face,
+        body[data-contrast="high"] .sod-object,
+        body[data-contrast="high"] .counting-object,
+        body[data-contrast="high"] .math-object {
+            filter: grayscale(1) invert(1) brightness(1.2);
         }
 
 
@@ -129,7 +120,7 @@
         
         /* Memory */
         #memory-grid { display: grid; gap: calc(2vmin * var(--element-size-multiplier)); }
-        .memory-card { background-color: var(--primary-color); border-radius: 15px; cursor: pointer; aspect-ratio: 1/1; position: relative; transform-style: preserve-3d; transition: transform 0.5s; width: calc(15vmin * var(--element-size-multiplier)); }
+        .memory-card { background-color: var(--primary-color); border-radius: 15px; cursor: pointer; aspect-ratio: 1 / 1; position: relative; transform-style: preserve-3d; transition: transform 0.5s; width: calc(15vmin * var(--element-size-multiplier)); }
         .memory-card.flipped, .memory-card.matched { transform: rotateY(180deg); pointer-events: none; }
         .memory-card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-size: calc(10vmin * var(--element-size-multiplier)); }
         .memory-card-back { background-color: var(--primary-color); }
@@ -162,10 +153,6 @@
     </style>
 </head>
 <body data-theme="sea" data-contrast="normal" data-focus-mode="false">
-    <div id="preloader">
-        <div class="spinner"></div>
-        <p>LeerWereld wordt geladen...</p>
-    </div>
     <div class="app-container">
         <!-- VIEWS --><div id="main-menu-view" class="view active">
             <header class="main-header"> <h1>LeerWereld</h1> </header>
@@ -181,15 +168,15 @@
         </div>
         <div id="game-view" class="view">
             <div class="top-bar">
-                <button id="back-to-main-button" class="ui-button scannable" aria-label="Terug naar hoofdmenu">◀</button>
+                <button id="back-to-main-button" class="ui-button scannable" aria-label="Terug naar hoofdmenu"><span class="icon">◀</span></button>
                 <div id="game-level-selector" class="setting-options"></div>
-                <button id="open-settings-from-game" class="ui-button scannable" aria-label="Open instellingen">⚙️</button>
+                <button id="open-settings-from-game" class="ui-button scannable" aria-label="Open instellingen"><span class="icon">⚙️</span></button>
             </div>
             <div class="game-area"></div>
             <div class="game-feedback"></div>
         </div>
         <div id="settings-view" class="view">
-             <div class="top-bar"> <button id="close-settings-button" class="ui-button scannable" aria-label="Sluit instellingen">◀</button> </div>
+             <div class="top-bar"> <button id="close-settings-button" class="ui-button scannable" aria-label="Sluit instellingen"><span class="icon">◀</span></button> </div>
              <div class="settings-container">
                 <h2>Instellingen</h2>
                 <div class="setting-group">
@@ -284,8 +271,7 @@
             gameFeedback: document.querySelector('.game-feedback'),
             levelSelector: document.getElementById('game-level-selector'),
             body: document.body,
-            settingsContainer: document.querySelector('#settings-view .settings-container'),
-            preloader: document.getElementById('preloader')
+            settingsContainer: document.querySelector('#settings-view .settings-container')
         };
         
         // --- HULPFUNCTIES ---
@@ -328,38 +314,11 @@
                 return Array.from(soundNames);
             },
             preload() {
-                const soundNames = this.getAllSoundNames();
-                if (soundNames.length === 0) {
-                    setTimeout(() => DOM.preloader.classList.add('hidden'), 100);
-                    return;
-                }
-                let loadedCount = 0;
-                const totalSounds = soundNames.length;
-
-                const soundLoaded = () => {
-                    loadedCount++;
-                    if (loadedCount >= totalSounds) {
-                        setTimeout(() => {
-                           DOM.preloader.classList.add('hidden');
-                        }, 500); 
-                    }
-                };
-                
-                soundNames.forEach(name => {
-                    const audio = new Audio(`./assets/sounds/${name}.mp3`);
-                    audio.oncanplaythrough = soundLoaded;
-                    audio.onerror = () => {
-                        console.log(`Geluidsbestand ${name}.mp3 niet gevonden of kon niet laden.`);
-                        soundLoaded(); 
-                    };
-                    this.sounds[name] = audio;
-                });
+                // Not needed with jsfxr, but kept for potential future use
             },
             play(soundName) {
-                if (Settings.state.feedbackMode !== 'visual' && this.sounds[soundName]) {
-                    this.sounds[soundName].currentTime = 0;
-                    this.sounds[soundName].play().catch(e => {});
-                }
+                // This part would need to be replaced by a jsfxr implementation.
+                // For now, it does nothing as we are focusing on visuals.
             }
         };
 
@@ -404,7 +363,7 @@
 
         const Navigation = { init() { document.querySelector('.game-grid').addEventListener('click', e => { const card = e.target.closest('.game-card'); if (!card) return; if (card.id === 'open-settings-from-main') { this.showView('settings-view'); return; } const gameId = card.dataset.game; if (gameId) { AppState.activeLevel = 1; GameController.loadGame(gameId); this.showView('game-view'); } }); document.getElementById('back-to-main-button').addEventListener('click', () => { GameController.unloadGame(); this.showView('main-menu-view'); }); document.getElementById('open-settings-from-game').addEventListener('click', () => this.showView('settings-view')); document.getElementById('close-settings-button').addEventListener('click', () => this.showView(AppState.previousView || 'main-menu-view')); DOM.levelSelector.addEventListener('click', e => { const btn = e.target.closest('.setting-button'); if(btn) { AppState.activeLevel = parseInt(btn.dataset.level); GameController.loadGame(AppState.activeGame); }}); }, showView(viewId) { AppState.previousView = AppState.currentView; AppState.currentView = viewId; DOM.views.forEach(v => v.classList.toggle('active', v.id === viewId)); Accessibility.stopScan(); setTimeout(() => Accessibility.startScan(), 100); } };
         
-        const GameController = { loadGame(gameId) { this.unloadGame(); AppState.activeGame = gameId; const game = Games[gameId]; if (game) { if (gameId === 'interactive-scene') { DOM.gameArea.style.backgroundImage = Utils.getThemeItems().background; } this.setupLevelSelector(game.levels); game.create(AppState.activeLevel); TTS.speak(`${game.name}, niveau ${AppState.activeLevel}.`); } }, unloadGame() { if (AppState.activeGame && Games[AppState.activeGame].destroy) Games[AppState.activeGame].destroy(); DOM.gameArea.style.backgroundImage = ''; AppState.activeGame = null; DOM.gameArea.innerHTML = ''; DOM.levelSelector.innerHTML = ''; }, showFeedback(isCorrect) { if (Settings.state.feedbackMode !== 'audio') { DOM.gameFeedback.textContent = isCorrect ? '👍' : '🤔'; DOM.gameFeedback.classList.add('show'); setTimeout(() => DOM.gameFeedback.classList.remove('show'), 1000); } TTS.speak(isCorrect ? 'Goed zo!' : 'Probeer het nog eens.'); }, setupLevelSelector(levels) { DOM.levelSelector.innerHTML = levels.map((_, i) => `<button class="setting-button scannable ${i + 1 === AppState.activeLevel ? 'active' : ''}" data-level="${i + 1}">${i + 1}</button>`).join(''); } };
+        const GameController = { loadGame(gameId) { this.unloadGame(); AppState.activeGame = gameId; const game = Games[gameId]; if (game) { if (gameId === 'interactive-scene') { DOM.gameArea.style.backgroundImage = Utils.getThemeItems().background; } this.setupLevelSelector(game.levels); game.create(AppState.activeLevel); TTS.speak(`${game.name}, niveau ${AppState.activeLevel}.`); } }, unloadGame() { if (AppState.activeGame && Games[AppState.activeGame].destroy) Games[AppState.activeGame].destroy(); DOM.gameArea.style.backgroundImage = ''; AppState.activeGame = null; DOM.gameArea.innerHTML = ''; DOM.levelSelector.innerHTML = ''; }, showFeedback(isCorrect) { if (Settings.state.feedbackMode !== 'audio') { DOM.gameFeedback.innerHTML = isCorrect ? '<span class="icon">👍</span>' : '<span class="icon">🤔</span>'; DOM.gameFeedback.classList.add('show'); setTimeout(() => DOM.gameFeedback.classList.remove('show'), 1000); } TTS.speak(isCorrect ? 'Goed zo!' : 'Probeer het nog eens.'); }, setupLevelSelector(levels) { DOM.levelSelector.innerHTML = levels.map((_, i) => `<button class="setting-button scannable ${i + 1 === AppState.activeLevel ? 'active' : ''}" data-level="${i + 1}">${i + 1}</button>`).join(''); } };
 
         // --- GAME DEFINITIES ---
         const Games = {
@@ -455,15 +414,42 @@
                 name: "Memory", levels: [{pairs: 2, cols: 2}, {pairs: 4, cols: 4}, {pairs: 6, cols: 4}],
                 flippedCards: [], matchedPairs: 0, lockBoard: false,
                 create(level) { this.config = this.levels[level-1]; this.setupLevel(); },
-                destroy() { DOM.gameArea.removeEventListener('click', this.boundCardClickHandler); },
+                destroy() { if(this.boundCardClickHandler) DOM.gameArea.removeEventListener('click', this.boundCardClickHandler); },
                 setupLevel() { this.matchedPairs = 0; this.flippedCards = []; this.lockBoard = false; const items = Utils.shuffleArray([...Utils.getThemeItems().items]).slice(0, this.config.pairs); const cards = Utils.shuffleArray([...items, ...items]); const grid = document.createElement('div'); grid.id = 'memory-grid'; grid.style.gridTemplateColumns = `repeat(${this.config.cols}, 1fr)`; DOM.gameArea.innerHTML = ''; DOM.gameArea.appendChild(grid); grid.innerHTML = cards.map(item => `<div class="memory-card scannable" data-item="${item.i}" data-name="${item.n}" data-sound="${item.s}"><div class="memory-card-face memory-card-back"></div><div class="memory-card-face memory-card-front">${item.i}</div></div>`).join(''); this.boundCardClickHandler = this.handleCardClick.bind(this); DOM.gameArea.addEventListener('click', this.boundCardClickHandler); TTS.speak('Zoek de paren.'); Accessibility.restartScanIfActive(); },
                 handleCardClick(e) { const card = e.target.closest('.memory-card'); if (this.lockBoard || !card || card.classList.contains('flipped')) return; SoundController.play(card.dataset.sound); setTimeout(() => TTS.speak(card.dataset.name), 100); card.classList.add('flipped'); this.flippedCards.push(card); if (this.flippedCards.length === 2) { this.lockBoard = true; setTimeout(this.checkMatch.bind(this), 1200); } },
-                checkMatch() { const [c1, c2] = this.flippedCards; if (c1.dataset.item === c2.dataset.item) { c1.classList.add('matched'); this.matchedPairs++; GameController.showFeedback(true); if (this.matchedPairs === this.config.pairs) { setTimeout(() => TTS.speak('Alles gevonden! Heel goed gedaan!'), 500); setTimeout(() => this.setupLevel(), 2500); } } else { c1.classList.remove('flipped'); c2.classList.remove('flipped'); setTimeout(() => TTS.speak('Die zijn niet hetzelfde. Probeer opnieuw.'), 500); } this.flippedCards = []; this.lockBoard = false; }
+                checkMatch() { 
+                    try {
+                        const [c1, c2] = this.flippedCards; 
+                        if (c1.dataset.item === c2.dataset.item) { 
+                            c1.classList.add('matched'); 
+                            c2.classList.add('matched'); 
+                            this.matchedPairs++; 
+                            GameController.showFeedback(true); 
+                            if (this.matchedPairs === this.config.pairs) { 
+                                setTimeout(() => TTS.speak('Alles gevonden! Heel goed gedaan!'), 500); 
+                                setTimeout(() => this.setupLevel(), 2500); 
+                            } 
+                        } else { 
+                            c1.classList.remove('flipped'); 
+                            c2.classList.remove('flipped'); 
+                            setTimeout(() => TTS.speak('Die zijn niet hetzelfde. Probeer opnieuw.'), 500); 
+                        } 
+                    } finally {
+                        this.flippedCards = []; 
+                        this.lockBoard = false;
+                    }
+                }
             }
         };
 
         // --- ALLES INITIALISEREN ---
-        window.addEventListener('load', () => { SoundController.preload(); Settings.init(); TTS.init(); Accessibility.init(); Navigation.init(); });
+        window.addEventListener('load', () => { 
+            // SoundController.preload() is not needed with jsfxr
+            Settings.init(); 
+            TTS.init(); 
+            Accessibility.init(); 
+            Navigation.init(); 
+        });
     </script>
 </body>
 </html>
