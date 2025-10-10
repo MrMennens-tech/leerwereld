@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeerWereld</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/tetunori/fluent-emoji-webfont@v0.8.5/dist/FluentEmojiHighContrast.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="sea" data-contrast="normal" data-focus-mode="false">
+    <div class="app-container">
+        <!-- MAIN MENU -->
+        <div id="main-menu-view" class="view active">
+            <header class="main-header">
+                <h1>LeerWereld</h1>
+            </header>
+            <div class="game-grid">
+                <div class="game-card scannable" data-game="interactive-scene">
+                    <div class="icon">👆</div>
+                    <h2>Ontdek en Tik</h2>
+                </div>
+                <div class="game-card scannable" data-game="moving-targets">
+                    <div class="icon">🎯</div>
+                    <h2>Vliegende Vangers</h2>
+                </div>
+                <div class="game-card scannable" data-game="same-or-different">
+                    <div class="icon">🎨</div>
+                    <h2>Hetzelfde of Anders</h2>
+                </div>
+                <div class="game-card scannable" data-game="counting">
+                    <div class="icon">🔢</div>
+                    <h2>Tellen</h2>
+                </div>
+                <div class="game-card scannable" data-game="math">
+                    <div class="icon">➕</div>
+                    <h2>Rekenen</h2>
+                </div>
+                <div class="game-card scannable" data-game="memory">
+                    <div class="icon">🧠</div>
+                    <h2>Memory</h2>
+                </div>
+                <div class="game-card scannable" id="open-settings-from-main">
+                    <div class="icon">⚙️</div>
+                    <h2>Instellingen</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME VIEW -->
+        <div id="game-view" class="view">
+            <div class="top-bar">
+                <button id="back-to-main-button" class="ui-button scannable" aria-label="Terug naar hoofdmenu">
+                    <span class="icon">◀</span>
+                </button>
+                <div id="game-level-selector" class="setting-options"></div>
+                <button id="open-settings-from-game" class="ui-button scannable" aria-label="Open instellingen">
+                    <span class="icon">⚙️</span>
+                </button>
+            </div>
+            <div class="game-area"></div>
+            <div class="game-feedback"></div>
+        </div>
+
+        <!-- SETTINGS VIEW -->
+        <div id="settings-view" class="view">
+            <div class="top-bar">
+                <button id="close-settings-button" class="ui-button scannable" aria-label="Sluit instellingen">
+                    <span class="icon">◀</span>
+                </button>
+            </div>
+            <div class="settings-container">
+                <h2>Instellingen</h2>
+                
+                <div class="setting-group">
+                    <h3>Thema</h3>
+                    <div id="theme-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="theme" data-value="sea">Zee</button>
+                        <button class="setting-button scannable" data-setting="theme" data-value="jungle">Jungle</button>
+                        <button class="setting-button scannable" data-setting="theme" data-value="farm">Boerderij</button>
+                        <button class="setting-button scannable" data-setting="theme" data-value="space">Ruimte</button>
+                        <button class="setting-button scannable" data-setting="theme" data-value="colors">Kleuren</button>
+                        <button class="setting-button scannable" data-setting="theme" data-value="shapes">Vormen</button>
+                        <button class="setting-button scannable" data-setting="theme" data-value="spring">Lente</button>
+                        <button class="setting-button scannable" data-setting="theme" data-value="summer">Zomer</button>
+                        <button class="setting-button scannable" data-setting="theme" data-value="autumn">Herfst</button>
+                        <button class="setting-button scannable" data-setting="theme" data-value="winter">Winter</button>
+                        <button class="setting-button scannable" data-setting="theme" data-value="christmas">Kerst</button>
+                        <button class="setting-button scannable" data-setting="theme" data-value="sport">Sport</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Toegankelijkheid</h3>
+                    <div id="input-mode-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="inputMode" data-value="touch">Touch/Muis</button>
+                        <button class="setting-button scannable" data-setting="inputMode" data-value="one-button">Eénknops</button>
+                        <button class="setting-button scannable" data-setting="inputMode" data-value="two-button">Tweeknops</button>
+                    </div>
+                    <div class="slider-container" style="margin-top:2vmin;">
+                        <label for="scan-speed-slider">Scansnelheid:</label>
+                        <input type="range" id="scan-speed-slider" class="scannable" min="1" max="5" step="0.5" data-setting="scanSpeed">
+                        <span id="scan-speed-value">3.0s</span>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Grootte Elementen</h3>
+                    <div class="slider-container">
+                        <label for="element-size-slider">Schaal:</label>
+                        <input type="range" id="element-size-slider" class="scannable" min="0.8" max="2.0" step="0.1" data-setting="elementSize">
+                        <span id="element-size-value">1.0x</span>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Icoon Stijl</h3>
+                    <p>Wisselt de stijl van de iconen voor betere zichtbaarheid.</p>
+                    <div id="emoji-style-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="default">Standaard <span style="font-family: sans-serif;">🙂</span></button>
+                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="noto">Duidelijk <span style="font-family: 'Noto Color Emoji', sans-serif;">🙂</span></button>
+                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="fluent-hc">Fluent HC <span style="font-family: 'Fluent Emoji High Contrast', sans-serif;">🙂</span></button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Scan Modus</h3>
+                    <p>Kies welke elementen worden opgenomen in de scan.</p>
+                    <div id="scan-scope-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="scanScope" data-value="full">Volledige Controle</button>
+                        <button class="setting-button scannable" data-setting="scanScope" data-value="game-only">Enkel Spel</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Visueel</h3>
+                    <div id="visual-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="focusMode" data-value="false">Standaard</button>
+                        <button class="setting-button scannable" data-setting="focusMode" data-value="true">Focus</button>
+                        <button class="setting-button scannable" data-setting="contrast" data-value="normal">Normaal</button>
+                        <button class="setting-button scannable" data-setting="contrast" data-value="high">Hoog Contrast</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Feedback</h3>
+                    <div id="feedback-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="feedbackMode" data-value="both">Alles</button>
+                        <button class="setting-button scannable" data-setting="feedbackMode" data-value="visual">Visueel</button>
+                        <button class="setting-button scannable" data-setting="feedbackMode" data-value="audio">Auditief</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Audio Engine</h3>
+                    <p>Kies het type geluidseffecten voor de spelletjes.</p>
+                    <div id="audio-engine-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="audioEngine" data-value="webaudio">Synthetisch</button>
+                        <button class="setting-button scannable" data-setting="audioEngine" data-value="jsfxr">8-bit Retro</button>
+                        <button class="setting-button scannable" data-setting="audioEngine" data-value="samples">Echte Geluiden</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Stem (TTS)</h3>
+                    <div id="tts-voice-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="voice" data-value="female">Vrouw</button>
+                        <button class="setting-button scannable" data-setting="voice" data-value="male">Man</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initApp } from './app.js';
+        
+        window.addEventListener('load', () => {
+            initApp();
+        });
+    </script>
+</body>
+</html>
+
