@@ -75,6 +75,30 @@
         .game-feedback { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.5); font-size: 20vmin; opacity: 0; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease; pointer-events: none; z-index: 200; }
         .game-feedback.show { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 
+        /* --- ICOON STIJLEN --- */
+        .icon, .interactive-object, .moving-target, .memory-card-face, .sod-object, .counting-object, .math-object {
+            font-family: inherit; /* Standaard erft de body font */
+        }
+        body[data-emoji-style="openmoji"] .icon,
+        body[data-emoji-style="openmoji"] .interactive-object,
+        body[data-emoji-style="openmoji"] .moving-target,
+        body[data-emoji-style="openmoji"] .memory-card-face,
+        body[data-emoji-style="openmoji"] .sod-object,
+        body[data-emoji-style="openmoji"] .counting-object,
+        body[data-emoji-style="openmoji"] .math-object {
+            font-family: "OpenMoji", "Noto Color Emoji", sans-serif;
+        }
+        body[data-emoji-style="fluent"] .icon,
+        body[data-emoji-style="fluent"] .interactive-object,
+        body[data-emoji-style="fluent"] .moving-target,
+        body[data-emoji-style="fluent"] .memory-card-face,
+        body[data-emoji-style="fluent"] .sod-object,
+        body[data-emoji-style="fluent"] .counting-object,
+        body[data-emoji-style="fluent"] .math-object {
+            font-family: "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+        }
+
+
         /* --- SPELSPECIFIEKE STIJLEN --- */
         /* Ontdek en Tik */
         #interactive-scene-container { width: 100%; height: 100%; position: relative; }
@@ -193,6 +217,15 @@
                         <label for="element-size-slider">Schaal:</label>
                         <input type="range" id="element-size-slider" class="scannable" min="0.8" max="2.0" step="0.1" data-setting="elementSize">
                         <span id="element-size-value">1.0x</span>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <h3>Icoon Stijl</h3>
+                    <p>Beschikbaarheid hangt af van lettertypen op het systeem.</p>
+                    <div id="emoji-style-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="default">Standaard <span style="font-family: sans-serif;">🙂</span></button>
+                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="openmoji">OpenMoji <span style="font-family: 'OpenMoji', 'Noto Color Emoji', sans-serif;">🙂</span></button>
+                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="fluent">Fluent <span style="font-family: 'Segoe UI Emoji', sans-serif;">🙂</span></button>
                     </div>
                 </div>
                 <div class="setting-group">
@@ -320,9 +353,9 @@
         };
 
         const Settings = {
-            state: { theme: 'sea', inputMode: 'touch', scanSpeed: 3.0, scanScope: 'full', focusMode: false, contrast: 'normal', feedbackMode: 'both', voice: 'female', elementSize: 1.0 },
+            state: { theme: 'sea', inputMode: 'touch', scanSpeed: 3.0, scanScope: 'full', focusMode: false, contrast: 'normal', feedbackMode: 'both', voice: 'female', elementSize: 1.0, emojiStyle: 'default' },
             init() { this.load(); this.applyAll(); this.updateUI(); DOM.settingsContainer.addEventListener('click', e => { const btn = e.target.closest('.setting-button'); if(btn && btn.dataset.setting) this.handleButtonClick(e, btn.dataset.setting); }); const scanSlider = document.getElementById('scan-speed-slider'); scanSlider.addEventListener('input', e => { this.state.scanSpeed = parseFloat(e.target.value); document.getElementById('scan-speed-value').textContent = `${this.state.scanSpeed.toFixed(1)}s`; }); scanSlider.addEventListener('change', () => this.save()); const sizeSlider = document.getElementById('element-size-slider'); sizeSlider.addEventListener('input', e => { this.state.elementSize = parseFloat(e.target.value); this.apply('elementSize'); document.getElementById('element-size-value').textContent = `${this.state.elementSize.toFixed(1)}x`; }); sizeSlider.addEventListener('change', () => this.save()); },
-            handleButtonClick(event, key) { const btn = event.target.closest('.setting-button'); if (!btn) return; const val = btn.dataset.value; this.state[key] = val === 'true' ? true : (val === 'false' ? false : val); this.apply(key); this.updateUI(); this.save(); TTS.speak(btn.textContent); Accessibility.restartScanIfActive(); },
+            handleButtonClick(event, key) { const btn = event.target.closest('.setting-button'); if (!btn) return; const val = btn.dataset.value; this.state[key] = val === 'true' ? true : (val === 'false' ? false : val); this.apply(key); this.updateUI(); this.save(); TTS.speak(btn.textContent.replace('🙂','')); Accessibility.restartScanIfActive(); },
             save() { localStorage.setItem('leerwereld_settings', JSON.stringify(this.state)); },
             load() { const saved = localStorage.getItem('leerwereld_settings'); if (saved) { this.state = { ...this.state, ...JSON.parse(saved) }; } },
             apply(key) { if (key === 'elementSize') { document.documentElement.style.setProperty('--element-size-multiplier', this.state.elementSize); } else { DOM.body.dataset[key] = this.state[key]; } if (key === 'inputMode') Accessibility.setInputMode(this.state.inputMode); if (key === 'scanScope') Accessibility.restartScanIfActive(); },
