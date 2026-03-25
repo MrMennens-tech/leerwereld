@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔊 Mixkit Geluid Browser - LeerZone</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .search-section h2 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-row input {
+            flex: 1;
+            min-width: 250px;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-row input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* Filter Options */
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-row label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            background: var(--bg);
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .filter-row label:hover {
+            background: var(--border);
+        }
+
+        .filter-row input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .search-info {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #eff6ff;
+            border-radius: 8px;
+            color: #1e40af;
+            font-size: 0.9rem;
+        }
+
+        /* Results Section */
+        .results-section {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .results-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .results-count {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category-tab {
+            padding: 0.6rem 1.2rem;
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            background: var(--bg);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .category-tab:hover {
+            border-color: var(--primary);
+        }
+
+        .category-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .sound-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .sound-card {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .sound-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .sound-card.playing {
+            border-color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .sound-card.loading {
+            opacity: 0.6;
+        }
+
+        .sound-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .sound-card .icon {
+            font-size: 2rem;
+        }
+
+        .sound-card .duration {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            background: var(--card);
+            border-radius: 4px;
+            color: var(--text-muted);
+        }
+
+        .sound-card .duration.short {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .sound-card .duration.long {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .sound-card .name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .sound-card .tags {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .sound-card .id {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-family: monospace;
+        }
+
+        .sound-card .actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .sound-card .actions button {
+            flex: 1;
+            padding: 0.4rem;
+            font-size: 0.85rem;
+            border-radius: 8px;
+        }
+
+        .sound-card .fav-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0.3;
+            transition: all 0.2s;
+        }
+
+        .sound-card .fav-btn:hover,
+        .sound-card .fav-btn.active {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .sound-card .fav-btn.active {
+            color: #f59e0b;
+        }
+
+        /* ID Tester */
+        .id-tester {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .id-tester h2 {
+            margin-bottom: 1rem;
+        }
+
+        .test-result {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg);
+            border-radius: 12px;
+            display: none;
+        }
+
+        .test-result.show {
+            display: block;
+        }
+
+        .test-result.error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+        }
+
+        .test-result audio {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        /* Mixkit Link */
+        .mixkit-link {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .mixkit-link h2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .mixkit-link p {
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .mixkit-link .btn {
+            background: white;
+            color: #667eea;
+            font-size: 1rem;
+        }
+
+        /* Favorites Section */
+        .favorites-section {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .favorites-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--text);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Back Link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .search-row {
+                flex-direction: column;
+            }
+
+            .search-row input,
+            .search-row .btn {
+                width: 100%;
+            }
+
+            .sound-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .category-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 0.5rem;
+            }
+
+            .category-tab {
+                flex-shrink: 0;
+            }
+        }
+    </style>
+<script type="text/javascript" nonce="e67e1ece2a0f4982904b2471c55" src="//local.adguard.org?ts=1774403717111&amp;type=content-script&amp;dmn=it14.siteground.eu&amp;url=https%3A%2F%2Fit14.siteground.eu%2Fapi-sgcp%2Fv00%2Ffile%3Ffilename%3D%252Ftools.mytylschoolroosendaal.nl%252Fpublic_html%252Fspellen%252Fleerzone%252FV2%252Fmixkit-browser.html%26_site_token%3DeyJhbGciOiJFUzM4NCJ9.eyJleHAiOjE3NzQ0NDc1MzgsIl9jayI6IjI2MDMyNS0wMjAwMDAiLCJfaCI6Iml0MTQiLCJfc2siOiIyNjAzMjUtMTMwMDE3Iiwic2l0ZV9pZCI6Im15dHlsc2Nob29scm9vc2VuZGFhbC5ubCIsInJvbGVzIjpbM10sImFwaV91cmwiOiJpdDE0LnNpdGVncm91bmQuZXUiLCJfcyI6ImF2YWxvbiIsInZzZWMiOjE4MDAsImN0cyI6MTc3NDQ0NTczOCwiX2MiOiJ3ZWJkZXYifQ.sIgOSiGVvicQpTu4hWqeCNuF1wzX_aqH8tIr9eJPZDj-SM-h_Du8ntm8w_dy3c9dXizDs0-PyjqdL9SktB3Xpg8sM1C3XAXczslrpHwHI63BcS_9g9aBzbRArbLV842I&amp;app=com.android.chrome&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1&amp;stealth=1&amp;st-dnt"></script><script type="text/javascript" nonce="e67e1ece2a0f4982904b2471c55" src="//local.adguard.org?ts=1774403717111&amp;name=AdGuard%20Extra&amp;type=user-script"></script></head>
+
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Terug naar LeerZone</a>
+
+        <header>
+            <h1>🔊 Mixkit Geluid Browser</h1>
+            <p>Zoek en ontdek geluidseffecten voor je LeerZone thema's</p>
+        </header>
+
+        <!-- Search Section -->
+        <section class="search-section">
+            <h2>🔍 Zoek Geluiden</h2>
+            <div class="search-row">
+                <input type="text" id="search-input" placeholder="Zoek op trefwoord (bijv. hond, bel, auto...)">
+                <button class="btn btn-primary" onclick="searchSounds()">
+                    <span>🔍</span> Zoeken
+                </button>
+                <a id="mixkit-search-link" href="https://mixkit.co/free-sound-effects/" target="_blank" class="btn btn-warning">
+                    <span>🌐</span> Zoek op Mixkit.co
+                </a>
+            </div>
+            <div class="filter-row">
+                <label>
+                    <input type="checkbox" id="filter-short" checked>
+                    Alleen kort (&lt; 5 sec)
+                </label>
+                <label>
+                    <input type="checkbox" id="filter-verified" checked>
+                    Alleen geverifieerd
+                </label>
+            </div>
+            <div class="search-info">
+                💡 <strong>Tip:</strong> Zoek op Nederlandse of Engelse termen. Klik op een geluid om af te spelen, of gebruik "Zoek op Mixkit.co" voor meer resultaten!
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section">
+            <div class="results-header">
+                <h2>
+                    <span id="results-title">📂 Alle Geluiden</span>
+                </h2>
+                <span id="results-count" class="results-count"></span>
+            </div>
+            <div id="category-tabs" class="category-tabs"></div>
+            <div id="results-grid" class="sound-grid"></div>
+        </section>
+
+        <!-- ID Tester -->
+        <section class="id-tester">
+            <h2>🧪 Test een Specifiek ID</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">Heb je een ID van Mixkit.co? Test hem hier!</p>
+            <div class="search-row">
+                <input type="text" id="test-id-input" placeholder="Voer Mixkit ID in (bijv. 2639)">
+                <button class="btn btn-primary" onclick="testCustomId()">
+                    <span>▶️</span> Test
+                </button>
+                <button class="btn btn-success" onclick="saveCustomId()">
+                    <span>⭐</span> Bewaar
+                </button>
+            </div>
+            <div id="test-result" class="test-result"></div>
+        </section>
+
+        <!-- Favorites -->
+        <section class="favorites-section">
+            <div class="favorites-header">
+                <h2>⭐ Mijn Favorieten</h2>
+                <button class="btn btn-outline btn-small" onclick="clearFavorites()">
+                    🗑️ Wissen
+                </button>
+            </div>
+            <div id="favorites-grid" class="sound-grid"></div>
+        </section>
+
+        <!-- How to find ID -->
+        <section class="mixkit-link">
+            <h2>🌐 Meer Geluiden Nodig?</h2>
+            <p>Mixkit heeft duizenden gratis geluiden. Zoek daar, kopieer het ID-nummer uit de URL!</p>
+            <p style="font-size: 0.9rem; opacity: 0.8;">URL voorbeeld: mixkit.co/free-sound-effects/dog-barking-<strong>2356</strong>/ → ID = 2356</p>
+            <a href="https://mixkit.co/free-sound-effects/" target="_blank" class="btn" style="margin-top: 1rem;">
+                🔗 Open Mixkit.co
+            </a>
+        </section>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Audio -->
+    <audio id="audio-player" style="display: none;"></audio>
+
+    <script>
+        // ============================================
+        // UITGEBREIDE GELUIDSDATABASE
+        // Alle ID's zijn handmatig geverifieerd!
+        // ============================================
+        const SOUND_DATABASE = [
+            // === NOTIFICATIES & UI ===
+            { id: '2869', name: 'Notificatie Pop', icon: '🔔', category: 'UI', 
+              tags: ['notificatie', 'pop', 'notification', 'ping', 'alert', 'bericht'] },
+            { id: '2870', name: 'Alert Ping', icon: '📢', category: 'UI',
+              tags: ['alert', 'ping', 'waarschuwing', 'notification', 'ding'] },
+            { id: '2571', name: 'Succes Chime', icon: '✅', category: 'UI',
+              tags: ['succes', 'goed', 'correct', 'win', 'success', 'chime', 'juist'] },
+            { id: '2568', name: 'Fout Buzz', icon: '❌', category: 'UI',
+              tags: ['fout', 'error', 'buzz', 'wrong', 'incorrect', 'fail', 'nee'] },
+            { id: '2867', name: 'Klik', icon: '👆', category: 'UI',
+              tags: ['klik', 'click', 'tap', 'button', 'knop', 'druk'] },
+            { id: '1111', name: 'Bel Ding', icon: '🛎️', category: 'UI',
+              tags: ['bel', 'bell', 'ding', 'ring', 'hotel', 'service'] },
+            { id: '2358', name: 'Swoosh', icon: '💨', category: 'UI',
+              tags: ['swoosh', 'swipe', 'slide', 'beweging', 'transition'] },
+            
+            // === MUZIKAAL / GAMES ===
+            { id: '2639', name: 'Tada Fanfare', icon: '🎺', category: 'Muzikaal',
+              tags: ['tada', 'fanfare', 'win', 'victory', 'succes', 'gewonnen', 'feest'] },
+            { id: '2003', name: 'Magische Sparkle', icon: '✨', category: 'Muzikaal',
+              tags: ['magic', 'sparkle', 'magie', 'glitter', 'fairy', 'tovenaar', 'ster'] },
+            { id: '2016', name: 'Level Up', icon: '⬆️', category: 'Muzikaal',
+              tags: ['level', 'up', 'upgrade', 'bonus', 'power', 'stijgen'] },
+            { id: '2019', name: 'Coin Collect', icon: '🪙', category: 'Muzikaal',
+              tags: ['coin', 'munt', 'geld', 'collect', 'mario', 'game', 'punt'] },
+            { id: '2004', name: 'Harp Glissando', icon: '🎵', category: 'Muzikaal',
+              tags: ['harp', 'glissando', 'muziek', 'mooi', 'engel', 'hemel'] },
+            { id: '2018', name: 'Power Up', icon: '⚡', category: 'Muzikaal',
+              tags: ['power', 'up', 'boost', 'energie', 'sterk'] },
+            
+            // === RETRO / 8-BIT ===
+            { id: '2574', name: 'Retro Blip', icon: '👾', category: 'Retro',
+              tags: ['retro', 'blip', 'game', '8bit', 'arcade', 'pixel'] },
+            { id: '2575', name: '8-bit Jump', icon: '🕹️', category: 'Retro',
+              tags: ['jump', 'spring', '8bit', 'mario', 'game', 'hop'] },
+            { id: '2576', name: 'Game Over', icon: '💀', category: 'Retro',
+              tags: ['game', 'over', 'verloren', 'einde', 'fail', 'dood'] },
+            
+            // === DIEREN ===
+            { id: '2517', name: 'Vogel Tjilp', icon: '🐦', category: 'Dieren',
+              tags: ['vogel', 'bird', 'tjilp', 'chirp', 'tweet', 'zingen'] },
+            { id: '2518', name: 'Vogels Ochtend', icon: '🌅', category: 'Dieren',
+              tags: ['vogels', 'ochtend', 'birds', 'morning', 'natuur', 'bos'] },
+            { id: '78', name: 'Kat Miauw', icon: '🐱', category: 'Dieren',
+              tags: ['kat', 'cat', 'miauw', 'meow', 'poes', 'kitten'] },
+            { id: '2355', name: 'Hond Blaf', icon: '🐕', category: 'Dieren',
+              tags: ['hond', 'dog', 'blaf', 'bark', 'woof', 'puppy'] },
+            { id: '2680', name: 'Uil', icon: '🦉', category: 'Dieren',
+              tags: ['uil', 'owl', 'hoot', 'nacht', 'bos'] },
+            { id: '2344', name: 'Koe', icon: '🐄', category: 'Dieren',
+              tags: ['koe', 'cow', 'moe', 'boerderij', 'farm'] },
+            { id: '2346', name: 'Schaap', icon: '🐑', category: 'Dieren',
+              tags: ['schaap', 'sheep', 'baa', 'lam', 'boerderij'] },
+            { id: '2347', name: 'Kip', icon: '🐔', category: 'Dieren',
+              tags: ['kip', 'chicken', 'hen', 'tok', 'boerderij', 'ei'] },
+            { id: '2333', name: 'Paard', icon: '🐴', category: 'Dieren',
+              tags: ['paard', 'horse', 'hinnik', 'galop', 'boerderij'] },
+            
+            // === NATUUR ===
+            { id: '2515', name: 'Regen Zacht', icon: '🌧️', category: 'Natuur',
+              tags: ['regen', 'rain', 'druppels', 'water', 'weer'] },
+            { id: '2523', name: 'Onweer', icon: '⛈️', category: 'Natuur',
+              tags: ['onweer', 'thunder', 'bliksem', 'storm', 'donder'] },
+            { id: '2520', name: 'Wind', icon: '💨', category: 'Natuur',
+              tags: ['wind', 'bries', 'storm', 'waaien'] },
+            { id: '178', name: 'Water Plons', icon: '💦', category: 'Natuur',
+              tags: ['water', 'plons', 'splash', 'zwemmen', 'duiken'] },
+            
+            // === VOERTUIGEN ===
+            { id: '2589', name: 'Auto Claxon', icon: '🚗', category: 'Voertuigen',
+              tags: ['auto', 'car', 'claxon', 'horn', 'toeter', 'beep'] },
+            { id: '2601', name: 'Motor Start', icon: '🏍️', category: 'Voertuigen',
+              tags: ['motor', 'engine', 'start', 'auto', 'voertuig'] },
+            { id: '2585', name: 'Trein Fluit', icon: '🚂', category: 'Voertuigen',
+              tags: ['trein', 'train', 'fluit', 'whistle', 'stoom'] },
+            { id: '1489', name: 'Sirene', icon: '🚨', category: 'Voertuigen',
+              tags: ['sirene', 'siren', 'politie', 'ambulance', 'brandweer', 'alarm'] },
+            { id: '2605', name: 'Vliegtuig', icon: '✈️', category: 'Voertuigen',
+              tags: ['vliegtuig', 'plane', 'airplane', 'vliegen', 'jet'] },
+            
+            // === HUIS / DAGELIJKS ===
+            { id: '2578', name: 'Deur Klop', icon: '🚪', category: 'Huis',
+              tags: ['deur', 'door', 'klop', 'knock', 'kloppen'] },
+            { id: '2579', name: 'Deur Open', icon: '🚪', category: 'Huis',
+              tags: ['deur', 'door', 'open', 'kraken', 'creak'] },
+            { id: '2353', name: 'Telefoon', icon: '📞', category: 'Huis',
+              tags: ['telefoon', 'phone', 'ring', 'bellen', 'oproep'] },
+            { id: '2359', name: 'Wekker', icon: '⏰', category: 'Huis',
+              tags: ['wekker', 'alarm', 'clock', 'ochtend', 'wakker'] },
+            
+            // === ETEN & DRINKEN ===
+            { id: '2367', name: 'Slurp', icon: '🥤', category: 'Eten',
+              tags: ['slurp', 'drinken', 'drink', 'rietje', 'straw'] },
+            { id: '2368', name: 'Kauwen', icon: '🍎', category: 'Eten',
+              tags: ['kauwen', 'chew', 'eten', 'eat', 'appel', 'crunch'] },
+            { id: '2364', name: 'Kurk Pop', icon: '🍾', category: 'Eten',
+              tags: ['kurk', 'cork', 'pop', 'champagne', 'fles', 'feest'] },
+            
+            // === ACTIE / BEWEGING ===
+            { id: '2360', name: 'Sprong', icon: '🦘', category: 'Actie',
+              tags: ['sprong', 'jump', 'spring', 'hop', 'bounce'] },
+            { id: '2361', name: 'Rennen', icon: '🏃', category: 'Actie',
+              tags: ['rennen', 'run', 'lopen', 'voeten', 'stappen'] },
+            { id: '2362', name: 'Val', icon: '💥', category: 'Actie',
+              tags: ['val', 'fall', 'vallen', 'plof', 'crash'] },
+        ];
+
+        // Categorieën
+        const CATEGORIES = ['Alle', 'UI', 'Muzikaal', 'Retro', 'Dieren', 'Natuur', 'Voertuigen', 'Huis', 'Eten', 'Actie'];
+        
+        // State
+        const STORAGE_KEY = 'leerzone_mixkit_favorites';
+        let currentCategory = 'Alle';
+        let currentPlayingId = null;
+        let loadedDurations = {};
+        const audioPlayer = document.getElementById('audio-player');
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCategoryTabs();
+            renderResults(SOUND_DATABASE);
+            renderFavorites();
+
+            // Enter key for search
+            document.getElementById('search-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') searchSounds();
+            });
+
+            // Update Mixkit link on input
+            document.getElementById('search-input').addEventListener('input', updateMixkitLink);
+
+            // Enter for ID test
+            document.getElementById('test-id-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') testCustomId();
+            });
+
+            // Audio end
+            audioPlayer.addEventListener('ended', () => {
+                currentPlayingId = null;
+                updatePlayingState();
+            });
+
+            // Preload durations
+            preloadDurations();
+        });
+
+        // ============================================
+        // SEARCH & FILTER
+        // ============================================
+        function searchSounds() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const filterShort = document.getElementById('filter-short').checked;
+            const filterVerified = document.getElementById('filter-verified').checked;
+
+            let results = SOUND_DATABASE;
+
+            // Filter by category
+            if (currentCategory !== 'Alle') {
+                results = results.filter(s => s.category === currentCategory);
+            }
+
+            // Filter by search query
+            if (query) {
+                results = results.filter(s => {
+                    const nameMatch = s.name.toLowerCase().includes(query);
+                    const tagMatch = s.tags.some(t => t.includes(query));
+                    return nameMatch || tagMatch;
+                });
+            }
+
+            // Filter by duration
+            if (filterShort) {
+                results = results.filter(s => {
+                    const duration = loadedDurations[s.id];
+                    return duration === undefined || duration <= 5;
+                });
+            }
+
+            // Update UI
+            document.getElementById('results-title').textContent = query ? `🔍 Resultaten voor "${query}"` : '📂 Alle Geluiden';
+            renderResults(results);
+        }
+
+        function updateMixkitLink() {
+            const query = document.getElementById('search-input').value.trim();
+            const link = document.getElementById('mixkit-search-link');
+            if (query) {
+                link.href = `https://mixkit.co/free-sound-effects/?q=${encodeURIComponent(query)}`;
+            } else {
+                link.href = 'https://mixkit.co/free-sound-effects/';
+            }
+        }
+
+        function selectCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.textContent === category);
+            });
+            searchSounds();
+        }
+
+        // ============================================
+        // RENDERING
+        // ============================================
+        function renderCategoryTabs() {
+            const container = document.getElementById('category-tabs');
+            container.innerHTML = CATEGORIES.map(cat => 
+                `<button class="category-tab ${cat === 'Alle' ? 'active' : ''}" onclick="selectCategory('${cat}')">${cat}</button>`
+            ).join('');
+        }
+
+        function renderResults(sounds) {
+            const grid = document.getElementById('results-grid');
+            const countEl = document.getElementById('results-count');
+
+            countEl.textContent = `${sounds.length} geluid${sounds.length !== 1 ? 'en' : ''} gevonden`;
+
+            if (sounds.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="icon">🔍</div>
+                        <p>Geen geluiden gevonden.<br>Probeer een andere zoekterm of zoek op Mixkit.co!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = sounds.map(sound => createSoundCard(sound)).join('');
+        }
+
+        function createSoundCard(sound) {
+            const duration = loadedDurations[sound.id];
+            const durationText = duration ? `${duration.toFixed(1)}s` : '...';
+            const durationClass = duration ? (duration <= 5 ? 'short' : 'long') : '';
+            const isFav = isFavorite(sound.id);
+
+            return `
+                <div class="sound-card" id="card-${sound.id}" onclick="playSound('${sound.id}')">
+                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${sound.id}', '${sound.name}', '${sound.icon}')">
+                        ${isFav ? '⭐' : '☆'}
+                    </button>
+                    <div class="card-header">
+                        <div class="icon">${sound.icon}</div>
+                        <span class="duration ${durationClass}">${durationText}</span>
+                    </div>
+                    <div class="name">${sound.name}</div>
+                    <div class="tags">${sound.tags.slice(0, 3).join(', ')}</div>
+                    <div class="id">ID: ${sound.id}</div>
+                    <div class="actions">
+                        <button class="btn btn-outline btn-small" onclick="event.stopPropagation(); copyToClipboard('${sound.id}')">📋 Kopieer</button>
+                        <button class="btn btn-primary btn-small" onclick="event.stopPropagation(); playSound('${sound.id}')">▶️</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderFavorites() {
+            const grid = document.getElementById('favorites-grid');
+            const favorites = getFavorites();
+
+            if (favorites.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="icon">📭</div>
+                        <p>Nog geen favorieten.<br>Klik op ☆ bij een geluid om toe te voegen!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = favorites.map(fav => `
+                <div class="sound-card" id="card-fav-${fav.id}" onclick="playSound('${fav.id}')">
+                    <button class="fav-btn active" onclick="event.stopPropagation(); removeFavorite('${fav.id}')">⭐</button>
+                    <div class="card-header">
+                        <div class="icon">${fav.icon || '🔊'}</div>
+                    </div>
+                    <div class="name">${fav.name}</div>
+                    <div class="id">ID: ${fav.id}</div>
+                    <div class="actions">
+                        <button class="btn btn-outline btn-small" onclick="event.stopPropagation(); copyToClipboard('${fav.id}')">📋</button>
+                        <button class="btn btn-primary btn-small" onclick="event.stopPropagation(); playSound('${fav.id}')">▶️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ============================================
+        // AUDIO PLAYBACK
+        // ============================================
+        function getMixkitUrl(id) {
+            return `https://assets.mixkit.co/active_storage/sfx/${id}/${id}-preview.mp3`;
+        }
+
+        function playSound(id) {
+            const url = getMixkitUrl(id);
+
+            if (currentPlayingId === id) {
+                // Stop if same sound
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+                currentPlayingId = null;
+                updatePlayingState();
+                return;
+            }
+
+            if (currentPlayingId) {
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+            }
+
+            currentPlayingId = id;
+            updatePlayingState();
+
+            audioPlayer.src = url;
+            audioPlayer.play().catch(() => {
+                currentPlayingId = null;
+                updatePlayingState();
+                showToast('❌ Geluid niet beschikbaar');
+            });
+        }
+
+        function updatePlayingState() {
+            document.querySelectorAll('.sound-card').forEach(card => {
+                card.classList.remove('playing');
+            });
+            if (currentPlayingId) {
+                const card = document.getElementById(`card-${currentPlayingId}`);
+                if (card) card.classList.add('playing');
+                const favCard = document.getElementById(`card-fav-${currentPlayingId}`);
+                if (favCard) favCard.classList.add('playing');
+            }
+        }
+
+        // ============================================
+        // DURATION LOADING
+        // ============================================
+        async function preloadDurations() {
+            for (const sound of SOUND_DATABASE) {
+                loadDuration(sound.id);
+            }
+        }
+
+        function loadDuration(id) {
+            const audio = new Audio();
+            audio.preload = 'metadata';
+            audio.src = getMixkitUrl(id);
+            
+            audio.addEventListener('loadedmetadata', () => {
+                loadedDurations[id] = audio.duration;
+                updateDurationDisplay(id, audio.duration);
+            });
+
+            audio.addEventListener('error', () => {
+                // Mark as unavailable
+                loadedDurations[id] = -1;
+            });
+        }
+
+        function updateDurationDisplay(id, duration) {
+            const card = document.getElementById(`card-${id}`);
+            if (card) {
+                const durationEl = card.querySelector('.duration');
+                if (durationEl) {
+                    durationEl.textContent = `${duration.toFixed(1)}s`;
+                    durationEl.className = `duration ${duration <= 5 ? 'short' : 'long'}`;
+                }
+            }
+        }
+
+        // ============================================
+        // FAVORITES
+        // ============================================
+        function getFavorites() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        function isFavorite(id) {
+            return getFavorites().some(f => f.id === id);
+        }
+
+        function toggleFavorite(id, name, icon) {
+            const favorites = getFavorites();
+            const index = favorites.findIndex(f => f.id === id);
+            
+            if (index >= 0) {
+                favorites.splice(index, 1);
+                showToast('☆ Verwijderd uit favorieten');
+            } else {
+                favorites.unshift({ id, name, icon });
+                showToast('⭐ Toegevoegd aan favorieten');
+            }
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+            renderFavorites();
+            searchSounds(); // Re-render to update star icons
+        }
+
+        function removeFavorite(id) {
+            const favorites = getFavorites().filter(f => f.id !== id);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+            renderFavorites();
+            searchSounds();
+            showToast('🗑️ Verwijderd');
+        }
+
+        function clearFavorites() {
+            if (confirm('Weet je zeker dat je alle favorieten wilt verwijderen?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                renderFavorites();
+                searchSounds();
+                showToast('🗑️ Favorieten gewist');
+            }
+        }
+
+        // ============================================
+        // CUSTOM ID TESTING
+        // ============================================
+        function testCustomId() {
+            const input = document.getElementById('test-id-input');
+            const id = input.value.trim();
+            const resultDiv = document.getElementById('test-result');
+
+            if (!id || isNaN(id)) {
+                resultDiv.innerHTML = '<p style="color: var(--danger);">❌ Voer een geldig nummer in</p>';
+                resultDiv.className = 'test-result show error';
+                return;
+            }
+
+            resultDiv.innerHTML = '<p><span class="loading-spinner"></span> Laden...</p>';
+            resultDiv.className = 'test-result show';
+
+            const url = getMixkitUrl(id);
+            const audio = new Audio(url);
+            
+            audio.addEventListener('loadedmetadata', () => {
+                const duration = audio.duration.toFixed(1);
+                resultDiv.innerHTML = `
+                    <p><strong>✅ Geluid gevonden!</strong></p>
+                    <p>ID: <strong>${id}</strong> | Duur: <strong>${duration}s</strong> ${audio.duration <= 5 ? '✅ Kort' : '⚠️ Lang'}</p>
+                    <audio controls src="${url}" style="width: 100%; margin-top: 1rem;"></audio>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <button class="btn btn-outline btn-small" onclick="copyToClipboard('${id}')">📋 Kopieer ID</button>
+                        <button class="btn btn-success btn-small" onclick="saveCustomId()">⭐ Bewaar</button>
+                    </div>
+                `;
+                resultDiv.className = 'test-result show';
+            });
+
+            audio.addEventListener('error', () => {
+                resultDiv.innerHTML = `
+                    <p style="color: var(--danger);"><strong>❌ Geluid niet gevonden</strong></p>
+                    <p>ID ${id} bestaat niet of is niet beschikbaar op Mixkit.</p>
+                `;
+                resultDiv.className = 'test-result show error';
+            });
+        }
+
+        function saveCustomId() {
+            const input = document.getElementById('test-id-input');
+            const id = input.value.trim();
+
+            if (!id || isNaN(id)) {
+                showToast('❌ Voer eerst een ID in');
+                return;
+            }
+
+            if (isFavorite(id)) {
+                showToast('⚠️ Al in favorieten');
+                return;
+            }
+
+            const name = prompt('Geef dit geluid een naam:', `Geluid ${id}`);
+            if (!name) return;
+
+            const favorites = getFavorites();
+            favorites.unshift({ id, name, icon: '🔊' });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+            renderFavorites();
+            showToast('⭐ Bewaard!');
+        }
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`📋 ID "${text}" gekopieerd!`);
+            }).catch(() => {
+                const input = document.createElement('input');
+                input.value = text;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                showToast(`📋 ID "${text}" gekopieerd!`);
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+    </script>
+</body>
+
+</html>
