@@ -1,0 +1,132 @@
+# LeerWereld 📚
+
+Een educatieve Progressive Web App (PWA) voor kinderen met toegankelijke spellen en thema's.
+
+## 🎯 Wat is LeerWereld?
+
+LeerWereld is een interactieve leeromgeving speciaal ontworpen voor kinderen. De app biedt verschillende educatieve spellen die zich aanpassen aan verschillende thema's, van de zee tot de supermarkt. Alle spellen zijn volledig toegankelijk en ondersteunen verschillende input-modi.
+
+## 👥 Voor wie is het?
+
+- **Kinderen** van 3-8 jaar
+- **Ouders** die educatieve content zoeken
+- **Leerkrachten** in het basisonderwijs
+- **Therapeuten** die werken met kinderen met speciale behoeften
+- **Iedereen** die een toegankelijke leeromgeving waardeert
+
+## 🎮 Spellen
+
+### Beschikbare Spellen:
+- **Ontdek en Tik** - Interactieve objecten ontdekken
+- **Vliegende Vangers** - Reactie en coördinatie
+- **Hetzelfde of Anders** - Visuele discriminatie
+- **Tellen** - Getalbegrip en tellen
+- **Rekenen** - Basis wiskunde
+- **Memory** - Geheugen en concentratie
+
+### Toegankelijkheidsfeatures:
+- **Scanmodus** - Eén- en tweeknops bediening
+- **Text-to-Speech** - Auditieve feedback
+- **Visuele feedback** - Duidelijke visuele indicatoren
+- **Aanpasbare snelheid** - Voor verschillende behoeften
+- **Hoog contrast** - Voor slechtziende gebruikers
+
+## 🎨 Thema's
+
+De app ondersteunt 14 verschillende thema's:
+- 🌊 Zee - Onderwaterwereld
+- 🌿 Jungle - Wilde dieren
+- 🚜 Boerderij - Landbouw en dieren
+- 🚀 Ruimte - Astronauten en planeten
+- 🎄 Kerst - Feestelijke sfeer
+- 🍂 Herfst - Najaar en natuur
+- 🌸 Lente - Bloemen en groei
+- ☀️ Zomer - Zon en vakantie
+- ❄️ Winter - Kou en sneeuw
+- ⚽ Sport - Balspelen en activiteit
+- 🌈 Kleuren - Kleurherkenning
+- ⭐ Vormen - Geometrische vormen
+- 🛒 Supermarkt - Winkelen en boodschappen
+- 🏪 Winkel - Kleding en spullen
+
+## 🔧 Technische Features
+
+### PWA Functionaliteit:
+- **Offline beschikbaar** - Werkt zonder internet
+- **Installeerbaar** - Als app op telefoon/tablet
+- **Snelle laadtijden** - Service Worker caching
+- **Responsive design** - Werkt op alle apparaten
+
+### Audio Systemen:
+- **WebAudio API** - Realistische geluiden
+- **JSFXR** - 8-bit retro geluiden
+- **Text-to-Speech** - Nederlandse stemmen
+- **Aanpasbare pitch** - Voor verschillende voorkeuren
+
+### Toegankelijkheid:
+- **WCAG 2.1 compliant** - Internationale standaarden
+- **Keyboard navigation** - Volledige toetsenbordondersteuning
+- **Screen reader support** - Voor visueel gehandicapten
+- **High contrast mode** - Verbeterde zichtbaarheid
+
+## 📱 Installatie
+
+### Op iOS:
+1. Open de app in Safari
+2. Tik op het deel-icoon (⬆️)
+3. Kies "Voeg toe aan beginscherm"
+
+### Op Android/Windows:
+1. Open de app in Chrome/Edge
+2. Klik op de installatiebanner
+3. Of gebruik het menu (⋮) → "App installeren"
+
+## 🛠️ Ontwikkeling
+
+### Technologie Stack:
+- **HTML5** - Semantische markup
+- **CSS3** - Moderne styling met custom properties
+- **Vanilla JavaScript** - Geen frameworks, pure performance
+- **Web Audio API** - Geavanceerde geluidsynthese
+- **Service Worker** - Offline functionaliteit
+
+### Bestanden Structuur:
+```
+├── index.html          # Hoofdpagina
+├── app.js             # Hoofdapplicatie
+├── themes.js          # Thema configuratie
+├── audio-engines.js   # Geluidsystemen
+├── styles.css         # Styling
+├── service-worker.js  # PWA functionaliteit
+├── manifest.json      # PWA manifest
+└── themes.md          # Thema toevoegen handleiding
+```
+
+## 📖 Documentatie
+
+- **themes.md** - Handleiding voor het toevoegen van nieuwe thema's
+- **Code comments** - Uitgebreide documentatie in de code
+- **Console logging** - Debug informatie voor ontwikkelaars
+
+## 🎯 Doelstellingen
+
+LeerWereld is ontwikkeld met de volgende doelen:
+- **Inclusiviteit** - Toegankelijk voor alle kinderen
+- **Educatie** - Leerzame en leuke content
+- **Flexibiliteit** - Aanpasbaar aan verschillende behoeften
+- **Kwaliteit** - Hoge technische en educatieve standaarden
+
+## 📞 Contact & Support
+
+Voor vragen, suggesties of problemen:
+- Bekijk de code comments voor technische details
+- Raadpleeg themes.md voor thema-ontwikkeling
+- Test de app in verschillende browsers en apparaten
+
+## 📄 Licentie
+
+Dit project is ontwikkeld voor educatieve doeleinden. Alle code is open source en beschikbaar voor leren en aanpassen.
+
+---
+
+**LeerWereld v3** - Waar leren en spelen samenkomen! 🎓✨

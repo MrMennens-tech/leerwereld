@@ -1,0 +1,33 @@
+{
+  "name": "LeerZone",
+  "short_name": "LeerZone",
+  "description": "Educatieve spelletjes voor kinderen",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#e0f7fa",
+  "theme_color": "#0077c2",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "./icon-180.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["education", "kids", "games"],
+  "lang": "nl"
+}
+
