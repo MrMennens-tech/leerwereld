@@ -589,6 +589,17 @@ body[data-contrast="high"] .math-object {
 .lz-toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
 .lz-toast.lz-toast-error { background: #c62828; }
 
+/* --- EMOJI PICKER --- */
+.emoji-picker { position: fixed; z-index: 9999; background: var(--card-bg, #fff); border: 2px solid var(--border-color, #ddd); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18); width: 280px; max-height: 320px; display: flex; flex-direction: column; overflow: hidden; }
+.emoji-picker.hidden { display: none; }
+.emoji-picker-inner { display: flex; flex-direction: column; height: 100%; }
+.emoji-search { margin: 8px; padding: 6px 10px; border: 1.5px solid var(--border-color, #ddd); border-radius: 8px; font-size: clamp(0.85rem, 2vmin, 1rem); outline: none; background: var(--bg-color, #f9f9f9); color: var(--text-color, #333); }
+.emoji-search:focus { border-color: var(--primary-color, #4a90d9); }
+.emoji-grid { display: flex; flex-wrap: wrap; gap: 2px; padding: 4px 8px 8px; overflow-y: auto; flex: 1; }
+.emoji-btn { width: 36px; height: 36px; font-size: 1.4rem; background: none; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; line-height: 1; padding: 0; }
+.emoji-btn:hover { background: var(--hover-color, #f0f0f0); }
+.emoji-btn:active { background: var(--primary-color, #4a90d9); }
+
 /* --- SPELSPECIFIEKE STIJLEN --- */
 /* Ontdek en Tik */
 #word-display {

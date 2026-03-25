@@ -229,7 +229,7 @@ SoundController.play = function(soundName) {
         if (state.feedbackMode === 'visual' || state.audioMode === 'voiceOnly') return;
         let url;
         if (audioData.type === 'mixkit') {
-            url = MixkitSounds.getUrl(audioData.slug);
+            url = MixkitSounds.getUrl(audioData.id);
         } else if (audioData.type === 'custom') {
             url = audioData.data;
         }

@@ -8,6 +8,93 @@ import { MixkitSounds } from './mixkit-sounds.js';
 
 const MAX_AUDIO_SECONDS = 5;
 
+// --- EMOJI DATA (Dutch names for search) ---
+const EMOJI_DATA = [
+    // Dieren
+    { e:'🐶',n:'hond' },{ e:'🐱',n:'kat' },{ e:'🐭',n:'muis' },{ e:'🐹',n:'hamster' },
+    { e:'🐰',n:'konijn' },{ e:'🦊',n:'vos' },{ e:'🐻',n:'beer' },{ e:'🐼',n:'panda' },
+    { e:'🐨',n:'koala' },{ e:'🐯',n:'tijger' },{ e:'🦁',n:'leeuw' },{ e:'🐮',n:'koe' },
+    { e:'🐷',n:'varken' },{ e:'🐸',n:'kikker' },{ e:'🐵',n:'aap' },{ e:'🐔',n:'kip' },
+    { e:'🐧',n:'pinguïn' },{ e:'🐦',n:'vogel' },{ e:'🐤',n:'kuiken' },{ e:'🦆',n:'eend' },
+    { e:'🦅',n:'adelaar' },{ e:'🦉',n:'uil' },{ e:'🦇',n:'vleermuis' },{ e:'🐺',n:'wolf' },
+    { e:'🐴',n:'paard' },{ e:'🦄',n:'eenhoorn' },{ e:'🐝',n:'bij' },{ e:'🦋',n:'vlinder' },
+    { e:'🐌',n:'slak' },{ e:'🐞',n:'lieveheersbeestje' },{ e:'🐢',n:'schildpad' },
+    { e:'🐍',n:'slang' },{ e:'🦎',n:'hagedis' },{ e:'🦕',n:'dinosaurus' },
+    { e:'🐊',n:'krokodil' },{ e:'🐳',n:'walvis' },{ e:'🐬',n:'dolfijn' },
+    { e:'🐟',n:'vis' },{ e:'🐠',n:'tropische vis' },{ e:'🦈',n:'haai' },
+    { e:'🐙',n:'octopus' },{ e:'🦀',n:'krab' },{ e:'🐚',n:'schelp' },
+    { e:'🦜',n:'papegaai' },{ e:'🦩',n:'flamingo' },{ e:'🦢',n:'zwaan' },
+    { e:'🦚',n:'pauw' },{ e:'🐓',n:'haan' },{ e:'🦃',n:'kalkoen' },
+    { e:'🐑',n:'schaap' },{ e:'🐐',n:'geit' },{ e:'🦙',n:'lama' },
+    { e:'🦘',n:'kangoeroe' },{ e:'🦔',n:'egel' },{ e:'🐿️',n:'eekhoorn' },
+    { e:'🐘',n:'olifant' },{ e:'🦏',n:'neushoorn' },{ e:'🦛',n:'nijlpaard' },
+    { e:'🐪',n:'kameel' },{ e:'🦒',n:'giraf' },{ e:'🦓',n:'zebra' },
+    // Natuur
+    { e:'🌸',n:'bloesem' },{ e:'🌹',n:'roos' },{ e:'🌺',n:'bloem' },
+    { e:'🌻',n:'zonnebloem' },{ e:'🌼',n:'madeliefje' },{ e:'🌷',n:'tulp' },
+    { e:'🌱',n:'plantje' },{ e:'🌲',n:'boom' },{ e:'🌳',n:'eik' },
+    { e:'🌴',n:'palmboom' },{ e:'🌵',n:'cactus' },{ e:'🍀',n:'klavertje' },
+    { e:'🍁',n:'esdoornblad' },{ e:'🍂',n:'herfstblad' },{ e:'🍃',n:'blad' },
+    { e:'🍄',n:'paddenstoel' },{ e:'🌾',n:'graan' },{ e:'☀️',n:'zon' },
+    { e:'⛅',n:'bewolkt' },{ e:'🌧️',n:'regen' },{ e:'⛈️',n:'onweer' },
+    { e:'❄️',n:'sneeuwvlok' },{ e:'🌊',n:'golf zee' },{ e:'🌈',n:'regenboog' },
+    { e:'🌙',n:'maan' },{ e:'⭐',n:'ster' },{ e:'🌟',n:'glinsterende ster' },
+    { e:'⚡',n:'bliksem' },{ e:'🔥',n:'vuur' },{ e:'💧',n:'waterdruppel' },
+    { e:'🌍',n:'aarde wereld' },{ e:'🏔️',n:'berg' },{ e:'🌋',n:'vulkaan' },
+    { e:'🏖️',n:'strand' },{ e:'🏝️',n:'eiland' },{ e:'🌅',n:'zonsopgang' },
+    // Eten
+    { e:'🍎',n:'appel' },{ e:'🍊',n:'sinaasappel' },{ e:'🍋',n:'citroen' },
+    { e:'🍇',n:'druiven' },{ e:'🍓',n:'aardbei' },{ e:'🍒',n:'kers' },
+    { e:'🍑',n:'perzik' },{ e:'🍉',n:'watermeloen' },{ e:'🍌',n:'banaan' },
+    { e:'🍍',n:'ananas' },{ e:'🥝',n:'kiwi' },{ e:'🥦',n:'broccoli' },
+    { e:'🥕',n:'wortel' },{ e:'🌽',n:'mais' },{ e:'🍅',n:'tomaat' },
+    { e:'🥔',n:'aardappel' },{ e:'🍄',n:'paddenstoel' },{ e:'🥑',n:'avocado' },
+    { e:'🍕',n:'pizza' },{ e:'🍔',n:'hamburger' },{ e:'🍟',n:'friet' },
+    { e:'🌮',n:'taco' },{ e:'🍦',n:'ijsje' },{ e:'🎂',n:'taart verjaardag' },
+    { e:'🍰',n:'taartpunt' },{ e:'🍩',n:'donut' },{ e:'🍪',n:'koekje' },
+    { e:'🍫',n:'chocolade' },{ e:'🍬',n:'snoep' },{ e:'🍭',n:'lolly' },
+    { e:'🥤',n:'drankje' },{ e:'🍼',n:'fles baby' },{ e:'☕',n:'koffie thee' },
+    { e:'🍵',n:'kopje thee' },{ e:'🧃',n:'sap pakje' },{ e:'🍞',n:'brood' },
+    // Voertuigen
+    { e:'🚗',n:'auto' },{ e:'🚕',n:'taxi' },{ e:'🚌',n:'bus' },
+    { e:'🚑',n:'ambulance' },{ e:'🚒',n:'brandweerauto' },{ e:'🚓',n:'politieauto' },
+    { e:'🚚',n:'vrachtwagen' },{ e:'🚜',n:'tractor' },{ e:'🚲',n:'fiets' },
+    { e:'🛵',n:'scooter' },{ e:'✈️',n:'vliegtuig' },{ e:'🚀',n:'raket' },
+    { e:'🛸',n:'ufo' },{ e:'🚁',n:'helikopter' },{ e:'⛵',n:'zeilboot' },
+    { e:'🚢',n:'schip' },{ e:'🚂',n:'trein' },{ e:'🚃',n:'wagon' },
+    // Objecten & Sport
+    { e:'⚽',n:'voetbal' },{ e:'🏀',n:'basketbal' },{ e:'🏈',n:'rugby' },
+    { e:'⚾',n:'honkbal' },{ e:'🎾',n:'tennis' },{ e:'🏐',n:'volleybal' },
+    { e:'🎯',n:'doel pijl' },{ e:'🎮',n:'gamecontroller' },{ e:'🎲',n:'dobbelstenen' },
+    { e:'🎵',n:'muzieknoot' },{ e:'🎶',n:'muzieknoten' },{ e:'🎸',n:'gitaar' },
+    { e:'🎹',n:'piano' },{ e:'🥁',n:'drum' },{ e:'🎺',n:'trompet' },
+    { e:'🎻',n:'viool' },{ e:'📚',n:'boeken' },{ e:'📖',n:'boek' },
+    { e:'✏️',n:'potlood' },{ e:'🖍️',n:'kleurpotlood' },{ e:'🎨',n:'verfpalet' },
+    { e:'🏠',n:'huis' },{ e:'🏫',n:'school' },{ e:'🏥',n:'ziekenhuis' },
+    { e:'🎃',n:'pompoen halloween' },{ e:'🎄',n:'kerstboom' },{ e:'🎅',n:'kerstman' },
+    { e:'🎁',n:'cadeau cadeautje' },{ e:'🎉',n:'feest confetti' },{ e:'🎊',n:'ballonnen' },
+    { e:'🧸',n:'teddybeer knuffel' },{ e:'🪆',n:'matrjosjka' },{ e:'🎠',n:'carrousel' },
+    { e:'🛝',n:'glijbaan' },{ e:'🪁',n:'katapult' },{ e:'🧩',n:'puzzel' },
+    // Vormen & Kleuren
+    { e:'🔴',n:'rood cirkel' },{ e:'🟠',n:'oranje cirkel' },{ e:'🟡',n:'geel cirkel' },
+    { e:'🟢',n:'groen cirkel' },{ e:'🔵',n:'blauw cirkel' },{ e:'🟣',n:'paars cirkel' },
+    { e:'🟥',n:'rood vierkant' },{ e:'🟧',n:'oranje vierkant' },{ e:'🟨',n:'geel vierkant' },
+    { e:'🟩',n:'groen vierkant' },{ e:'🟦',n:'blauw vierkant' },{ e:'🟪',n:'paars vierkant' },
+    { e:'🔺',n:'rode driehoek' },{ e:'💎',n:'diamant ruit' },{ e:'⭐',n:'ster' },
+    { e:'❤️',n:'rood hart' },{ e:'🧡',n:'oranje hart' },{ e:'💛',n:'geel hart' },
+    { e:'💚',n:'groen hart' },{ e:'💙',n:'blauw hart' },{ e:'💜',n:'paars hart' },
+    { e:'🌈',n:'regenboog kleuren' },
+    // Mensen & Emoties
+    { e:'😀',n:'blij lachen' },{ e:'😂',n:'huilen lachen' },{ e:'😍',n:'verliefd' },
+    { e:'😎',n:'cool zonnebril' },{ e:'🤔',n:'denken nadenken' },{ e:'😴',n:'slapen moe' },
+    { e:'😱',n:'schrik bang' },{ e:'🤗',n:'knuffel blij' },{ e:'👍',n:'duim omhoog goed' },
+    { e:'👎',n:'duim omlaag nee' },{ e:'👋',n:'zwaaien hallo' },{ e:'🙌',n:'applaus' },
+    { e:'💪',n:'sterk spieren' },{ e:'🤝',n:'handdruk' },{ e:'✌️',n:'vrede vingers' },
+    { e:'👑',n:'kroon koning' },{ e:'🧢',n:'pet cap' },{ e:'👒',n:'hoed' },
+    { e:'🎓',n:'diploma afstuderen school' },{ e:'🧑',n:'persoon kind' },
+    { e:'👶',n:'baby' },{ e:'👩',n:'vrouw meisje' },{ e:'👨',n:'man jongen' },
+];
+
 // Alle ingebouwde geluidsnamen voor de dropdown
 const BUILTIN_SOUNDS = [
     { value: 'plons', label: 'Plons' },
@@ -77,6 +164,8 @@ export const ThemeEditor = {
     mediaRecorder: null,
     recordingTimers: [],
     activeRecordingIndex: -1,
+    _emojiPickerEl: null,
+    _emojiCallback: null,
 
     init(navigateFn) {
         this._navigate = navigateFn;
@@ -84,18 +173,31 @@ export const ThemeEditor = {
         document.getElementById('close-theme-editor-button')
             ?.addEventListener('click', () => this.close());
 
-        // Thema icoon
+        // Bouw emoji picker eenmalig
+        this._emojiPickerEl = this._createEmojiPickerEl();
+        document.body.appendChild(this._emojiPickerEl);
+
+        // Thema icoon – emoji picker
+        document.getElementById('te-theme-emoji-btn')
+            ?.addEventListener('click', () => {
+                this._openEmojiPicker(document.getElementById('te-theme-emoji-btn'), (emoji) => {
+                    const preview = document.getElementById('te-icon-preview');
+                    if (preview) {
+                        preview.textContent = emoji;
+                        preview.style.backgroundImage = '';
+                        preview.dataset.value = emoji;
+                    }
+                });
+            });
+
+        // Thema icoon – upload
         document.getElementById('te-icon-upload')
             ?.addEventListener('click', () => document.getElementById('te-icon-file').click());
         document.getElementById('te-icon-file')
             ?.addEventListener('change', (e) => {
                 const file = e.target.files[0];
-                if (file) this._handleIconUpload(file, 'te-icon-preview', 'te-icon-input');
+                if (file) this._handleIconUpload(file, 'te-icon-preview', null);
                 e.target.value = '';
-            });
-        document.getElementById('te-icon-input')
-            ?.addEventListener('input', (e) => {
-                document.getElementById('te-icon-preview').textContent = e.target.value || '🎨';
             });
 
         // Achtergrond type toggle
@@ -268,7 +370,7 @@ export const ThemeEditor = {
                     <label>Icoon</label>
                     <div class="icon-picker-row">
                         <span class="te-item-icon-preview icon-preview" data-value="❓">❓</span>
-                        <input type="text" class="te-item-icon-input icon-text-input" placeholder="Emoji" maxlength="4">
+                        <button class="te-emoji-pick-btn setting-button small-btn">🙂 Kies emoji</button>
                         <button class="te-item-icon-upload setting-button small-btn" title="Afbeelding uploaden">📁</button>
                         <input type="file" class="te-item-icon-file" accept="image/*" hidden>
                     </div>
@@ -302,8 +404,18 @@ export const ThemeEditor = {
                     <select class="te-mixkit-cat full-width">
                         ${mixkitCategories}
                     </select>
+                    <input type="text" class="te-mixkit-search text-input" placeholder="Zoek geluid..." style="margin-top:0.8vmin">
                     <div class="mixkit-sound-list"></div>
                     <div class="mixkit-selected-info"></div>
+                    <details class="mixkit-custom-id" style="margin-top:1vmin">
+                        <summary>Eigen Mixkit ID invoeren (via F12)</summary>
+                        <p class="audio-info" style="margin:0.5vmin 0">Ga naar mixkit.co → F12 → inspecteer afspeelknop → zoek data-audio-player-item-id-value</p>
+                        <div class="mixkit-url-row">
+                            <input type="number" class="te-mixkit-custom-id text-input" placeholder="bijv. 54" min="1" style="width:120px">
+                            <button class="te-mixkit-custom-preview setting-button small-btn">▶ Test</button>
+                            <button class="te-mixkit-custom-use setting-button small-btn">Gebruik</button>
+                        </div>
+                    </details>
                 </div>
 
                 <div class="sound-tab-panel hidden" data-tab="record">
@@ -336,25 +448,26 @@ export const ThemeEditor = {
         const container = document.querySelector(`.item-editor[data-index="${i}"]`);
         if (!container) return;
 
-        // Icoon emoji input
-        const iconInput = container.querySelector('.te-item-icon-input');
+        // Icoon – emoji picker
         const iconPreview = container.querySelector('.te-item-icon-preview');
-        iconInput?.addEventListener('input', (e) => {
-            const val = e.target.value;
-            if (val) {
-                iconPreview.textContent = val;
-                iconPreview.dataset.value = val;
-                iconPreview.style.backgroundImage = '';
-            }
+        const emojiPickBtn = container.querySelector('.te-emoji-pick-btn');
+        emojiPickBtn?.addEventListener('click', () => {
+            this._openEmojiPicker(emojiPickBtn, (emoji) => {
+                if (iconPreview) {
+                    iconPreview.textContent = emoji;
+                    iconPreview.dataset.value = emoji;
+                    iconPreview.style.backgroundImage = '';
+                }
+            });
         });
 
-        // Icoon upload
+        // Icoon – upload
         const iconUploadBtn = container.querySelector('.te-item-icon-upload');
         const iconFileInput = container.querySelector('.te-item-icon-file');
         iconUploadBtn?.addEventListener('click', () => iconFileInput.click());
         iconFileInput?.addEventListener('change', (e) => {
             const file = e.target.files[0];
-            if (file) this._handleIconUpload(file, iconPreview, iconInput);
+            if (file) this._handleIconUpload(file, iconPreview, null);
             e.target.value = '';
         });
 
@@ -386,7 +499,6 @@ export const ThemeEditor = {
         builtinSel?.addEventListener('change', (e) => {
             this.itemAudio[i] = { type: 'builtin', value: e.target.value };
         });
-        // Default
         if (builtinSel) {
             this.itemAudio[i] = { type: 'builtin', value: builtinSel.value };
         }
@@ -397,9 +509,30 @@ export const ThemeEditor = {
             if (val) document.dispatchEvent(new CustomEvent('leerzone:play-sound', { detail: val }));
         });
 
-        // Mixkit categorie wissel
+        // Mixkit categorie + zoekbalk
         const mixkitCat = container.querySelector('.te-mixkit-cat');
+        const mixkitSearch = container.querySelector('.te-mixkit-search');
         mixkitCat?.addEventListener('change', () => this._populateMixkitList(container, i));
+        mixkitSearch?.addEventListener('input', () => this._populateMixkitList(container, i, mixkitSearch.value));
+
+        // Mixkit eigen ID
+        const customIdInput = container.querySelector('.te-mixkit-custom-id');
+        container.querySelector('.te-mixkit-custom-preview')?.addEventListener('click', () => {
+            const id = customIdInput?.value.trim();
+            if (!id) return;
+            const url = MixkitSounds.getUrl(id);
+            const audio = new Audio(url);
+            audio.volume = 0.5;
+            audio.play().catch(() => this._showToast('ID niet gevonden of geen verbinding.', true));
+        });
+        container.querySelector('.te-mixkit-custom-use')?.addEventListener('click', () => {
+            const id = customIdInput?.value.trim();
+            if (!id) return;
+            this.itemAudio[i] = { type: 'mixkit', id };
+            const infoEl = container.querySelector('.mixkit-selected-info');
+            if (infoEl) infoEl.textContent = `Geselecteerd: eigen ID ${id}`;
+            this._showToast(`Mixkit ID ${id} geselecteerd`);
+        });
 
         // Opname
         this._bindRecording(container, i);
@@ -408,38 +541,44 @@ export const ThemeEditor = {
         this._bindUpload(container, i);
     },
 
-    _populateMixkitList(container, i) {
+    _populateMixkitList(container, i, searchQuery = '') {
         const catSel = container.querySelector('.te-mixkit-cat');
         const listEl = container.querySelector('.mixkit-sound-list');
-        if (!catSel || !listEl) return;
+        if (!listEl) return;
 
-        const catId = catSel.value;
-        const sounds = MixkitSounds.getSoundsByCategory(catId);
+        let sounds;
+        if (searchQuery && searchQuery.trim()) {
+            sounds = MixkitSounds.search(searchQuery);
+        } else {
+            const catId = catSel?.value;
+            sounds = MixkitSounds.getSoundsByCategory(catId);
+        }
+
+        const currentId = this.itemAudio[i]?.id;
 
         listEl.innerHTML = sounds.map(s => `
-            <div class="mixkit-sound-item" data-slug="${s.slug}">
+            <div class="mixkit-sound-item${currentId === s.id ? ' selected' : ''}" data-id="${s.id}">
+                <span class="mixkit-sound-icon">${s.icon || '🔊'}</span>
                 <span class="mixkit-sound-name">${s.name}</span>
-                <button class="mixkit-preview-btn setting-button small-btn" data-slug="${s.slug}">▶</button>
-                <button class="mixkit-use-btn setting-button small-btn" data-slug="${s.slug}" data-name="${s.name}">Gebruik</button>
+                <button class="mixkit-preview-btn setting-button small-btn" data-id="${s.id}">▶</button>
+                <button class="mixkit-use-btn setting-button small-btn" data-id="${s.id}" data-name="${s.name}">Gebruik</button>
             </div>
-        `).join('');
+        `).join('') || '<p class="audio-info">Geen resultaten</p>';
 
-        // Preview knop
         listEl.querySelectorAll('.mixkit-preview-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                const url = MixkitSounds.getUrl(btn.dataset.slug);
+                const url = MixkitSounds.getUrl(btn.dataset.id);
                 const audio = new Audio(url);
                 audio.volume = 0.5;
                 audio.play().catch(() => {
-                    this._showToast('Kan dit geluid niet laden. Controleer je internetverbinding.', true);
+                    this._showToast('Kan geluid niet laden. Controleer internetverbinding.', true);
                 });
             });
         });
 
-        // Gebruik knop
         listEl.querySelectorAll('.mixkit-use-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                this.itemAudio[i] = { type: 'mixkit', slug: btn.dataset.slug };
+                this.itemAudio[i] = { type: 'mixkit', id: btn.dataset.id };
                 listEl.querySelectorAll('.mixkit-sound-item').forEach(el => el.classList.remove('selected'));
                 btn.closest('.mixkit-sound-item').classList.add('selected');
                 const infoEl = container.querySelector('.mixkit-selected-info');
@@ -561,9 +700,12 @@ export const ThemeEditor = {
 
     _resetEditor() {
         document.getElementById('te-name').value = '';
-        document.getElementById('te-icon-input').value = '🎨';
-        document.getElementById('te-icon-preview').textContent = '🎨';
-        document.getElementById('te-icon-preview').style.backgroundImage = '';
+        const preview = document.getElementById('te-icon-preview');
+        if (preview) {
+            preview.textContent = '🎨';
+            preview.style.backgroundImage = '';
+            preview.dataset.value = '🎨';
+        }
         document.getElementById('te-bg-color1').value = '#89cff0';
         document.getElementById('te-bg-color2').value = '#005c99';
         document.getElementById('te-bg-solid-color').value = '#89cff0';
@@ -586,18 +728,17 @@ export const ThemeEditor = {
 
         const icon = theme.icon || '🎨';
         const iconPreview = document.getElementById('te-icon-preview');
-        const iconInput = document.getElementById('te-icon-input');
         if (icon.startsWith('data:')) {
             iconPreview.textContent = '';
             iconPreview.style.backgroundImage = `url('${icon}')`;
             iconPreview.style.backgroundSize = 'contain';
             iconPreview.style.backgroundRepeat = 'no-repeat';
             iconPreview.style.backgroundPosition = 'center';
-            if (iconInput) iconInput.value = '';
+            iconPreview.dataset.value = icon;
         } else {
             iconPreview.textContent = icon;
             iconPreview.style.backgroundImage = '';
-            if (iconInput) iconInput.value = icon;
+            iconPreview.dataset.value = icon;
         }
 
         this._parseBackground(theme.background);
@@ -612,7 +753,6 @@ export const ThemeEditor = {
 
             // Icoon
             const iconPreview = container.querySelector('.te-item-icon-preview');
-            const iconInputEl = container.querySelector('.te-item-icon-input');
             const itemIcon = item.i || '❓';
             if (itemIcon.startsWith('data:')) {
                 if (iconPreview) {
@@ -621,6 +761,7 @@ export const ThemeEditor = {
                     iconPreview.style.backgroundSize = 'contain';
                     iconPreview.style.backgroundRepeat = 'no-repeat';
                     iconPreview.style.backgroundPosition = 'center';
+                    iconPreview.dataset.value = itemIcon;
                 }
             } else {
                 if (iconPreview) {
@@ -628,7 +769,6 @@ export const ThemeEditor = {
                     iconPreview.dataset.value = itemIcon;
                     iconPreview.style.backgroundImage = '';
                 }
-                if (iconInputEl) iconInputEl.value = itemIcon;
             }
 
             // Naam
@@ -646,7 +786,7 @@ export const ThemeEditor = {
                     container.querySelector('[data-tab="mixkit"]')?.click();
                     setTimeout(() => {
                         const infoEl = container.querySelector('.mixkit-selected-info');
-                        if (infoEl) infoEl.textContent = `Geselecteerd: ${item._audio.slug}`;
+                        if (infoEl) infoEl.textContent = `Geselecteerd: Mixkit ID ${item._audio.id}`;
                     }, 100);
                 } else if (item._audio.type === 'custom') {
                     // Activeer upload/record tab - toon als geladen
@@ -733,36 +873,30 @@ export const ThemeEditor = {
 
     _getIconValue() {
         const preview = document.getElementById('te-icon-preview');
-        const input = document.getElementById('te-icon-input');
-        // Als er een backgroundImage is, is het een afbeelding
-        if (preview?.style.backgroundImage && preview.style.backgroundImage !== 'none') {
-            // Extraheer data URL uit backgroundImage: url('...')
+        if (!preview) return '🎨';
+        if (preview.dataset.value?.startsWith('data:')) return preview.dataset.value;
+        if (preview.style.backgroundImage && preview.style.backgroundImage !== 'none') {
             const match = preview.style.backgroundImage.match(/url\(['"]?(.*?)['"]?\)/);
             return match ? match[1] : '🎨';
         }
-        return input?.value || preview?.textContent || '🎨';
+        return preview.dataset.value || preview.textContent || '🎨';
     },
 
-    _handleIconUpload(file, previewElOrId, inputElOrId) {
+    _handleIconUpload(file, previewElOrId) {
         const reader = new FileReader();
         reader.onload = (e) => {
             const dataUrl = e.target.result;
             const preview = typeof previewElOrId === 'string'
                 ? document.getElementById(previewElOrId)
                 : previewElOrId;
-            const input = typeof inputElOrId === 'string'
-                ? document.getElementById(inputElOrId)
-                : inputElOrId;
-
             if (preview) {
                 preview.textContent = '';
                 preview.style.backgroundImage = `url('${dataUrl}')`;
                 preview.style.backgroundSize = 'contain';
                 preview.style.backgroundRepeat = 'no-repeat';
                 preview.style.backgroundPosition = 'center';
-                if (preview.dataset) preview.dataset.value = dataUrl;
+                preview.dataset.value = dataUrl;
             }
-            if (input) input.value = '';
         };
         reader.readAsDataURL(file);
     },
@@ -796,6 +930,93 @@ export const ThemeEditor = {
         }
         this.recordingTimers.forEach(t => clearTimeout(t));
         this.recordingTimers = [];
+    },
+
+    _createEmojiPickerEl() {
+        const picker = document.createElement('div');
+        picker.className = 'emoji-picker hidden';
+        picker.innerHTML = `
+            <div class="emoji-picker-inner">
+                <input type="text" class="emoji-search text-input" placeholder="Zoek emoji..." autocomplete="off">
+                <div class="emoji-grid"></div>
+            </div>`;
+
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            if (!picker.classList.contains('hidden') && !picker.contains(e.target)) {
+                const anchorId = picker.dataset.anchorId;
+                if (!anchorId || e.target.id !== anchorId && !e.target.closest(`#${anchorId}`)) {
+                    this._hideEmojiPicker();
+                }
+            }
+        }, true);
+
+        const searchInput = picker.querySelector('.emoji-search');
+        searchInput.addEventListener('input', () => {
+            this._renderEmojiGrid(picker.querySelector('.emoji-grid'), searchInput.value);
+        });
+
+        return picker;
+    },
+
+    _renderEmojiGrid(gridEl, query = '') {
+        const q = query.toLowerCase().trim();
+        const filtered = q
+            ? EMOJI_DATA.filter(d => d.n.includes(q) || d.e === q)
+            : EMOJI_DATA;
+
+        gridEl.innerHTML = filtered
+            .map(d => `<button class="emoji-btn" title="${d.n}" data-emoji="${d.e}">${d.e}</button>`)
+            .join('');
+
+        gridEl.querySelectorAll('.emoji-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (this._emojiCallback) this._emojiCallback(btn.dataset.emoji);
+                this._hideEmojiPicker();
+            });
+        });
+    },
+
+    _openEmojiPicker(anchorEl, callback) {
+        const picker = this._emojiPickerEl;
+        if (!picker) return;
+
+        this._emojiCallback = callback;
+
+        // Reset search
+        const searchInput = picker.querySelector('.emoji-search');
+        if (searchInput) searchInput.value = '';
+        this._renderEmojiGrid(picker.querySelector('.emoji-grid'), '');
+
+        // Position near anchor
+        const rect = anchorEl.getBoundingClientRect();
+        picker.style.position = 'fixed';
+        picker.style.zIndex = '9999';
+
+        // Show first to measure size
+        picker.classList.remove('hidden');
+
+        const pickerH = picker.offsetHeight || 300;
+        const pickerW = picker.offsetWidth || 280;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        let top = rect.bottom + 6;
+        let left = rect.left;
+
+        if (top + pickerH > vh) top = Math.max(0, rect.top - pickerH - 6);
+        if (left + pickerW > vw) left = Math.max(0, vw - pickerW - 8);
+
+        picker.style.top = `${top}px`;
+        picker.style.left = `${left}px`;
+
+        if (searchInput) searchInput.focus();
+    },
+
+    _hideEmojiPicker() {
+        this._emojiPickerEl?.classList.add('hidden');
+        this._emojiCallback = null;
     },
 
     _showToast(message, isError = false) {

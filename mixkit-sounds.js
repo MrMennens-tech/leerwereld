@@ -1,15 +1,20 @@
 /**
- * LeerZone - Mixkit Sound Browser
- * Gecureerde lijst van Mixkit geluidseffecten (max ~5 seconden)
- * Bron: mixkit.co (gratis licentie voor persoonlijk en commercieel gebruik)
+ * LeerZone - Mixkit Sound Database
+ * Geverifieerde geluids-ID's van mixkit.co
  *
- * URL formaat: https://assets.mixkit.co/sfx/preview/[slug].mp3
+ * URL formaat: https://assets.mixkit.co/active_storage/sfx/{id}/{id}-preview.mp3
  *
- * BEHEER: Voeg nieuwe geluiden toe door slug + naam toe te voegen aan de
- * juiste categorie. Test de URL in de browser om te verifiëren dat het geluid werkt.
+ * Eigen ID vinden: ga naar mixkit.co/free-sound-effects, open F12 DevTools,
+ * klik Inspecteren op een afspeelknop en zoek: data-audio-player-item-id-value="[GETAL]"
+ *
+ * BEHEER: Voeg nieuwe geverifieerde ID's toe aan de juiste categorie.
  */
 
-export const MIXKIT_BASE = 'https://assets.mixkit.co/sfx/preview/';
+export const MIXKIT_CDN = 'https://assets.mixkit.co/active_storage/sfx';
+
+export function getMixkitUrl(id) {
+    return `${MIXKIT_CDN}/${id}/${id}-preview.mp3`;
+}
 
 export const MixkitSounds = {
 
@@ -18,109 +23,99 @@ export const MixkitSounds = {
             label: 'Dieren',
             icon: '🐾',
             sounds: [
-                { slug: 'mixkit-angry-hen-clucks-1052', name: 'Kip' },
-                { slug: 'mixkit-rooster-crowing-in-the-morning-2462', name: 'Haan kraaien' },
-                { slug: 'mixkit-cat-meow-1108', name: 'Kat miauw' },
-                { slug: 'mixkit-small-dog-barking-2042', name: 'Hond blaffen' },
-                { slug: 'mixkit-frog-single-croaking-3057', name: 'Kikker' },
-                { slug: 'mixkit-single-cow-moo-1745', name: 'Koe' },
-                { slug: 'mixkit-sheep-single-baa-1740', name: 'Schaap' },
-                { slug: 'mixkit-wild-horse-neigh-346', name: 'Paard' },
-                { slug: 'mixkit-funny-pig-groan-2103', name: 'Varken' },
-                { slug: 'mixkit-duck-quack-1738', name: 'Eend' },
-                { slug: 'mixkit-crow-crow-1746', name: 'Kraai' },
-                { slug: 'mixkit-bee-flying-single-1558', name: 'Bij zoemen' },
-            ]
-        },
-
-        natuur: {
-            label: 'Natuur',
-            icon: '🌿',
-            sounds: [
-                { slug: 'mixkit-light-rain-loop-2393', name: 'Zachte regen' },
-                { slug: 'mixkit-rain-and-thunder-storm-2403', name: 'Onweer' },
-                { slug: 'mixkit-sea-waves-loop-1196', name: 'Zeegolven' },
-                { slug: 'mixkit-water-drop-in-a-puddle-1291', name: 'Waterdruppel' },
-                { slug: 'mixkit-fire-crackle-1061', name: 'Kampvuur' },
-                { slug: 'mixkit-forest-birds-ambience-1210', name: 'Vogels in bos' },
-                { slug: 'mixkit-light-wind-1195', name: 'Zachte wind' },
-                { slug: 'mixkit-strong-winds-blowing-loop-2434', name: 'Sterke wind' },
-                { slug: 'mixkit-birds-chirping-and-wind-ambience-1191', name: 'Vogels & wind' },
-                { slug: 'mixkit-water-bubbles-underwater-2405', name: 'Bubbels' },
+                { id: '78',   name: 'Kat miauw',       icon: '🐱' },
+                { id: '2355', name: 'Hond blaf',        icon: '🐕' },
+                { id: '54',   name: 'Grote hond blaf',  icon: '🐶' },
+                { id: '2344', name: 'Koe',              icon: '🐄' },
+                { id: '2346', name: 'Schaap',           icon: '🐑' },
+                { id: '2347', name: 'Kip',              icon: '🐔' },
+                { id: '2333', name: 'Paard',            icon: '🐴' },
+                { id: '2517', name: 'Vogel tjilp',      icon: '🐦' },
+                { id: '2518', name: 'Vogels ochtend',   icon: '🌅' },
+                { id: '2680', name: 'Uil',              icon: '🦉' },
             ]
         },
 
         spel: {
-            label: 'Spel & UI',
+            label: 'Spel & Winnen',
             icon: '🎮',
             sounds: [
-                { slug: 'mixkit-arcade-game-jump-coin-216', name: 'Munt pakken' },
-                { slug: 'mixkit-winning-chime-600', name: 'Winnen klokje' },
-                { slug: 'mixkit-correct-answer-tone-2870', name: 'Goed antwoord' },
-                { slug: 'mixkit-wrong-answer-buzz-950', name: 'Fout antwoord' },
-                { slug: 'mixkit-retro-game-notification-212', name: 'Game notificatie' },
-                { slug: 'mixkit-video-game-win-2016', name: 'Spel gewonnen' },
-                { slug: 'mixkit-magical-coin-win-1936', name: 'Magische munt' },
-                { slug: 'mixkit-unlock-game-notification-253', name: 'Ontgrendeld' },
-                { slug: 'mixkit-bonus-extra-in-game-2064', name: 'Bonus!' },
-                { slug: 'mixkit-game-level-completed-2059', name: 'Level compleet' },
-                { slug: 'mixkit-8-bit-game-coin-1022', name: '8-bit munt' },
-                { slug: 'mixkit-player-jumping-in-a-video-game-2043', name: 'Sprong spel' },
+                { id: '2639', name: 'Tada fanfare',     icon: '🎺' },
+                { id: '2003', name: 'Magische sparkle', icon: '✨' },
+                { id: '2016', name: 'Level up',         icon: '⬆️' },
+                { id: '2019', name: 'Munt pakken',      icon: '🪙' },
+                { id: '2018', name: 'Power up',         icon: '⚡' },
+                { id: '2574', name: 'Retro blip',       icon: '👾' },
+                { id: '2575', name: '8-bit sprong',     icon: '🕹️' },
+                { id: '2576', name: 'Game over',        icon: '💀' },
+                { id: '2571', name: 'Succes chime',     icon: '✅' },
+                { id: '2568', name: 'Fout buzz',        icon: '❌' },
             ]
         },
 
-        muziek: {
-            label: 'Muziek & Bellen',
-            icon: '🎵',
+        ui: {
+            label: 'UI & Knoppen',
+            icon: '🔔',
             sounds: [
-                { slug: 'mixkit-happy-bells-notification-937', name: 'Blije bellen' },
-                { slug: 'mixkit-achievement-bell-600', name: 'Prestatie bel' },
-                { slug: 'mixkit-cute-giggle-172', name: 'Lachje' },
-                { slug: 'mixkit-positive-interface-beep-221', name: 'Positieve beep' },
-                { slug: 'mixkit-animation-flute-notification-2876', name: 'Fluit notificatie' },
-                { slug: 'mixkit-fairy-magic-swoosh-1461', name: 'Magie swoosh' },
-                { slug: 'mixkit-magic-sparkle-2096', name: 'Magie sprankel' },
-                { slug: 'mixkit-funny-giggle-2015', name: 'Grappig lachje' },
-                { slug: 'mixkit-cheerful-notification-862', name: 'Vrolijke notificatie' },
-                { slug: 'mixkit-xylophone-notification-2867', name: 'Xylofoon' },
+                { id: '2869', name: 'Notificatie pop',  icon: '🔔' },
+                { id: '2870', name: 'Alert ping',       icon: '📢' },
+                { id: '2867', name: 'Klik',             icon: '👆' },
+                { id: '1111', name: 'Bel ding',         icon: '🛎️' },
+                { id: '2358', name: 'Swoosh',           icon: '💨' },
+                { id: '2004', name: 'Harp glissando',   icon: '🎵' },
             ]
         },
 
-        beweging: {
-            label: 'Beweging & Effecten',
-            icon: '💨',
+        natuur: {
+            label: 'Natuur & Weer',
+            icon: '🌿',
             sounds: [
-                { slug: 'mixkit-fast-rocket-whoosh-1714', name: 'Raket whoosh' },
-                { slug: 'mixkit-air-swoosh-1470', name: 'Lucht swoosh' },
-                { slug: 'mixkit-quick-jump-2974', name: 'Sprong' },
-                { slug: 'mixkit-bubble-pop-2121', name: 'Bubbel pop' },
-                { slug: 'mixkit-small-explosion-hit-1914', name: 'Kleine explosie' },
-                { slug: 'mixkit-water-splash-1195', name: 'Waterplons' },
-                { slug: 'mixkit-ball-bounce-at-the-playground-2071', name: 'Bal stuitert' },
-                { slug: 'mixkit-falling-hit-757', name: 'Bons' },
-                { slug: 'mixkit-simple-click-2067', name: 'Klikje' },
-                { slug: 'mixkit-click-error-on-software-2073', name: 'Error klik' },
+                { id: '2515', name: 'Regen zacht',      icon: '🌧️' },
+                { id: '2523', name: 'Onweer',           icon: '⛈️' },
+                { id: '2520', name: 'Wind',             icon: '💨' },
+                { id: '178',  name: 'Water plons',      icon: '💦' },
             ]
         },
 
-        transport: {
-            label: 'Transport',
+        voertuigen: {
+            label: 'Voertuigen',
             icon: '🚗',
             sounds: [
-                { slug: 'mixkit-small-engine-passing-1590', name: 'Auto rijdt' },
-                { slug: 'mixkit-bicycle-bell-ringing-1585', name: 'Fietsbel' },
-                { slug: 'mixkit-car-door-slam-1576', name: 'Autodeur' },
-                { slug: 'mixkit-car-horn-1591', name: 'Autohoorn' },
-                { slug: 'mixkit-train-ride-loop-2506', name: 'Trein' },
-                { slug: 'mixkit-airplane-flying-by-1578', name: 'Vliegtuig' },
-                { slug: 'mixkit-helicopter-flying-loop-1580', name: 'Helikopter' },
-                { slug: 'mixkit-ship-horn-1583', name: 'Scheepshoorn' },
+                { id: '2589', name: 'Auto claxon',      icon: '🚗' },
+                { id: '2601', name: 'Motor start',      icon: '🏍️' },
+                { id: '2585', name: 'Trein fluit',      icon: '🚂' },
+                { id: '1489', name: 'Sirene',           icon: '🚨' },
+                { id: '2605', name: 'Vliegtuig',        icon: '✈️' },
+            ]
+        },
+
+        huis: {
+            label: 'Huis & Dagelijks',
+            icon: '🏠',
+            sounds: [
+                { id: '2578', name: 'Deur klop',        icon: '🚪' },
+                { id: '2579', name: 'Deur open',        icon: '🚪' },
+                { id: '2353', name: 'Telefoon',         icon: '📞' },
+                { id: '2359', name: 'Wekker',           icon: '⏰' },
+                { id: '2367', name: 'Slurp',            icon: '🥤' },
+                { id: '2368', name: 'Kauwen',           icon: '🍎' },
+            ]
+        },
+
+        actie: {
+            label: 'Actie & Beweging',
+            icon: '💥',
+            sounds: [
+                { id: '2360', name: 'Sprong',           icon: '🦘' },
+                { id: '2361', name: 'Rennen',           icon: '🏃' },
+                { id: '2362', name: 'Val',              icon: '💥' },
+                { id: '2364', name: 'Kurk pop',         icon: '🍾' },
             ]
         }
     },
 
-    getUrl(slug) {
-        return `${MIXKIT_BASE}${slug}.mp3`;
+    getUrl(id) {
+        return getMixkitUrl(id);
     },
 
     getAllSounds() {
@@ -135,5 +130,13 @@ export const MixkitSounds = {
 
     getSoundsByCategory(catId) {
         return this.categories[catId]?.sounds || [];
+    },
+
+    search(query) {
+        const q = query.toLowerCase();
+        return this.getAllSounds().filter(s =>
+            s.name.toLowerCase().includes(q) ||
+            s.categoryLabel.toLowerCase().includes(q)
+        );
     }
 };
