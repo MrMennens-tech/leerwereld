@@ -1,0 +1,1030 @@
+/* LeerZone - Styling */
+
+/* --- ALGEMENE STIJLEN EN CSS VARIABELEN --- */
+:root {
+    --font-family: 'Poppins', sans-serif;
+    --bg-color: #e0f7fa;
+    --primary-color: #0077c2;
+    --secondary-color: #004d7a;
+    --accent-color: #ffc107;
+    --text-color: #0d4d7a;
+    --card-bg: #ffffff;
+    --card-shadow: rgba(0, 77, 122, 0.2);
+    --highlight-border: 6px solid #ffeb3b;
+    --bg-image: url('https://www.transparenttextures.com/patterns/wavecut.png');
+    --element-size-multiplier: 1.0;
+}
+
+/* --- THEMA'S --- */
+body[data-theme="jungle"] { --bg-color: #e8f5e9; --primary-color: #2e7d32; --secondary-color: #1b5e20; --accent-color: #ff6f00; --text-color: #1b5e20; --card-shadow: rgba(46, 125, 50, 0.2); --bg-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); }
+body[data-theme="farm"] { --bg-color: #fffde7; --primary-color: #c62828; --secondary-color: #8e0000; --accent-color: #4caf50; --text-color: #bf360c; --card-shadow: rgba(198, 40, 40, 0.2); --bg-image: url('https://www.transparenttextures.com/patterns/checkered-pattern.png'); }
+body[data-theme="space"] { --bg-color: #1a237e; --primary-color: #bbdefb; --secondary-color: #e3f2fd; --accent-color: #fdd835; --text-color: #ffffff; --card-bg: #3f51b5; --card-shadow: rgba(255, 255, 255, 0.1); --bg-image: url('https://www.transparenttextures.com/patterns/stardust.png'); }
+body[data-theme="christmas"] { --bg-color: #fce4ec; --primary-color: #ad1457; --secondary-color: #880e4f; --accent-color: #fdd835; --text-color: #880e4f; --card-shadow: rgba(136, 14, 79, 0.2); --bg-image: url('https://www.transparenttextures.com/patterns/snow.png'); }
+body[data-theme="autumn"] { --bg-color: #fff3e0; --primary-color: #e65100; --secondary-color: #bf360c; --accent-color: #8d6e63; --text-color: #bf360c; --card-shadow: rgba(230, 81, 0, 0.2); --bg-image: url('https://www.transparenttextures.com/patterns/sos.png'); }
+body[data-theme="spring"] { --bg-color: #e8f5e9; --primary-color: #ff80ab; --secondary-color: #f50057; --accent-color: #8bc34a; --text-color: #c51162; --card-shadow: rgba(245, 0, 87, 0.2); --bg-image: url('https://www.transparenttextures.com/patterns/flowers.png'); }
+body[data-theme="summer"] { --bg-color: #e3f2fd; --primary-color: #f57c00; --secondary-color: #0277bd; --accent-color: #ffeb3b; --text-color: #f57c00; --card-shadow: rgba(245, 124, 0, 0.2); --bg-image: url('https://www.transparenttextures.com/patterns/sun.png'); }
+body[data-theme="winter"] { --bg-color: #e0e0e0; --primary-color: #455a64; --secondary-color: #263238; --accent-color: #81d4fa; --text-color: #263238; --card-shadow: rgba(69, 90, 100, 0.2); --bg-image: url('https://www.transparenttextures.com/patterns/ice-age.png'); }
+body[data-theme="sport"] { --bg-color: #e0f2f1; --primary-color: #00695c; --secondary-color: #004d40; --accent-color: #ffab00; --text-color: #004d40; --card-shadow: rgba(0, 77, 64, 0.2); --bg-image: url('https://www.transparenttextures.com/patterns/lined-paper.png'); }
+body[data-theme="supermarket"] { --bg-color: #f8f9fa; --primary-color: #28a745; --secondary-color: #1e7e34; --accent-color: #ffc107; --text-color: #155724; --card-shadow: rgba(40, 167, 69, 0.2); --bg-image: url('https://www.transparenttextures.com/patterns/checkered-pattern.png'); }
+body[data-theme="shop"] { --bg-color: #f0fdfa; --primary-color: #a8e6cf; --secondary-color: #7fcdcd; --accent-color: #ffd93d; --text-color: #2d5a87; --card-shadow: rgba(168, 230, 207, 0.2); --bg-image: url('https://www.transparenttextures.com/patterns/light-wool.png'); }
+body[data-theme="colors"] { --bg-color: linear-gradient(135deg, #ffeef8 0%, #e8f4ff 25%, #fffde7 50%, #e8ffe8 75%, #fff3e0 100%); --primary-color: #6a1b9a; --secondary-color: #4a148c; --accent-color: #fbc02d; --text-color: #4a148c; --card-shadow: rgba(74, 20, 140, 0.2); --bg-image: none; }
+body[data-theme="shapes"] { --bg-color: #e8eaf6; --primary-color: #3f51b5; --secondary-color: #1a237e; --accent-color: #e91e63; --text-color: #1a237e; --card-shadow: rgba(63, 81, 181, 0.2); --bg-image: url('https://www.transparenttextures.com/patterns/az-subtle.png'); }
+
+/* Hoog contrast thema */
+body[data-contrast="high"] { --bg-color: #000; --primary-color: #fff; --secondary-color: #000; --accent-color: #ff0; --text-color: #fff; --card-bg: #000; --card-shadow: rgba(255, 255, 255, 0.5); --highlight-border: 8px solid #0ff; --bg-image: none; }
+body[data-contrast="high"] .setting-button.active { background-color: var(--accent-color); color: #000; border-color: var(--accent-color); }
+
+/* --- BASISSTRUCTUUR & UI ELEMENTEN --- */
+* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; font-family: var(--font-family); background-color: var(--bg-color); background-image: var(--bg-image); color: var(--text-color); transition: background-color 0.5s ease, color 0.5s ease; overflow: hidden; }
+.app-container { display: flex; flex-direction: column; height: 100%; width: 100%; padding: 2vmin; }
+.view { display: none; flex-grow: 1; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.view.active { display: flex; }
+
+/* Main menu specifiek - perfecte centrering met wrapper */
+#main-menu-view {
+    padding: 0; /* Reset padding */
+}
+
+.main-menu-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2vmin; /* Ruimte tussen header en grid */
+    width: 100%;
+    max-width: 100%;
+}
+
+.main-header { 
+    flex-shrink: 0; /* Voorkom dat header krimpt */
+    width: 100%; /* Neem volledige breedte voor centrering */
+}
+
+.main-header h1 { 
+    font-size: clamp(2.5rem, 8vmin, 5rem); 
+    font-weight: 700; 
+    color: var(--secondary-color); 
+    text-align: center; 
+    margin: 0;
+    width: 100%;
+}
+.game-grid { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); /* Vaste 3 kolommen - alle cards even groot */
+    gap: 3vmin; 
+    width: 100%; 
+    max-width: 800px; /* past op smartboard */
+    padding: 0;
+    flex-shrink: 0; /* Voorkom dat grid krimpt */
+}
+
+/* Responsive: 2 kolommen op kleinere schermen */
+@media (max-width: 768px) {
+    .game-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.game-card { 
+    background-color: var(--card-bg); 
+    border-radius: 20px; 
+    box-shadow: 0 10px 20px var(--card-shadow); 
+    aspect-ratio: 1 / 1; /* Perfect vierkant */
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    transition: transform 0.2s ease, box-shadow 0.2s ease; 
+    border: 6px solid transparent; 
+    text-align: center; 
+    padding: 2vmin; 
+    width: 100%; /* Zorgt dat alle cards de volledige kolom breedte gebruiken */
+    max-width: 100%;
+}
+.game-card:hover { transform: translateY(-5px); }
+
+/* Floating Buttons (Instellingen & Thema's) */
+.floating-button {
+    position: fixed;
+    background-color: var(--primary-color);
+    color: var(--card-bg);
+    border: none;
+    border-radius: 50%;
+    width: clamp(60px, 12vmin, 90px);
+    height: clamp(60px, 12vmin, 90px);
+    font-size: clamp(28px, 6vmin, 45px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 50;
+    border: 4px solid transparent;
+}
+
+.floating-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.floating-button.scan-highlight {
+    outline: var(--highlight-border);
+    outline-offset: 4px;
+    transform: scale(1.15);
+    box-shadow: 0 0 30px var(--accent-color);
+}
+
+.floating-top-right {
+    top: clamp(15px, 3vmin, 30px);
+    right: clamp(15px, 3vmin, 30px);
+}
+
+.floating-bottom-right {
+    bottom: clamp(15px, 3vmin, 30px);
+    right: clamp(15px, 3vmin, 30px);
+}
+.game-card .icon { font-size: clamp(2.5rem, 8vmin, 5rem); margin-bottom: 1vmin; }
+.game-card h2 { font-size: clamp(1rem, 3vmin, 1.6rem); font-weight: 600; }
+.scannable.scan-highlight { outline: var(--highlight-border); outline-offset: 4px; transform: scale(1.05); box-shadow: 0 0 30px var(--accent-color); }
+.ui-button { background-color: var(--primary-color); color: var(--card-bg); border: none; border-radius: 50%; width: clamp(50px, 10vmin, 80px); height: clamp(50px, 10vmin, 80px); font-size: clamp(24px, 5vmin, 40px); cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px var(--card-shadow); transition: transform 0.2s ease; border: 4px solid transparent; }
+.top-bar { position: absolute; top: 2vmin; right: 2vmin; left: 2vmin; display: flex; justify-content: space-between; align-items: center; z-index: 100; gap: 2vmin; }
+
+/* Niveau-selector styling - duidelijker met labels */
+#game-level-selector { 
+    display: flex; 
+    gap: 1.5vmin; 
+    flex-wrap: wrap; 
+    justify-content: center;
+    flex: 1;
+    max-width: 60%;
+}
+
+.level-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1vmin 2vmin !important;
+    min-width: 10vmin;
+    gap: 0.5vmin;
+}
+
+.level-number {
+    font-size: clamp(0.8rem, 2vmin, 1.2rem);
+    font-weight: 700;
+}
+
+.level-label {
+    font-size: clamp(0.7rem, 1.5vmin, 0.9rem);
+    opacity: 0.8;
+    font-weight: 400;
+}
+#settings-view .settings-container { background-color: var(--card-bg); padding: 4vmin; border-radius: 20px; width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; }
+.setting-group { margin-bottom: 3vmin; }
+.setting-group h3 { font-size: clamp(1.2rem, 4vmin, 1.8rem); margin-bottom: 1.5vmin; border-bottom: 2px solid var(--primary-color); padding-bottom: 1vmin; }
+.setting-group p { font-size: clamp(0.9rem, 2vmin, 1.1rem); margin-top: -1vmin; margin-bottom: 1.5vmin; opacity: 0.8; }
+.setting-options { display: flex; flex-wrap: wrap; gap: 1.5vmin; }
+.setting-button { flex-grow: 1; padding: 1.5vmin 2.5vmin; border: 3px solid var(--primary-color); background-color: transparent; color: var(--primary-color); border-radius: 12px; font-size: clamp(1rem, 2.5vmin, 1.4rem); cursor: pointer; }
+.setting-button.active { background-color: var(--primary-color); color: var(--card-bg); }
+
+/* PWA Installatie */
+.install-info { 
+    background-color: rgba(0, 119, 194, 0.1); 
+    padding: 2vmin; 
+    border-radius: 12px; 
+    border: 2px solid var(--primary-color);
+}
+.install-info p { 
+    font-size: clamp(0.8rem, 2vmin, 1rem); 
+    line-height: 1.6; 
+    margin: 0;
+}
+.install-btn {
+    background-color: var(--accent-color) !important;
+    color: var(--text-color) !important;
+    font-weight: 700;
+    border-color: var(--accent-color) !important;
+}
+.install-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 5px 20px rgba(255, 193, 7, 0.5);
+}
+
+/* Installatie Banners */
+.install-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+    max-width: 100%;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.install-banner.show {
+    transform: translateY(0);
+}
+
+.install-banner.hidden {
+    display: none;
+}
+
+.banner-content {
+    display: flex;
+    align-items: center;
+    padding: 3vmin 4vmin;
+    gap: 3vmin;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.ios-banner {
+    background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+    color: white;
+    border-radius: 20px 20px 0 0;
+}
+
+.android-banner {
+    background: linear-gradient(135deg, #34A853 0%, #137333 100%);
+    color: white;
+    border-radius: 20px 20px 0 0;
+}
+
+.banner-icon {
+    font-size: clamp(2.5rem, 6vmin, 4rem);
+    flex-shrink: 0;
+}
+
+.banner-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.banner-title {
+    font-size: clamp(1.2rem, 3vmin, 1.6rem);
+    font-weight: 700;
+    margin: 0 0 0.5vmin 0;
+}
+
+.banner-description {
+    font-size: clamp(0.9rem, 2.2vmin, 1.1rem);
+    margin: 0;
+    opacity: 0.9;
+    line-height: 1.4;
+}
+
+.ios-share-icon,
+.ios-add-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 0.3em;
+}
+
+.ios-share-icon {
+    width: 18px;
+    height: 24px;
+}
+
+.ios-add-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.banner-close {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: clamp(1.5rem, 4vmin, 2.5rem);
+    cursor: pointer;
+    padding: 1vmin;
+    border-radius: 50%;
+    width: clamp(40px, 8vmin, 60px);
+    height: clamp(40px, 8vmin, 60px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.banner-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.banner-install-btn {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 2vmin 4vmin;
+    border-radius: 12px;
+    font-size: clamp(1rem, 2.5vmin, 1.3rem);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.banner-install-btn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+}
+
+/* Responsive aanpassingen voor kleine schermen */
+@media (max-width: 480px) {
+    .banner-content {
+        padding: 2.5vmin 3vmin;
+        gap: 2vmin;
+    }
+    
+    .banner-text {
+        font-size: 0.9em;
+    }
+    
+    .banner-install-btn {
+        padding: 1.5vmin 3vmin;
+        font-size: 0.9em;
+    }
+}
+
+/* Fix voor Fluent HC iconen in settings - maak actieve knoppen outline i.p.v. gevuld */
+body[data-emoji-style="fluent-hc"] .setting-button.active,
+body[data-emoji-style="fluent-hc"][data-contrast="high"] .setting-button.active {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 4px solid var(--primary-color);
+    font-weight: 700;
+}
+
+body[data-contrast="high"][data-emoji-style="fluent-hc"] .setting-button.active {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+/* Fix voor Fluent HC UI buttons (terug knop, settings knop) - maak outline i.p.v. gevuld */
+body[data-emoji-style="fluent-hc"] .ui-button,
+body[data-contrast="high"] .ui-button {
+    background-color: transparent;
+    border: 4px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+body[data-contrast="high"][data-emoji-style="fluent-hc"] .ui-button {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+#game-view { padding-top: calc(10vmin + 2vmin); }
+.game-area { flex-grow: 1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; background-size: cover; background-position: center; transition: background-image 0.5s ease-in-out; }
+.game-feedback { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.5); font-size: 20vmin; opacity: 0; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease; pointer-events: none; z-index: 200; }
+.game-feedback.show { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+
+/* Fix voor Fluent HC feedback iconen - voeg achtergrond cirkel toe zodat ze zichtbaar zijn */
+body[data-emoji-style="fluent-hc"] .game-feedback {
+    background-color: var(--card-bg);
+    border: 0.5vmin solid var(--primary-color);
+    border-radius: 50%;
+    width: 30vmin;
+    height: 30vmin;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 3vmin var(--card-shadow);
+}
+
+body[data-contrast="high"][data-emoji-style="fluent-hc"] .game-feedback {
+    background-color: #000;
+    border-color: #fff;
+    border-width: 1vmin;
+}
+
+/* --- ICOON STIJLEN --- */
+.icon, .interactive-object, .moving-target, .memory-card-face, .sod-object, .counting-object, .math-object {
+    font-family: var(--font-family), sans-serif;
+}
+body[data-emoji-style="noto"] .icon,
+body[data-emoji-style="noto"] .interactive-object,
+body[data-emoji-style="noto"] .moving-target,
+body[data-emoji-style="noto"] .memory-card-face,
+body[data-emoji-style="noto"] .sod-object,
+body[data-emoji-style="noto"] .counting-object,
+body[data-emoji-style="noto"] .math-object {
+    font-family: "Noto Color Emoji", sans-serif;
+}
+body[data-emoji-style="fluent-hc"] .icon,
+body[data-emoji-style="fluent-hc"] .interactive-object,
+body[data-emoji-style="fluent-hc"] .moving-target,
+body[data-emoji-style="fluent-hc"] .memory-card-face,
+body[data-emoji-style="fluent-hc"] .sod-object,
+body[data-emoji-style="fluent-hc"] .counting-object,
+body[data-emoji-style="fluent-hc"] .math-object {
+    font-family: "Fluent Emoji High Contrast", sans-serif;
+}
+
+/* Maak Fluent HC emoji's iets groter voor betere zichtbaarheid */
+body[data-emoji-style="fluent-hc"] .interactive-object,
+body[data-emoji-style="fluent-hc"] .moving-target,
+body[data-emoji-style="fluent-hc"] .memory-card-face,
+body[data-emoji-style="fluent-hc"] .sod-object,
+body[data-emoji-style="fluent-hc"] .counting-object,
+body[data-emoji-style="fluent-hc"] .math-object {
+    transform: scale(1.15);
+}
+body[data-contrast="high"] .icon,
+body[data-contrast="high"] .interactive-object,
+body[data-contrast="high"] .moving-target,
+body[data-contrast="high"] .memory-card-face,
+body[data-contrast="high"] .sod-object,
+body[data-contrast="high"] .counting-object,
+body[data-contrast="high"] .math-object {
+    filter: grayscale(1) invert(1) brightness(1.2);
+}
+
+/* --- THEMA SELECTOR --- */
+.theme-selector-container { 
+    background-color: var(--card-bg); 
+    padding: 4vmin; 
+    border-radius: 20px; 
+    width: 90%; 
+    max-width: 1200px; 
+    max-height: 90vh; 
+    overflow-y: auto; 
+}
+
+.theme-selector-container h2 { 
+    font-size: clamp(2rem, 5vmin, 3rem); 
+    margin-bottom: 3vmin; 
+    text-align: center; 
+}
+
+.theme-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(clamp(120px, 18vmin, 180px), 1fr)); 
+    gap: 3vmin; 
+    padding: 2vmin; 
+}
+
+.theme-card { 
+    background-color: var(--card-bg); 
+    border-radius: 20px; 
+    box-shadow: 0 10px 20px var(--card-shadow); 
+    aspect-ratio: 1 / 1; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    transition: transform 0.2s ease, box-shadow 0.2s ease; 
+    border: 6px solid transparent; 
+    text-align: center; 
+    padding: 2vmin; 
+}
+
+.theme-card:hover { 
+    transform: translateY(-5px); 
+}
+
+.theme-card.active { 
+    border-color: var(--accent-color); 
+    box-shadow: 0 0 20px var(--accent-color); 
+}
+
+.theme-card .theme-icon { 
+    font-size: clamp(3rem, 10vmin, 6rem); 
+    margin-bottom: 1vmin; 
+}
+
+.theme-card .theme-name { 
+    font-size: clamp(0.9rem, 2.5vmin, 1.3rem); 
+    font-weight: 600; 
+}
+
+/* --- THEMA SELECTOR - EIGEN THEMA'S --- */
+#custom-themes-section { margin-top: 4vmin; }
+.custom-themes-header { font-size: clamp(1.2rem, 3vmin, 1.8rem); margin-bottom: 2vmin; border-bottom: 2px solid var(--primary-color); padding-bottom: 1vmin; }
+.custom-theme-actions { display: flex; flex-wrap: wrap; gap: 2vmin; margin-top: 3vmin; justify-content: center; }
+.create-theme-btn { font-weight: 700; background: var(--accent-color); color: #000; border-color: var(--accent-color); }
+.theme-card.custom-theme-card { position: relative; }
+.theme-card-actions { display: flex; gap: 1vmin; margin-top: 1vmin; }
+.theme-card-btn { padding: 0.5vmin 1.5vmin; border: 2px solid currentColor; border-radius: 8px; background: transparent; color: var(--primary-color); font-size: clamp(0.7rem, 1.8vmin, 1rem); cursor: pointer; }
+.theme-card-btn:hover { background: var(--primary-color); color: var(--card-bg); }
+.theme-card-btn.delete { color: #c62828; border-color: #c62828; }
+.theme-card-btn.delete:hover { background: #c62828; color: #fff; }
+.theme-icon-img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
+
+/* --- THEMA EDITOR --- */
+#theme-editor-view { justify-content: flex-start; align-items: center; }
+.top-bar-title { font-size: clamp(1.2rem, 3vmin, 1.8rem); font-weight: 700; flex: 1; text-align: center; }
+.theme-editor-container { width: 90%; max-width: 900px; max-height: calc(100vh - 15vmin); overflow-y: auto; padding: 2vmin 0 6vmin; display: flex; flex-direction: column; gap: 3vmin; }
+
+.editor-section { background: var(--card-bg); border-radius: 16px; padding: 3vmin; box-shadow: 0 4px 12px var(--card-shadow); }
+.editor-section h3 { font-size: clamp(1rem, 2.8vmin, 1.5rem); margin-bottom: 2vmin; border-bottom: 2px solid var(--primary-color); padding-bottom: 1vmin; }
+.section-subtitle { font-size: clamp(0.7rem, 1.6vmin, 0.9rem); opacity: 0.7; font-weight: 400; }
+
+.editor-field { display: flex; flex-direction: column; gap: 0.8vmin; margin-bottom: 2vmin; }
+.editor-field label { font-size: clamp(0.85rem, 2vmin, 1.1rem); font-weight: 600; opacity: 0.85; }
+.editor-field:last-child { margin-bottom: 0; }
+
+.text-input { width: 100%; padding: 1.5vmin 2vmin; border: 2px solid var(--primary-color); border-radius: 10px; font-size: clamp(1rem, 2.5vmin, 1.3rem); background: transparent; color: var(--text-color); font-family: var(--font-family); }
+.text-input:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(255,193,7,0.3); }
+
+.icon-picker-row { display: flex; align-items: center; gap: 2vmin; flex-wrap: wrap; }
+.icon-preview { width: clamp(50px, 10vmin, 80px); height: clamp(50px, 10vmin, 80px); font-size: clamp(2rem, 7vmin, 4rem); display: flex; align-items: center; justify-content: center; background: var(--bg-color); border-radius: 12px; border: 2px solid var(--primary-color); flex-shrink: 0; }
+.icon-text-input { width: clamp(60px, 12vmin, 100px); padding: 1vmin; border: 2px solid var(--primary-color); border-radius: 10px; font-size: clamp(1.2rem, 3vmin, 1.8rem); text-align: center; background: transparent; color: var(--text-color); }
+
+.color-row { display: flex; align-items: center; gap: 2vmin; margin-bottom: 1.5vmin; }
+.color-row label { min-width: 80px; font-size: clamp(0.85rem, 2vmin, 1.1rem); }
+.color-row input[type="color"] { width: clamp(40px, 8vmin, 60px); height: clamp(36px, 7vmin, 54px); border: 2px solid var(--primary-color); border-radius: 8px; cursor: pointer; padding: 2px; background: none; }
+
+.bg-preview { width: 100%; height: clamp(50px, 10vmin, 80px); border-radius: 12px; border: 2px solid var(--primary-color); margin-top: 1vmin; }
+
+/* Item editor */
+.item-editor { border: 2px solid var(--primary-color); border-radius: 12px; padding: 2vmin; margin-bottom: 2vmin; }
+.item-editor:last-child { margin-bottom: 0; }
+.item-editor-header { margin-bottom: 1.5vmin; }
+.item-number { font-weight: 700; font-size: clamp(0.9rem, 2.2vmin, 1.2rem); color: var(--primary-color); }
+.editor-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2vmin; }
+@media (max-width: 480px) { .editor-row { grid-template-columns: 1fr; } }
+
+/* Sound tabs */
+.sound-tabs { display: flex; gap: 1vmin; flex-wrap: wrap; margin-bottom: 1.5vmin; }
+.sound-tab { flex: 1; min-width: 80px; padding: 1vmin 1.5vmin; border: 2px solid var(--primary-color); border-radius: 10px; background: transparent; color: var(--primary-color); font-size: clamp(0.75rem, 1.8vmin, 1rem); cursor: pointer; font-family: var(--font-family); transition: background 0.2s; }
+.sound-tab.active { background: var(--primary-color); color: var(--card-bg); }
+.sound-tab-panel { display: flex; flex-direction: column; gap: 1vmin; }
+.sound-tab-panel.hidden { display: none; }
+
+.full-width { width: 100%; padding: 1vmin 1.5vmin; border: 2px solid var(--primary-color); border-radius: 10px; font-size: clamp(0.85rem, 2vmin, 1.1rem); background: var(--card-bg); color: var(--text-color); font-family: var(--font-family); }
+.small-btn { flex-shrink: 0; padding: 0.8vmin 1.5vmin; font-size: clamp(0.75rem, 1.8vmin, 0.95rem); flex-grow: 0; }
+.audio-limit-note { font-size: clamp(0.7rem, 1.5vmin, 0.85rem); opacity: 0.65; font-weight: 400; }
+.audio-info { font-size: clamp(0.7rem, 1.6vmin, 0.85rem); opacity: 0.7; font-style: italic; }
+.editor-info { font-size: clamp(0.8rem, 1.8vmin, 1rem); opacity: 0.8; margin-bottom: 1.5vmin; }
+
+/* Mixkit browser */
+.mixkit-sound-list { display: flex; flex-direction: column; gap: 0.8vmin; max-height: 20vmax; overflow-y: auto; border: 1px solid var(--primary-color); border-radius: 8px; padding: 1vmin; }
+.mixkit-sound-item { display: flex; align-items: center; gap: 1vmin; padding: 0.8vmin; border-radius: 8px; transition: background 0.15s; }
+.mixkit-sound-item:hover { background: var(--bg-color); }
+.mixkit-sound-item.selected { background: rgba(var(--primary-color-rgb, 0,119,194), 0.15); border: 1px solid var(--primary-color); }
+.mixkit-sound-name { flex: 1; font-size: clamp(0.8rem, 1.8vmin, 1rem); }
+.mixkit-selected-info { font-size: clamp(0.75rem, 1.6vmin, 0.9rem); color: var(--primary-color); font-weight: 600; margin-top: 0.5vmin; }
+
+/* Opname controls */
+.record-controls { display: flex; align-items: center; gap: 1.5vmin; flex-wrap: wrap; }
+.record-timer { font-size: clamp(0.85rem, 2vmin, 1.1rem); font-weight: 600; color: var(--primary-color); }
+.record-playback { display: flex; align-items: center; gap: 1.5vmin; }
+.record-status { font-size: clamp(0.75rem, 1.6vmin, 0.9rem); opacity: 0.75; }
+
+/* Upload */
+.upload-info-row { display: flex; align-items: center; gap: 1.5vmin; flex-wrap: wrap; }
+.upload-filename { font-size: clamp(0.75rem, 1.6vmin, 0.9rem); opacity: 0.8; flex: 1; word-break: break-all; }
+
+/* Editor acties */
+.editor-actions { display: flex; flex-wrap: wrap; gap: 2vmin; justify-content: center; }
+.editor-primary-btn { background: var(--primary-color); color: var(--card-bg); font-weight: 700; }
+
+/* Toast notificatie */
+.lz-toast { position: fixed; bottom: 6vmin; left: 50%; transform: translateX(-50%) translateY(20px); background: #333; color: #fff; padding: 1.5vmin 3vmin; border-radius: 12px; font-size: clamp(0.9rem, 2vmin, 1.1rem); opacity: 0; transition: opacity 0.3s, transform 0.3s; pointer-events: none; z-index: 9999; white-space: nowrap; max-width: 90vw; }
+.lz-toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+.lz-toast.lz-toast-error { background: #c62828; }
+
+/* --- SPELSPECIFIEKE STIJLEN --- */
+/* Ontdek en Tik */
+#word-display {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+}
+
+.word-prompt {
+    background: var(--card-bg);
+    padding: 2vmin 4vmin;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px var(--card-shadow);
+    border: 4px solid var(--primary-color);
+    font-size: clamp(1.2rem, 3vmin, 1.8rem);
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.word-target {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 4vmin, 2.5rem);
+    text-transform: lowercase;
+}
+
+.scene-words-toggle,
+.counting-words-toggle,
+.memory-words-toggle {
+    display: flex;
+    gap: 1.5vmin;
+    flex-wrap: wrap;
+}
+
+.scene-words-toggle .toggle-btn,
+.counting-words-toggle .toggle-btn,
+.memory-words-toggle .toggle-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1vmin 2vmin !important;
+    min-width: 10vmin;
+    gap: 0.3vmin;
+    font-size: clamp(0.75rem, 1.8vmin, 1rem);
+    border: 3px solid var(--primary-color);
+    background-color: transparent;
+    color: var(--primary-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.scene-words-toggle .toggle-btn span,
+.counting-words-toggle .toggle-btn span,
+.memory-words-toggle .toggle-btn span {
+    font-size: clamp(1.2rem, 3vmin, 1.8rem);
+}
+
+.scene-words-toggle .toggle-btn.active,
+.counting-words-toggle .toggle-btn.active,
+.memory-words-toggle .toggle-btn.active {
+    background-color: var(--primary-color);
+    color: var(--card-bg);
+}
+
+#interactive-scene-container { width: 100%; height: 100%; position: relative; }
+.interactive-object { position: absolute; font-size: calc(12vmin * var(--element-size-multiplier)); cursor: pointer; transition: opacity 0.5s ease, transform 0.5s ease; }
+.interactive-object.hidden { opacity: 0; transform: scale(0.8); pointer-events: none; }
+@keyframes launch { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-100vh); opacity: 0; } }
+.interactive-object.animate-launch { animation: launch 1.5s ease-in forwards; }
+@keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(0); opacity: 0; } }
+.interactive-object.animate-pop { animation: pop 0.5s ease-out forwards; }
+@keyframes drive-off { 0% { transform: translateX(0); } 100% { transform: translateX(100vw); } }
+.interactive-object.animate-drive-off { animation: drive-off 2s linear forwards; }
+
+/* Vliegende Vangers */
+.speed-control { 
+    position: absolute; 
+    top: 10px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background-color: var(--card-bg); 
+    padding: 2vmin 4vmin; 
+    border-radius: 20px; 
+    box-shadow: 0 10px 20px var(--card-shadow); 
+    border: 4px solid var(--primary-color);
+    display: flex; 
+    align-items: center; 
+    gap: 2vmin; 
+    z-index: 10;
+    font-size: clamp(0.9rem, 2.5vmin, 1.3rem);
+    font-weight: 600;
+    color: var(--text-color);
+}
+.speed-control label { 
+    font-weight: 700; 
+    white-space: nowrap;
+    color: var(--primary-color);
+}
+.speed-control input[type="range"] { 
+    width: clamp(100px, 25vmin, 250px);
+    height: 6px;
+    border-radius: 5px;
+    background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+.speed-control input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: clamp(20px, 4vmin, 30px);
+    height: clamp(20px, 4vmin, 30px);
+    border-radius: 50%;
+    background: var(--accent-color);
+    cursor: pointer;
+    border: 3px solid var(--primary-color);
+    box-shadow: 0 2px 8px var(--card-shadow);
+}
+.speed-control input[type="range"]::-moz-range-thumb {
+    width: clamp(20px, 4vmin, 30px);
+    height: clamp(20px, 4vmin, 30px);
+    border-radius: 50%;
+    background: var(--accent-color);
+    cursor: pointer;
+    border: 3px solid var(--primary-color);
+    box-shadow: 0 2px 8px var(--card-shadow);
+}
+
+/* Custom cursor voor vliegende vangers - grote hand/vinger */
+#game-view[data-active-game="moving-targets"] .game-area {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><text x="0" y="40" font-size="40">👆</text></svg>') 24 0, pointer;
+}
+
+.moving-target { 
+    position: absolute; 
+    font-size: calc(10vmin * var(--element-size-multiplier)); 
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><text x="0" y="40" font-size="40">✋</text></svg>') 24 24, grab;
+    transition: transform 0.2s ease; 
+}
+
+.moving-target:active {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><text x="0" y="40" font-size="40">✊</text></svg>') 24 24, grabbing;
+}
+
+.moving-target.caught { transform: scale(0); }
+
+/* Memory */
+#memory-grid { display: grid; gap: calc(2vmin * var(--element-size-multiplier)); }
+
+.memory-word {
+    font-size: clamp(1rem, 2.5vmin, 1.8rem);
+    font-weight: 700;
+    color: var(--primary-color);
+    text-transform: lowercase;
+    padding: 1vmin;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.memory-card { background-color: var(--primary-color); border-radius: 15px; cursor: pointer; aspect-ratio: 1 / 1; position: relative; transform-style: preserve-3d; transition: transform 0.5s; width: calc(15vmin * var(--element-size-multiplier)); }
+.memory-card.flipped, .memory-card.matched { transform: rotateY(180deg); pointer-events: none; }
+.memory-card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-size: calc(10vmin * var(--element-size-multiplier)); border-radius: 15px; }
+.memory-card-back { background-color: var(--primary-color); border-radius: 15px; }
+.memory-card-front { background-color: var(--card-bg); transform: rotateY(180deg); border-radius: 15px; }
+
+/* Hetzelfde of Anders */
+#sod-container { display: flex; flex-direction: column; align-items: center; gap: 5vmin; }
+#sod-reference-area { border: 5px dashed var(--primary-color); padding: 2vmin; border-radius: 20px; }
+.sod-object { font-size: clamp(calc(8rem * var(--element-size-multiplier)), calc(15vmin * var(--element-size-multiplier)), calc(12rem * var(--element-size-multiplier))); width: auto; height: auto; }
+.sod-object.sod-mirror { transform: scaleX(-1); }
+.sod-object.sod-silhouette { filter: brightness(0); }
+.sod-object.sod-small { font-size: clamp(calc(5rem * var(--element-size-multiplier)), calc(10vmin * var(--element-size-multiplier)), calc(8rem * var(--element-size-multiplier))); }
+.sod-object.sod-large { font-size: clamp(calc(12rem * var(--element-size-multiplier)), calc(20vmin * var(--element-size-multiplier)), calc(18rem * var(--element-size-multiplier))); }
+
+/* Woord display voor leesoefening */
+.sod-word { 
+    font-size: clamp(3rem, 8vmin, 6rem); 
+    font-weight: 700; 
+    color: var(--primary-color);
+    text-transform: lowercase;
+    padding: 2vmin 4vmin;
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 10px 20px var(--card-shadow);
+    border: 4px solid var(--primary-color);
+    display: inline-block;
+}
+
+/* Words toggle in de top-bar */
+.sod-words-toggle { 
+    display: flex; 
+    gap: 1.5vmin; 
+    flex-wrap: wrap;
+}
+
+.sod-words-toggle .toggle-btn { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1vmin 2vmin !important;
+    min-width: 10vmin;
+    gap: 0.3vmin;
+    font-size: clamp(0.75rem, 1.8vmin, 1rem);
+    border: 3px solid var(--primary-color); 
+    background-color: transparent; 
+    color: var(--primary-color); 
+    border-radius: 12px; 
+    cursor: pointer; 
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.sod-words-toggle .toggle-btn span {
+    font-size: clamp(1.2rem, 3vmin, 1.8rem);
+}
+
+.sod-words-toggle .toggle-btn.active { 
+    background-color: var(--primary-color); 
+    color: var(--card-bg); 
+}
+
+#sod-choice-area { display: flex; gap: 4vmin; flex-wrap: wrap; justify-content: center; }
+.sod-choice-card { background: var(--card-bg); border-radius: 20px; box-shadow: 0 10px 20px var(--card-shadow); cursor: pointer; border: 6px solid transparent; transition: transform 0.2s ease; padding: calc(1vmin * var(--element-size-multiplier)); }
+.sod-choice-card:hover { transform: translateY(-5px); }
+
+/* Tellen */
+#counting-container { display: flex; flex-direction: column; align-items: center; gap: 3vmin; }
+#counting-display { font-size: calc(15vmin * var(--element-size-multiplier)); font-weight: 700; }
+#counting-target-area { border: 5px dashed var(--primary-color); border-radius: 20px; min-height: 25vmin; width: 80%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; padding: 2vmin; gap: 2vmin; }
+#counting-source-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 2vmin; margin-top: 2vmin; }
+.counting-object { font-size: calc(8vmin * var(--element-size-multiplier)); cursor: pointer; transition: transform 0.2s ease; }
+.counting-object:hover { transform: scale(1.1); }
+
+/* Rekenen */
+#math-container { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 3vmin; }
+
+/* Math mode toggle in de top-bar (naast niveau knoppen) */
+.math-mode-toggle { 
+    display: flex; 
+    gap: 1.5vmin; 
+    flex-wrap: wrap;
+}
+
+.math-mode-toggle .toggle-btn { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1vmin 2vmin !important;
+    min-width: 10vmin;
+    gap: 0.3vmin;
+    font-size: clamp(0.75rem, 1.8vmin, 1rem);
+    border: 3px solid var(--primary-color); 
+    background-color: transparent; 
+    color: var(--primary-color); 
+    border-radius: 12px; 
+    cursor: pointer; 
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.math-mode-toggle .toggle-btn span {
+    font-size: clamp(1.2rem, 3vmin, 1.8rem);
+}
+
+.math-mode-toggle .toggle-btn.active { 
+    background-color: var(--primary-color); 
+    color: var(--card-bg); 
+}
+
+#math-problem-area { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 2vmin; 
+    font-size: calc(8vmin * var(--element-size-multiplier)); 
+    font-weight: 600; 
+    margin-bottom: 4vmin; 
+    flex-wrap: wrap; 
+}
+
+.math-object-group { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 1vmin; 
+    max-width: 30vmin;
+}
+
+.math-object { 
+    font-size: calc(6vmin * var(--element-size-multiplier)); 
+}
+
+.math-number { 
+    font-size: calc(12vmin * var(--element-size-multiplier)); 
+    font-weight: 700; 
+}
+
+.math-number.themed { 
+    color: var(--primary-color); 
+    text-shadow: 2px 2px 4px var(--card-shadow);
+}
+
+.math-operator { 
+    font-size: calc(10vmin * var(--element-size-multiplier)); 
+    font-weight: 700; 
+    color: var(--secondary-color);
+}
+
+#math-answer-area { 
+    display: flex; 
+    gap: 1.2vmin; 
+    justify-content: center; 
+    flex-wrap: nowrap;
+    max-width: 98%;
+}
+
+.math-answer-btn { 
+    padding: calc(2.5vmin * var(--element-size-multiplier)) calc(1.2vmin * var(--element-size-multiplier)); 
+    font-size: calc(6vmin * var(--element-size-multiplier)); 
+    font-weight: 700; 
+    border-radius: 12px; 
+    background-color: var(--card-bg); 
+    box-shadow: 0 5px 15px var(--card-shadow); 
+    cursor: pointer; 
+    min-width: calc(7.5vmin * var(--element-size-multiplier)); 
+    border: 3px solid var(--primary-color);
+    transition: all 0.2s ease;
+    flex: 0 1 auto;
+}
+
+/* Speciaal voor het 10-vakje - breder voor twee cijfers */
+.math-answer-btn.double-digit { 
+    min-width: calc(11vmin * var(--element-size-multiplier));
+    padding: calc(2.5vmin * var(--element-size-multiplier)) calc(1vmin * var(--element-size-multiplier));
+}
+
+.math-answer-btn.themed-btn { 
+    color: var(--primary-color); 
+    font-weight: 800;
+}
+
+.math-answer-btn:hover { 
+    transform: scale(1.05); 
+    box-shadow: 0 8px 20px var(--card-shadow);
+}
+
+/* Button Mapping Configuratie */
+.button-mapping-config {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 2vmin;
+    border-radius: 15px;
+    margin-top: 1vmin;
+}
+
+.button-mapping-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5vmin 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.button-mapping-row:last-of-type {
+    border-bottom: none;
+}
+
+.button-mapping-row label {
+    font-weight: 600;
+    font-size: clamp(0.9rem, 2.2vmin, 1.1rem);
+    color: var(--text-color);
+}
+
+.button-mapping-controls {
+    display: flex;
+    gap: 1vmin;
+    align-items: center;
+}
+
+.button-display {
+    background: var(--card-bg);
+    padding: 1vmin 2vmin;
+    border-radius: 10px;
+    border: 2px solid var(--primary-color);
+    font-weight: 600;
+    font-size: clamp(0.85rem, 2vmin, 1rem);
+    color: var(--primary-color);
+    min-width: 10vmin;
+    text-align: center;
+}
+
+/* Button Mapping Modal */
+.button-mapping-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+}
+
+.button-mapping-modal.show {
+    display: flex;
+}
+
+.button-mapping-modal-content {
+    background: var(--card-bg);
+    padding: 4vmin 6vmin;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    border: 4px solid var(--primary-color);
+    animation: modalPulse 2s ease-in-out infinite;
+}
+
+@keyframes modalPulse {
+    0%, 100% { transform: scale(1); border-color: var(--primary-color); }
+    50% { transform: scale(1.05); border-color: var(--accent-color); }
+}
+
+.button-mapping-modal-content h3 {
+    margin: 0 0 2vmin 0;
+    color: var(--primary-color);
+    font-size: clamp(1.5rem, 4vmin, 2.5rem);
+}
+
+.button-mapping-modal-content p {
+    margin: 1vmin 0;
+    font-size: clamp(1rem, 2.5vmin, 1.3rem);
+    color: var(--text-color);
+}
+
