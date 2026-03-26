@@ -151,8 +151,7 @@ export const Settings = {
         if (key === 'scanScope') Accessibility.restartScanIfActive();
         if (key === 'theme') {
             const theme = Utils.themes[this.state.theme];
-            if (theme?.isCustom) SoundController.registerCustomTheme(theme);
-            else SoundController.customAudio = {};
+            SoundController.registerThemeAudio(theme);
         }
     },
     
@@ -208,19 +207,20 @@ export const Settings = {
 // --- SOUND CONTROLLER (met toegang tot Settings) ---
 export const SoundController = createSoundController(() => Settings.state);
 
-// Custom audio registry: soundKey -> { type: 'custom'|'mixkit', data?, slug? }
+// Custom audio registry: soundKey -> { type: 'custom'|'mixkit', data? }
 SoundController.customAudio = {};
 
-SoundController.registerCustomTheme = function(theme) {
+SoundController.registerThemeAudio = function(theme) {
     this.customAudio = {};
     if (!theme?.items) return;
-    theme.items.forEach((item, i) => {
-        if (item._audio && item.s?.startsWith('lz_custom_')) {
+    theme.items.forEach((item) => {
+        if (item._audio && item.s) {
             this.customAudio[item.s] = item._audio;
         }
     });
 };
 
+const MAX_PLAY_MS = 2000;
 const _origPlay = SoundController.play.bind(SoundController);
 SoundController.play = function(soundName) {
     if (this.customAudio[soundName]) {
@@ -237,6 +237,7 @@ SoundController.play = function(soundName) {
             const audio = new Audio(url);
             audio.volume = 0.5;
             audio.play().catch(e => console.warn('Custom audio mislukt:', e));
+            setTimeout(() => { if (!audio.paused) audio.pause(); }, MAX_PLAY_MS);
         }
         return;
     }
@@ -2172,9 +2173,9 @@ export function initApp() {
         SoundController.play(e.detail);
     });
 
-    // Registreer custom geluiden voor huidig actief thema (bij herstart)
+    // Registreer geluiden voor huidig actief thema (bij herstart)
     const activeTheme = Utils.themes[Settings.state.theme];
-    if (activeTheme?.isCustom) SoundController.registerCustomTheme(activeTheme);
+    SoundController.registerThemeAudio(activeTheme);
 
     // Maak ButtonMapping beschikbaar voor onclick handlers in HTML
     window.ButtonMapping = ButtonMapping;

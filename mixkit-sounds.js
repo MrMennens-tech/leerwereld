@@ -38,6 +38,8 @@ export const MixkitSounds = {
                 { id: '2466', name: 'Uil',                  icon: '🦉' },
                 { id: '1775', name: 'Wolf huilt',           icon: '🐺' },
                 { id: '1770', name: 'Ezel balk',            icon: '🫏' },
+                { id: '2437', name: 'Kaketoe schreeuwt',    icon: '🦜' },
+                { id: '2921', name: 'Vis in water',         icon: '🐟' },
             ]
         },
 
@@ -79,6 +81,7 @@ export const MixkitSounds = {
                 { id: '2580', name: 'Lichte klik',          icon: '👆' },
                 { id: '2864', name: 'Deurbel',              icon: '🚪' },
                 { id: '896',  name: 'Afwijzing',            icon: '🚫' },
+                { id: '2344', name: 'Magische ring',         icon: '✨' },
             ]
         },
 
@@ -95,6 +98,8 @@ export const MixkitSounds = {
                 { id: '3126', name: 'Stromend water',       icon: '💧' },
                 { id: '3000', name: 'Waterbubbel',          icon: '💦' },
                 { id: '2443', name: 'Vulkaanuitbarsting',   icon: '🌋' },
+                { id: '2428', name: 'Droge bladeren',       icon: '🍂' },
+                { id: '2921', name: 'Vis in water',         icon: '🐟' },
             ]
         },
 
@@ -110,6 +115,7 @@ export const MixkitSounds = {
                 { id: '1564', name: 'Autodeur dicht',       icon: '🚪' },
                 { id: '3129', name: 'Autodeur sluiten',     icon: '🚪' },
                 { id: '1484', name: 'Swoosh',               icon: '💨' },
+                { id: '1557', name: 'Sci-Fi voertuig',      icon: '🛸' },
             ]
         },
     },

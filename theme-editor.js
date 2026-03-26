@@ -7,6 +7,7 @@ import { CustomThemeStore } from './theme-store.js';
 import { MixkitSounds } from './mixkit-sounds.js';
 
 const MAX_AUDIO_SECONDS = 5;
+const MAX_PREVIEW_MS = 2000; // preview-knop stopt altijd na 2 seconden
 
 // --- EMOJI DATA (Dutch names for search) ---
 const EMOJI_DATA = [
@@ -534,14 +535,17 @@ export const ThemeEditor = {
             _customAudio = new Audio(url);
             _customAudio.volume = 0.5;
             customPreviewBtn.textContent = '⏹ Stop';
-            _customAudio.play().catch(() => {
-                this._showToast('ID niet gevonden of geen verbinding.', true);
-                customPreviewBtn.textContent = '▶ Test';
-            });
-            _customAudio.addEventListener('ended', () => {
+            const stopCustom = () => {
+                if (_customAudio && !_customAudio.paused) _customAudio.pause();
                 customPreviewBtn.textContent = '▶ Test';
                 _customAudio = null;
+            };
+            _customAudio.play().catch(() => {
+                this._showToast('ID niet gevonden of geen verbinding.', true);
+                stopCustom();
             });
+            _customAudio.addEventListener('ended', stopCustom);
+            setTimeout(stopCustom, MAX_PREVIEW_MS);
         });
         container.querySelector('.te-mixkit-custom-use')?.addEventListener('click', () => {
             const id = customIdInput?.value.trim();
@@ -607,17 +611,19 @@ export const ThemeEditor = {
                 listEl._activeBtn = btn;
                 btn.textContent = '⏹';
                 btn.classList.add('playing');
-                audio.play().catch(() => {
-                    this._showToast('Kan geluid niet laden. Controleer internetverbinding.', true);
-                    btn.textContent = '▶';
-                    btn.classList.remove('playing');
-                });
-                audio.addEventListener('ended', () => {
+                const stopPlayback = () => {
+                    if (!audio.paused) audio.pause();
                     btn.textContent = '▶';
                     btn.classList.remove('playing');
                     listEl._activeAudio = null;
                     listEl._activeBtn = null;
+                };
+                audio.play().catch(() => {
+                    this._showToast('Kan geluid niet laden. Controleer internetverbinding.', true);
+                    stopPlayback();
                 });
+                audio.addEventListener('ended', stopPlayback);
+                setTimeout(stopPlayback, MAX_PREVIEW_MS);
             });
         });
 
