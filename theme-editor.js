@@ -167,6 +167,10 @@ export const ThemeEditor = {
     activeRecordingIndex: -1,
     _emojiPickerEl: null,
     _emojiCallback: null,
+    _mixkitPickerEl: null,
+    _mixkitPickerCallback: null,
+    _mixkitPickerAudio: null,
+    _mixkitPickerActiveBtn: null,
 
     init(navigateFn) {
         this._navigate = navigateFn;
@@ -177,6 +181,10 @@ export const ThemeEditor = {
         // Bouw emoji picker eenmalig
         this._emojiPickerEl = this._createEmojiPickerEl();
         document.body.appendChild(this._emojiPickerEl);
+
+        // Bouw Mixkit geluid picker eenmalig
+        this._mixkitPickerEl = this._createMixkitPickerEl();
+        document.body.appendChild(this._mixkitPickerEl);
 
         // Thema icoon – emoji picker
         document.getElementById('te-theme-emoji-btn')
@@ -402,12 +410,8 @@ export const ThemeEditor = {
                 </div>
 
                 <div class="sound-tab-panel hidden" data-tab="mixkit">
-                    <select class="te-mixkit-cat full-width">
-                        ${mixkitCategories}
-                    </select>
-                    <input type="text" class="te-mixkit-search text-input" placeholder="Zoek geluid..." style="margin-top:0.8vmin">
-                    <div class="mixkit-sound-list"></div>
-                    <div class="mixkit-selected-info"></div>
+                    <div class="mixkit-selected-info">Geen geluid geselecteerd</div>
+                    <button class="te-mixkit-pick-btn setting-button">🔊 Kies geluid</button>
                     <details class="mixkit-custom-id" style="margin-top:1vmin">
                         <summary>Eigen Mixkit ID invoeren (via F12)</summary>
                         <p class="audio-info" style="margin:0.5vmin 0">Ga naar mixkit.co → F12 → inspecteer afspeelknop → zoek data-audio-player-item-id-value</p>
@@ -488,10 +492,6 @@ export const ThemeEditor = {
                     }
                 }
 
-                // Laad Mixkit lijst bij eerste keer openen
-                if (tab.dataset.tab === 'mixkit') {
-                    this._populateMixkitList(container, i);
-                }
             });
         });
 
@@ -510,11 +510,17 @@ export const ThemeEditor = {
             if (val) document.dispatchEvent(new CustomEvent('leerzone:play-sound', { detail: val }));
         });
 
-        // Mixkit categorie + zoekbalk
-        const mixkitCat = container.querySelector('.te-mixkit-cat');
-        const mixkitSearch = container.querySelector('.te-mixkit-search');
-        mixkitCat?.addEventListener('change', () => this._populateMixkitList(container, i));
-        mixkitSearch?.addEventListener('input', () => this._populateMixkitList(container, i, mixkitSearch.value));
+        // Mixkit picker knop
+        const mixkitPickBtn = container.querySelector('.te-mixkit-pick-btn');
+        const mixkitInfoEl = container.querySelector('.mixkit-selected-info');
+        mixkitPickBtn?.addEventListener('click', () => {
+            this._openMixkitPicker(mixkitPickBtn, (sound) => {
+                this.itemAudio[i] = { type: 'mixkit', id: sound.id };
+                if (mixkitInfoEl) {
+                    mixkitInfoEl.innerHTML = `${sound.icon || '🔊'} <strong>${sound.name}</strong>`;
+                }
+            });
+        });
 
         // Mixkit eigen ID
         const customIdInput = container.querySelector('.te-mixkit-custom-id');
@@ -563,79 +569,173 @@ export const ThemeEditor = {
         this._bindUpload(container, i);
     },
 
-    _populateMixkitList(container, i, searchQuery = '') {
-        const catSel = container.querySelector('.te-mixkit-cat');
-        const listEl = container.querySelector('.mixkit-sound-list');
-        if (!listEl) return;
+    _createMixkitPickerEl() {
+        const picker = document.createElement('div');
+        picker.className = 'mixkit-picker hidden';
 
-        let sounds;
-        if (searchQuery && searchQuery.trim()) {
-            sounds = MixkitSounds.search(searchQuery);
-        } else {
-            const catId = catSel?.value;
-            sounds = MixkitSounds.getSoundsByCategory(catId);
-        }
+        const catOptions = Object.entries(MixkitSounds.categories)
+            .map(([id, cat]) => `<button class="mxp-cat-btn" data-cat="${id}">${cat.icon} ${cat.label}</button>`)
+            .join('');
 
-        const currentId = this.itemAudio[i]?.id;
-
-        listEl.innerHTML = sounds.map(s => `
-            <div class="mixkit-sound-item${currentId === s.id ? ' selected' : ''}" data-id="${s.id}">
-                <span class="mixkit-sound-icon">${s.icon || '🔊'}</span>
-                <span class="mixkit-sound-name">${s.name}</span>
-                <button class="mixkit-preview-btn setting-button small-btn" data-id="${s.id}">▶</button>
-                <button class="mixkit-use-btn setting-button small-btn" data-id="${s.id}" data-name="${s.name}">Gebruik</button>
+        picker.innerHTML = `
+            <div class="mxp-header">
+                <input type="text" class="mxp-search text-input" placeholder="🔍 Zoek geluid..." autocomplete="off">
+                <button class="mxp-close setting-button small-btn">✕</button>
             </div>
-        `).join('') || '<p class="audio-info">Geen resultaten</p>';
+            <div class="mxp-cats">
+                <button class="mxp-cat-btn active" data-cat="">Alle</button>
+                ${catOptions}
+            </div>
+            <div class="mxp-list"></div>`;
 
-        listEl.querySelectorAll('.mixkit-preview-btn').forEach(btn => {
+        picker.querySelector('.mxp-close').addEventListener('click', () => this._hideMixkitPicker());
+
+        // Sluit bij klik buiten
+        document.addEventListener('click', (e) => {
+            if (!picker.classList.contains('hidden') &&
+                !picker.contains(e.target) &&
+                !e.target.closest('.te-mixkit-pick-btn')) {
+                this._hideMixkitPicker();
+            }
+        }, true);
+
+        // Zoekbalk
+        picker.querySelector('.mxp-search').addEventListener('input', (e) => {
+            this._renderMixkitPickerList(e.target.value, '');
+            picker.querySelectorAll('.mxp-cat-btn').forEach(b => b.classList.remove('active'));
+        });
+
+        // Categorie knoppen
+        picker.querySelectorAll('.mxp-cat-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                // Stop eerder spelend geluid in deze lijst
-                if (listEl._activeAudio && !listEl._activeAudio.paused) {
-                    listEl._activeAudio.pause();
-                    listEl._activeAudio.currentTime = 0;
-                    if (listEl._activeBtn) {
-                        listEl._activeBtn.textContent = '▶';
-                        listEl._activeBtn.classList.remove('playing');
-                    }
-                    // Zelfde knop opnieuw → stop alleen
-                    if (listEl._activeBtn === btn) {
-                        listEl._activeAudio = null;
-                        listEl._activeBtn = null;
-                        return;
-                    }
+                picker.querySelectorAll('.mxp-cat-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                picker.querySelector('.mxp-search').value = '';
+                this._renderMixkitPickerList('', btn.dataset.cat);
+            });
+        });
+
+        return picker;
+    },
+
+    _renderMixkitPickerList(query, catId) {
+        const picker = this._mixkitPickerEl;
+        if (!picker) return;
+
+        // Stop eventueel spelend geluid
+        this._stopMixkitPickerAudio();
+
+        const sounds = query?.trim()
+            ? MixkitSounds.search(query)
+            : catId
+                ? MixkitSounds.getSoundsByCategory(catId)
+                : MixkitSounds.getAllSounds();
+
+        const listEl = picker.querySelector('.mxp-list');
+        listEl.innerHTML = sounds.length
+            ? sounds.map(s => `
+                <div class="mxp-item" data-id="${s.id}" data-name="${s.name}" data-icon="${s.icon || '🔊'}">
+                    <span class="mxp-icon">${s.icon || '🔊'}</span>
+                    <span class="mxp-name">${s.name}</span>
+                    <span class="mxp-cat-label">${s.categoryLabel || ''}</span>
+                    <button class="mxp-play setting-button small-btn" data-id="${s.id}">▶</button>
+                    <button class="mxp-use setting-button small-btn" data-id="${s.id}">✓</button>
+                </div>`).join('')
+            : '<p class="audio-info" style="padding:1vmin">Geen resultaten</p>';
+
+        listEl.querySelectorAll('.mxp-play').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (this._mixkitPickerAudio && !this._mixkitPickerAudio.paused) {
+                    this._stopMixkitPickerAudio();
+                    if (this._mixkitPickerActiveBtn === btn) return;
                 }
                 const url = MixkitSounds.getUrl(btn.dataset.id);
-                const audio = new Audio(url);
-                audio.volume = 0.5;
-                listEl._activeAudio = audio;
-                listEl._activeBtn = btn;
+                this._mixkitPickerAudio = new Audio(url);
+                this._mixkitPickerAudio.volume = 0.5;
+                this._mixkitPickerActiveBtn = btn;
                 btn.textContent = '⏹';
                 btn.classList.add('playing');
-                const stopPlayback = () => {
-                    if (!audio.paused) audio.pause();
+                const stop = () => {
+                    if (this._mixkitPickerAudio && !this._mixkitPickerAudio.paused)
+                        this._mixkitPickerAudio.pause();
                     btn.textContent = '▶';
                     btn.classList.remove('playing');
-                    listEl._activeAudio = null;
-                    listEl._activeBtn = null;
+                    this._mixkitPickerAudio = null;
+                    this._mixkitPickerActiveBtn = null;
                 };
-                audio.play().catch(() => {
-                    this._showToast('Kan geluid niet laden. Controleer internetverbinding.', true);
-                    stopPlayback();
+                this._mixkitPickerAudio.play().catch(() => {
+                    this._showToast('Kan geluid niet laden.', true);
+                    stop();
                 });
-                audio.addEventListener('ended', stopPlayback);
-                setTimeout(stopPlayback, MAX_PREVIEW_MS);
+                this._mixkitPickerAudio.addEventListener('ended', stop);
+                setTimeout(stop, MAX_PREVIEW_MS);
             });
         });
 
-        listEl.querySelectorAll('.mixkit-use-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.itemAudio[i] = { type: 'mixkit', id: btn.dataset.id };
-                listEl.querySelectorAll('.mixkit-sound-item').forEach(el => el.classList.remove('selected'));
-                btn.closest('.mixkit-sound-item').classList.add('selected');
-                const infoEl = container.querySelector('.mixkit-selected-info');
-                if (infoEl) infoEl.textContent = `Geselecteerd: ${btn.dataset.name}`;
+        listEl.querySelectorAll('.mxp-use').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const item = btn.closest('.mxp-item');
+                if (this._mixkitPickerCallback) {
+                    this._mixkitPickerCallback({
+                        id: item.dataset.id,
+                        name: item.dataset.name,
+                        icon: item.dataset.icon,
+                    });
+                }
+                this._hideMixkitPicker();
             });
         });
+    },
+
+    _stopMixkitPickerAudio() {
+        if (this._mixkitPickerAudio && !this._mixkitPickerAudio.paused) {
+            this._mixkitPickerAudio.pause();
+        }
+        if (this._mixkitPickerActiveBtn) {
+            this._mixkitPickerActiveBtn.textContent = '▶';
+            this._mixkitPickerActiveBtn.classList.remove('playing');
+        }
+        this._mixkitPickerAudio = null;
+        this._mixkitPickerActiveBtn = null;
+    },
+
+    _openMixkitPicker(anchorEl, callback) {
+        const picker = this._mixkitPickerEl;
+        if (!picker) return;
+
+        this._mixkitPickerCallback = callback;
+
+        // Reset naar "Alle" categorie
+        picker.querySelectorAll('.mxp-cat-btn').forEach(b => b.classList.remove('active'));
+        picker.querySelector('.mxp-cat-btn[data-cat=""]')?.classList.add('active');
+        picker.querySelector('.mxp-search').value = '';
+        this._renderMixkitPickerList('', '');
+
+        // Toon picker, positioneer
+        picker.classList.remove('hidden');
+
+        const rect = anchorEl.getBoundingClientRect();
+        const pw = picker.offsetWidth || 360;
+        const ph = picker.offsetHeight || 400;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        let top = rect.bottom + 6;
+        let left = rect.left;
+        if (top + ph > vh) top = Math.max(0, rect.top - ph - 6);
+        if (left + pw > vw) left = Math.max(0, vw - pw - 8);
+
+        picker.style.top = `${top}px`;
+        picker.style.left = `${left}px`;
+        picker.querySelector('.mxp-search').focus();
+    },
+
+    _hideMixkitPicker() {
+        this._stopMixkitPickerAudio();
+        this._mixkitPickerEl?.classList.add('hidden');
+        this._mixkitPickerCallback = null;
     },
 
     _bindRecording(container, i) {

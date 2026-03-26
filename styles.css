@@ -590,6 +590,32 @@ body[data-contrast="high"] .math-object {
 .lz-toast.lz-toast-error { background: #c62828; }
 .mixkit-preview-btn.playing { background: #e53935; color: #fff; }
 
+/* --- MIXKIT GELUID PICKER --- */
+.mixkit-picker { position: fixed; z-index: 10000; background: var(--card-bg, #fff); border: 2px solid var(--border-color, #ddd); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.22); width: clamp(300px, 90vw, 420px); max-height: min(480px, 80vh); display: flex; flex-direction: column; overflow: hidden; }
+.mixkit-picker.hidden { display: none; }
+.mxp-header { display: flex; gap: 0.5vmin; padding: 1.5vmin 1.5vmin 0.5vmin; align-items: center; flex-shrink: 0; }
+.mxp-search { flex: 1; padding: 0.6vmin 1vmin; font-size: clamp(0.85rem, 2vmin, 1rem); border: 1.5px solid var(--border-color, #ddd); border-radius: 8px; outline: none; background: var(--bg-color, #f9f9f9); color: var(--text-color, #333); }
+.mxp-search:focus { border-color: var(--primary-color, #4a90d9); }
+.mxp-close { flex-shrink: 0; padding: 0.4vmin 0.8vmin; font-size: 1.1rem; line-height: 1; }
+.mxp-cats { display: flex; flex-wrap: wrap; gap: 0.4vmin; padding: 0.5vmin 1.5vmin; flex-shrink: 0; border-bottom: 1px solid var(--border-color, #eee); }
+.mxp-cat-btn { padding: 0.3vmin 0.8vmin; font-size: clamp(0.75rem, 1.6vmin, 0.9rem); background: var(--bg-color, #f0f0f0); border: 1.5px solid transparent; border-radius: 20px; cursor: pointer; white-space: nowrap; color: var(--text-color, #333); transition: background 0.15s, border-color 0.15s; }
+.mxp-cat-btn:hover { background: var(--hover-color, #e0e0e0); }
+.mxp-cat-btn.active { background: var(--primary-color, #4a90d9); color: #fff; border-color: var(--primary-color, #4a90d9); }
+.mxp-list { overflow-y: auto; flex: 1; padding: 0.5vmin 0; }
+.mxp-item { display: grid; grid-template-columns: 2.2rem 1fr auto 2.6rem 2.6rem; align-items: center; gap: 0.5vmin; padding: 0.6vmin 1.5vmin; cursor: default; transition: background 0.1s; }
+.mxp-item:hover { background: var(--hover-color, #f5f5f5); }
+.mxp-icon { font-size: 1.4rem; text-align: center; }
+.mxp-name { font-size: clamp(0.8rem, 1.8vmin, 0.95rem); color: var(--text-color, #333); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mxp-cat-label { font-size: clamp(0.65rem, 1.4vmin, 0.8rem); color: var(--text-muted, #888); white-space: nowrap; }
+.mxp-play, .mxp-use { font-size: 1rem; padding: 0.3vmin 0.5vmin; border-radius: 6px; min-width: 2.2rem; text-align: center; }
+.mxp-play.playing { background: #e53935; color: #fff; }
+.mxp-use { background: var(--primary-color, #4a90d9); color: #fff; font-weight: 700; }
+.mxp-use:hover { filter: brightness(1.1); }
+
+/* Mixkit tab: kies-knop */
+.te-mixkit-pick-btn { width: 100%; margin-top: 0.8vmin; }
+.mixkit-selected-info { font-size: clamp(0.8rem, 1.8vmin, 0.95rem); color: var(--text-muted, #666); padding: 0.3vmin 0; min-height: 1.4em; }
+
 /* --- EMOJI PICKER --- */
 .emoji-picker { position: fixed; z-index: 9999; background: var(--card-bg, #fff); border: 2px solid var(--border-color, #ddd); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18); width: 280px; max-height: 320px; display: flex; flex-direction: column; overflow: hidden; }
 .emoji-picker.hidden { display: none; }
