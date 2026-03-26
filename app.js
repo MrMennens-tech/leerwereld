@@ -1994,7 +1994,7 @@ export const Games = {
         }
     },
 
-    // === EMB SPELLETJES (geïnspireerd op Doorway Online) ===
+    // === EMB SPELLETJES ===
 
     'druk-op-mij': {
         name: "Druk op Mij!",
