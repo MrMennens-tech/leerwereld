@@ -3,7 +3,7 @@
  * Zorgt voor snelle laadtijden en offline functionaliteit
  */
 
-const CACHE_NAME = 'leerzone-v5';
+const CACHE_NAME = 'leerzone-v6';
 const urlsToCache = [
     './',
     './index.html',

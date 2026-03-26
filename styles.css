@@ -1310,10 +1310,6 @@ body[data-contrast="high"] .math-object {
     color: var(--text-color, #333);
 }
 
-/* EMB game-cards: subtiele markering */
-.game-card.emb-game {
-    border-left: 4px solid var(--accent-color, #e2844a);
-}
 
 /* --- Schilderen nateken-kiezer --- */
 .schilder-nateken-kiezer {
