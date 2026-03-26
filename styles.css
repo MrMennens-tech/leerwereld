@@ -1069,3 +1069,372 @@ body[data-contrast="high"] .math-object {
     color: var(--text-color);
 }
 
+
+
+/* =====================================================
+   EMB SPELLETJES (Doorway Online stijl)
+   ===================================================== */
+
+/* --- Druk op Mij! --- */
+.druk-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 4vmin;
+    width: 100%;
+    height: 100%;
+    padding: 4vmin;
+    box-sizing: border-box;
+}
+
+.druk-knop {
+    background: var(--primary-color, #4a90e2);
+    border: none;
+    border-radius: 50%;
+    width: clamp(120px, 28vmin, 220px);
+    height: clamp(120px, 28vmin, 220px);
+    font-size: clamp(3rem, 10vmin, 7rem);
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3), inset 0 -4px 0 rgba(0,0,0,0.2);
+    transition: transform 0.1s, box-shadow 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+.druk-knop:active,
+.druk-knop.druk-flash {
+    transform: scale(0.88);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3), inset 0 -1px 0 rgba(0,0,0,0.2);
+    background: var(--accent-color, #e2844a);
+}
+
+.druk-deeltje {
+    position: absolute;
+    font-size: clamp(1.4rem, 4vmin, 2.5rem);
+    pointer-events: none;
+    animation: drukExplode 0.9s ease-out forwards;
+    transform-origin: center;
+    z-index: 50;
+}
+
+@keyframes drukExplode {
+    0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0.3); opacity: 0; }
+}
+
+/* --- Bubbels Tikken --- */
+.bubbel {
+    position: absolute;
+    border-radius: 50%;
+    cursor: pointer;
+    animation: bubbel-opstijgen linear forwards;
+    box-shadow: inset -6px -6px 12px rgba(255,255,255,0.5), 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.1s;
+    bottom: -120px;
+}
+
+.bubbel:active {
+    transform: scale(1.1);
+}
+
+@keyframes bubbel-opstijgen {
+    0%   { bottom: -120px; opacity: 0.9; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { bottom: 110%; opacity: 0; }
+}
+
+@keyframes bubbel-pop {
+    0%   { transform: scale(1); opacity: 1; }
+    60%  { transform: scale(1.6); opacity: 0.6; }
+    100% { transform: scale(0);   opacity: 0; }
+}
+
+.bubbel-pop {
+    animation: bubbel-pop 0.3s ease-out forwards !important;
+}
+
+/* --- Muziek Maken --- */
+.muziek-balk-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 1.5vmin;
+    width: 100%;
+    height: 100%;
+    padding: 4vmin 3vmin 6vmin;
+    box-sizing: border-box;
+}
+
+.muziek-balk {
+    flex: 1;
+    max-width: 80px;
+    border: none;
+    border-radius: 12px 12px 6px 6px;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25), inset 0 2px 0 rgba(255,255,255,0.3);
+    transition: transform 0.08s, box-shadow 0.08s;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 8px;
+}
+
+.muziek-balk:active,
+.muziek-balk.muziek-hit {
+    transform: scaleY(0.92) translateY(4px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.muziek-naam {
+    font-size: clamp(0.75rem, 2vmin, 1.1rem);
+    font-weight: 700;
+    color: rgba(255,255,255,0.95);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    pointer-events: none;
+}
+
+/* --- Vuurwerk! --- */
+.vuurwerk-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(1.4rem, 4vmin, 2rem);
+    font-weight: 700;
+    color: var(--text-color, #333);
+    text-align: center;
+    pointer-events: none;
+    opacity: 0.7;
+    user-select: none;
+}
+
+.vuurwerk-ster {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: vuurwerkVlieg 1.3s ease-out forwards;
+    z-index: 50;
+}
+
+@keyframes vuurwerkVlieg {
+    0%   { transform: translate(0, 0) scale(1.2); opacity: 1; }
+    70%  { opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0.1); opacity: 0; }
+}
+
+/* --- Vrij Schilderen --- */
+.schilder-palet {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(4px);
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+    align-items: center;
+}
+
+.schilder-kleur {
+    width: clamp(32px, 7vmin, 50px);
+    height: clamp(32px, 7vmin, 50px);
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.8);
+    cursor: pointer;
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.schilder-kleur.actief {
+    border-color: #333;
+    transform: scale(1.25);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+}
+
+.schilder-wis {
+    background: #fff;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-size: clamp(1.1rem, 3vmin, 1.5rem);
+    cursor: pointer;
+    margin-left: auto;
+    transition: background 0.15s;
+}
+
+.schilder-wis:active {
+    background: #f0f0f0;
+}
+
+#schilder-canvas {
+    display: block;
+    cursor: crosshair;
+    touch-action: none;
+    width: 100%;
+    background: #fff;
+    border-radius: 0 0 12px 12px;
+}
+
+/* --- Wat Hoor Je? --- */
+.geluid-speel-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 3vmin 0 2vmin;
+}
+
+.geluid-speel-knop {
+    background: var(--primary-color, #4a90e2);
+    color: #fff;
+    border: none;
+    border-radius: 40px;
+    padding: clamp(12px, 2.5vmin, 20px) clamp(24px, 5vmin, 40px);
+    font-size: clamp(1.1rem, 3vmin, 1.5rem);
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.geluid-speel-knop:active {
+    transform: scale(0.94);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.geluid-opties {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3vmin;
+    padding: 2vmin 3vmin 4vmin;
+}
+
+.geluid-optie {
+    background: var(--card-bg, #fff);
+    border: 3px solid var(--primary-color, #4a90e2);
+    border-radius: 20px;
+    padding: 3vmin;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5vmin;
+    min-width: clamp(90px, 20vmin, 160px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
+}
+
+.geluid-optie:active {
+    transform: scale(0.93);
+    background: var(--primary-color, #4a90e2);
+    box-shadow: none;
+}
+
+.geluid-optie-icon {
+    font-size: clamp(2.5rem, 9vmin, 5rem);
+    line-height: 1;
+}
+
+.geluid-optie-naam {
+    font-size: clamp(0.85rem, 2.2vmin, 1.1rem);
+    font-weight: 600;
+    color: var(--text-color, #333);
+}
+
+/* --- Groot of Klein? --- */
+.gk-vraag {
+    text-align: center;
+    font-size: clamp(1.3rem, 3.5vmin, 2rem);
+    font-weight: 700;
+    color: var(--text-color, #333);
+    padding: 3vmin 2vmin 1vmin;
+}
+
+.gk-items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6vmin;
+    flex: 1;
+    padding: 2vmin;
+}
+
+.gk-item {
+    background: var(--card-bg, #fff);
+    border: 3px solid var(--primary-color, #4a90e2);
+    border-radius: 20px;
+    padding: 3vmin 4vmin;
+    cursor: pointer;
+    line-height: 1;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    transition: transform 0.12s, box-shadow 0.12s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gk-item:active {
+    transform: scale(0.92);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+/* --- Kies Je Favoriet! --- */
+.kies-vraag {
+    text-align: center;
+    font-size: clamp(1.3rem, 3.5vmin, 2rem);
+    font-weight: 700;
+    color: var(--text-color, #333);
+    padding: 3vmin 2vmin 1vmin;
+}
+
+.kies-opties {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 4vmin;
+    flex: 1;
+    padding: 2vmin 3vmin 4vmin;
+}
+
+.kies-optie {
+    background: var(--card-bg, #fff);
+    border: 3px solid var(--primary-color, #4a90e2);
+    border-radius: 20px;
+    padding: 3vmin 4vmin;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2vmin;
+    min-width: clamp(100px, 22vmin, 170px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s;
+}
+
+.kies-optie:active {
+    transform: scale(0.92);
+    border-color: var(--accent-color, #e2844a);
+    box-shadow: 0 0 0 4px var(--accent-color, #e2844a)44;
+}
+
+.kies-icon {
+    font-size: clamp(2.8rem, 10vmin, 5.5rem);
+    line-height: 1;
+}
+
+.kies-naam {
+    font-size: clamp(0.9rem, 2.5vmin, 1.2rem);
+    font-weight: 600;
+    color: var(--text-color, #333);
+}
+
+/* EMB game-cards: subtiele markering */
+.game-card.emb-game {
+    border-left: 4px solid var(--accent-color, #e2844a);
+}

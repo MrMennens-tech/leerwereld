@@ -1971,13 +1971,13 @@ export const Games = {
         checkMatch() {
             try {
                 const [c1, c2] = this.flippedCards;
-                
+
                 if (c1.dataset.item === c2.dataset.item) {
                     c1.classList.add('matched');
                     c2.classList.add('matched');
                     this.matchedPairs++;
                     GameController.showFeedback(true);
-                    
+
                     if (this.matchedPairs === this.config.pairs) {
                         setTimeout(() => TTS.speak('Alles gevonden! Heel goed gedaan!'), 500);
                         setTimeout(() => this.setupLevel(), 2500);
@@ -1992,6 +1992,504 @@ export const Games = {
                 this.lockBoard = false;
             }
         }
+    },
+
+    // === EMB SPELLETJES (geïnspireerd op Doorway Online) ===
+
+    'druk-op-mij': {
+        name: "Druk op Mij!",
+        levels: [
+            { aantalKnoppen: 1 },
+            { aantalKnoppen: 2 },
+            { aantalKnoppen: 4 }
+        ],
+
+        create(level) {
+            this.config = this.levels[level - 1];
+            const items = Utils.getThemeItems().items.slice(0, this.config.aantalKnoppen);
+
+            DOM.gameArea.innerHTML = `<div class="druk-container"></div>`;
+            const container = document.querySelector('.druk-container');
+
+            items.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'druk-knop scannable';
+                btn.innerHTML = `<span>${item.i}</span>`;
+                btn.dataset.sound = item.s;
+                btn.addEventListener('click', () => {
+                    SoundController.play(item.s);
+                    TTS.speak(item.n);
+                    this._explosie(btn, item.i);
+                });
+                container.appendChild(btn);
+            });
+
+            TTS.speak('Druk op een knop!');
+            Accessibility.restartScanIfActive();
+        },
+
+        _explosie(btn, emoji) {
+            btn.classList.add('druk-flash');
+            setTimeout(() => btn.classList.remove('druk-flash'), 500);
+
+            const rect = btn.getBoundingClientRect();
+            const areaRect = DOM.gameArea.getBoundingClientRect();
+            const cx = rect.left - areaRect.left + rect.width / 2;
+            const cy = rect.top - areaRect.top + rect.height / 2;
+
+            for (let i = 0; i < 12; i++) {
+                const p = document.createElement('div');
+                p.className = 'druk-deeltje';
+                p.textContent = emoji;
+                const angle = (i / 12) * Math.PI * 2;
+                const dist = 70 + Math.random() * 100;
+                p.style.cssText = `left:${cx}px;top:${cy}px;--dx:${Math.cos(angle) * dist}px;--dy:${Math.sin(angle) * dist}px`;
+                DOM.gameArea.appendChild(p);
+                setTimeout(() => p.remove(), 900);
+            }
+        },
+
+        destroy() {}
+    },
+
+    'bubbels': {
+        name: "Bubbels Tikken",
+        levels: [
+            { aantal: 3, grootte: 100, snelheid: 4000 },
+            { aantal: 6, grootte: 70,  snelheid: 3000 },
+            { aantal: 10, grootte: 50, snelheid: 2200 }
+        ],
+        intervalId: null,
+
+        create(level) {
+            this.config = this.levels[level - 1];
+            DOM.gameArea.innerHTML = '';
+            clearInterval(this.intervalId);
+
+            const vertraging = this.config.snelheid / this.config.aantal;
+            for (let i = 0; i < this.config.aantal; i++) {
+                setTimeout(() => this._voegBubbel(), i * vertraging);
+            }
+            this.intervalId = setInterval(() => this._voegBubbel(), vertraging);
+
+            TTS.speak('Tik de bubbels!');
+            Accessibility.restartScanIfActive();
+        },
+
+        _voegBubbel() {
+            const kleuren = ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD','#98FB98','#FFB347','#87CEEB','#F0E68C'];
+            const kleur = kleuren[Math.floor(Math.random() * kleuren.length)];
+            const grootte = this.config.grootte + Math.random() * 20;
+            const breedte = DOM.gameArea.clientWidth || 300;
+
+            const bubbel = document.createElement('div');
+            bubbel.className = 'bubbel scannable';
+            bubbel.style.width = grootte + 'px';
+            bubbel.style.height = grootte + 'px';
+            bubbel.style.background = `radial-gradient(circle at 35% 35%, white 0%, ${kleur} 50%, ${kleur}99 100%)`;
+            bubbel.style.left = Math.max(0, Math.random() * (breedte - grootte)) + 'px';
+            bubbel.style.animationDuration = (5 + Math.random() * 3) + 's';
+
+            bubbel.addEventListener('click', () => {
+                bubbel.classList.add('bubbel-pop');
+                SoundController.play('plons');
+                setTimeout(() => bubbel.remove(), 300);
+                Accessibility.restartScanIfActive();
+            });
+
+            DOM.gameArea.appendChild(bubbel);
+            setTimeout(() => { if (bubbel.parentElement) bubbel.remove(); }, 9000);
+        },
+
+        destroy() {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+        }
+    },
+
+    'muziek-maken': {
+        name: "Muziek Maken",
+        levels: [
+            { noten: 4 },
+            { noten: 6 },
+            { noten: 8 }
+        ],
+        audioCtx: null,
+
+        create(level) {
+            this.config = this.levels[level - 1];
+
+            const alleNoten = [
+                { freq: 261.6, naam: 'Do',  kleur: '#FF6B6B' },
+                { freq: 293.7, naam: 'Re',  kleur: '#FF9F43' },
+                { freq: 329.6, naam: 'Mi',  kleur: '#FFC312' },
+                { freq: 349.2, naam: 'Fa',  kleur: '#A3CB38' },
+                { freq: 392.0, naam: 'Sol', kleur: '#12CBC4' },
+                { freq: 440.0, naam: 'La',  kleur: '#1289A7' },
+                { freq: 493.9, naam: 'Si',  kleur: '#9B59B6' },
+                { freq: 523.3, naam: "Do'", kleur: '#E84393' }
+            ];
+
+            const noten = alleNoten.slice(0, this.config.noten);
+
+            DOM.gameArea.innerHTML = `<div class="muziek-balk-container"></div>`;
+            const container = document.querySelector('.muziek-balk-container');
+
+            noten.forEach((noot, i) => {
+                // Xylofoon: langere balk = lagere toon (omgekeerde volgorde)
+                const balkHoogte = 100 + (noten.length - i) * 22;
+                const balk = document.createElement('button');
+                balk.className = 'muziek-balk scannable';
+                balk.style.background = `linear-gradient(to bottom, ${noot.kleur}cc, ${noot.kleur})`;
+                balk.style.height = balkHoogte + 'px';
+                balk.innerHTML = `<span class="muziek-naam">${noot.naam}</span>`;
+
+                balk.addEventListener('click', () => {
+                    this._speelNoot(noot.freq);
+                    balk.classList.add('muziek-hit');
+                    setTimeout(() => balk.classList.remove('muziek-hit'), 200);
+                    TTS.speak(noot.naam);
+                });
+
+                container.appendChild(balk);
+            });
+
+            TTS.speak('Druk op de balken om muziek te maken!');
+            Accessibility.restartScanIfActive();
+        },
+
+        _speelNoot(freq) {
+            try {
+                if (!this.audioCtx) {
+                    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                const ctx = this.audioCtx;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = 'triangle';
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.5, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+                osc.start();
+                osc.stop(ctx.currentTime + 1.2);
+            } catch (e) {}
+        },
+
+        destroy() {
+            if (this.audioCtx) {
+                this.audioCtx.close().catch(() => {});
+                this.audioCtx = null;
+            }
+        }
+    },
+
+    'vuurwerk': {
+        name: "Vuurwerk!",
+        levels: [
+            { raketten: 1, sterren: 20 },
+            { raketten: 3, sterren: 35 },
+            { raketten: 5, sterren: 50 }
+        ],
+        boundClick: null,
+
+        create(level) {
+            this.config = this.levels[level - 1];
+            DOM.gameArea.innerHTML = `<div class="vuurwerk-hint">✨ Tik op het scherm! ✨</div>`;
+
+            this.boundClick = (e) => {
+                const rect = DOM.gameArea.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                for (let i = 0; i < this.config.raketten; i++) {
+                    setTimeout(() => {
+                        const ox = x + (Math.random() - 0.5) * 100;
+                        const oy = y + (Math.random() - 0.5) * 100;
+                        this._ontplof(ox, oy);
+                    }, i * 180);
+                }
+
+                SoundController.play('glinstering');
+            };
+
+            DOM.gameArea.addEventListener('click', this.boundClick);
+            TTS.speak('Tik op het scherm voor vuurwerk!');
+            Accessibility.restartScanIfActive();
+        },
+
+        _ontplof(x, y) {
+            const kleuren = ['#FF6B6B','#FFD700','#00FF88','#00BFFF','#FF69B4','#FFA500','#ADFF2F','#FF4500','#7FFFD4'];
+            for (let i = 0; i < this.config.sterren; i++) {
+                const ster = document.createElement('div');
+                ster.className = 'vuurwerk-ster';
+                const kleur = kleuren[Math.floor(Math.random() * kleuren.length)];
+                ster.style.background = kleur;
+                ster.style.boxShadow = `0 0 6px 2px ${kleur}`;
+                ster.style.left = x + 'px';
+                ster.style.top = y + 'px';
+                const angle = (i / this.config.sterren) * Math.PI * 2 + Math.random() * 0.4;
+                const dist = 50 + Math.random() * 120;
+                ster.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
+                ster.style.setProperty('--dy', `${Math.sin(angle) * dist}px`);
+                DOM.gameArea.appendChild(ster);
+                setTimeout(() => ster.remove(), 1300);
+            }
+        },
+
+        destroy() {
+            if (this.boundClick) {
+                DOM.gameArea.removeEventListener('click', this.boundClick);
+            }
+        }
+    },
+
+    'schilderen': {
+        name: "Vrij Schilderen",
+        levels: [
+            { penGrootte: 40, aantalKleuren: 4 },
+            { penGrootte: 25, aantalKleuren: 8 },
+            { penGrootte: 15, aantalKleuren: 12 }
+        ],
+        canvas: null,
+        ctx2d: null,
+        schildert: false,
+        huidigKleur: '#FF6B6B',
+
+        create(level) {
+            this.config = this.levels[level - 1];
+            this.schildert = false;
+
+            const allKleuren = ['#FF6B6B','#FF9F43','#FFC312','#A3CB38','#12CBC4','#1289A7','#9B59B6','#E84393','#C4E538','#FDA7DF','#D980FA','#00B894'];
+            const kleuren = allKleuren.slice(0, this.config.aantalKleuren);
+            this.huidigKleur = kleuren[0];
+
+            DOM.gameArea.innerHTML = `
+                <div class="schilder-palet">
+                    ${kleuren.map((k, i) => `<button class="schilder-kleur scannable${i === 0 ? ' actief' : ''}" data-kleur="${k}" style="background:${k}" aria-label="Kleur ${k}"></button>`).join('')}
+                    <button class="schilder-wis scannable" aria-label="Wissen">🗑️</button>
+                </div>
+                <canvas id="schilder-canvas"></canvas>
+            `;
+
+            this.canvas = document.getElementById('schilder-canvas');
+            this.ctx2d = this.canvas.getContext('2d');
+
+            requestAnimationFrame(() => {
+                const areaRect = DOM.gameArea.getBoundingClientRect();
+                const paletH = document.querySelector('.schilder-palet')?.getBoundingClientRect().height || 60;
+                this.canvas.width = areaRect.width;
+                this.canvas.height = Math.max(100, areaRect.height - paletH - 12);
+                this.ctx2d.fillStyle = '#FFFFFF';
+                this.ctx2d.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            });
+
+            document.querySelectorAll('.schilder-kleur').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.schilder-kleur').forEach(b => b.classList.remove('actief'));
+                    btn.classList.add('actief');
+                    this.huidigKleur = btn.dataset.kleur;
+                });
+            });
+
+            document.querySelector('.schilder-wis').addEventListener('click', () => {
+                this.ctx2d.fillStyle = '#FFFFFF';
+                this.ctx2d.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                SoundController.play('klik');
+            });
+
+            this.boundDown = (e) => { this.schildert = true; this._verf(e); };
+            this.boundMove = (e) => { if (this.schildert) this._verf(e); };
+            this.boundUp   = () => { this.schildert = false; };
+
+            this.canvas.addEventListener('mousedown',  this.boundDown);
+            this.canvas.addEventListener('mousemove',  this.boundMove);
+            this.canvas.addEventListener('mouseup',    this.boundUp);
+            this.canvas.addEventListener('touchstart', this.boundDown, { passive: true });
+            this.canvas.addEventListener('touchmove',  this.boundMove, { passive: true });
+            this.canvas.addEventListener('touchend',   this.boundUp);
+
+            TTS.speak('Schilder iets moois!');
+            Accessibility.restartScanIfActive();
+        },
+
+        _verf(e) {
+            const rect = this.canvas.getBoundingClientRect();
+            const touch = e.touches?.[0];
+            const x = (touch ? touch.clientX : e.clientX) - rect.left;
+            const y = (touch ? touch.clientY : e.clientY) - rect.top;
+            this.ctx2d.beginPath();
+            this.ctx2d.arc(x, y, this.config.penGrootte / 2, 0, Math.PI * 2);
+            this.ctx2d.fillStyle = this.huidigKleur;
+            this.ctx2d.fill();
+        },
+
+        destroy() {
+            if (this.canvas) {
+                this.canvas.removeEventListener('mousedown',  this.boundDown);
+                this.canvas.removeEventListener('mousemove',  this.boundMove);
+                this.canvas.removeEventListener('mouseup',    this.boundUp);
+                this.canvas.removeEventListener('touchstart', this.boundDown);
+                this.canvas.removeEventListener('touchmove',  this.boundMove);
+                this.canvas.removeEventListener('touchend',   this.boundUp);
+            }
+            this.canvas = null;
+            this.ctx2d = null;
+        }
+    },
+
+    'geluid-raden': {
+        name: "Wat Hoor Je?",
+        levels: [
+            { opties: 2 },
+            { opties: 3 },
+            { opties: 4 }
+        ],
+        huidigItem: null,
+
+        create(level) {
+            this.config = this.levels[level - 1];
+            DOM.gameArea.innerHTML = `
+                <div class="geluid-speel-wrapper">
+                    <button id="geluid-speel" class="geluid-speel-knop scannable">🔊 Speel geluid</button>
+                </div>
+                <div id="geluid-opties" class="geluid-opties"></div>
+            `;
+
+            document.getElementById('geluid-speel').addEventListener('click', () => {
+                if (this.huidigItem) SoundController.play(this.huidigItem.s);
+            });
+
+            this._setupRonde();
+        },
+
+        _setupRonde() {
+            const alleItems = Utils.getThemeItems().items;
+            const shuffled = Utils.shuffleArray([...alleItems]);
+            const opties = shuffled.slice(0, this.config.opties);
+            this.huidigItem = opties[Math.floor(Math.random() * opties.length)];
+
+            const optiesEl = document.getElementById('geluid-opties');
+            optiesEl.innerHTML = opties.map(item => `
+                <button class="geluid-optie scannable" data-naam="${item.n}" data-sound="${item.s}">
+                    <span class="geluid-optie-icon">${item.i}</span>
+                    <span class="geluid-optie-naam">${item.n}</span>
+                </button>
+            `).join('');
+
+            setTimeout(() => {
+                SoundController.play(this.huidigItem.s);
+                TTS.speak('Welk plaatje hoort bij dit geluid?');
+            }, 500);
+
+            optiesEl.querySelectorAll('.geluid-optie').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const isGoed = btn.dataset.naam === this.huidigItem.n;
+                    GameController.showFeedback(isGoed);
+                    if (isGoed) {
+                        SoundController.play(this.huidigItem.s);
+                        setTimeout(() => this._setupRonde(), 1800);
+                    }
+                });
+            });
+
+            Accessibility.restartScanIfActive();
+        },
+
+        destroy() {}
+    },
+
+    'groot-klein': {
+        name: "Groot of Klein?",
+        levels: [
+            { factor: 4.0 },
+            { factor: 2.5 },
+            { factor: 1.7 }
+        ],
+
+        create(level) {
+            this.config = this.levels[level - 1];
+            DOM.gameArea.innerHTML = `
+                <div id="gk-vraag" class="gk-vraag">Tik op het <strong>GROTE</strong> plaatje!</div>
+                <div id="gk-items" class="gk-items"></div>
+            `;
+            TTS.speak('Tik op het grote plaatje!');
+            this._setupRonde();
+        },
+
+        _setupRonde() {
+            const items = Utils.shuffleArray([...Utils.getThemeItems().items]).slice(0, 2);
+            const grotereIdx = Math.floor(Math.random() * 2);
+            const grootFontSize = 110;
+            const kleinFontSize = Math.round(grootFontSize / this.config.factor);
+
+            const itemsEl = document.getElementById('gk-items');
+            itemsEl.innerHTML = items.map((item, i) => {
+                const isGroot = i === grotereIdx;
+                const fs = isGroot ? grootFontSize : kleinFontSize;
+                return `<button class="gk-item scannable" data-correct="${isGroot}" style="font-size:${fs}px" data-naam="${item.n}" data-sound="${item.s}">${item.i}</button>`;
+            }).join('');
+
+            itemsEl.querySelectorAll('.gk-item').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    SoundController.play(btn.dataset.sound);
+                    const isGoed = btn.dataset.correct === 'true';
+                    GameController.showFeedback(isGoed);
+                    if (isGoed) {
+                        setTimeout(() => this._setupRonde(), 1600);
+                    }
+                });
+            });
+
+            Accessibility.restartScanIfActive();
+        },
+
+        destroy() {}
+    },
+
+    'kies-favoriet': {
+        name: "Kies Je Favoriet!",
+        levels: [
+            { opties: 2 },
+            { opties: 3 },
+            { opties: 4 }
+        ],
+
+        create(level) {
+            this.config = this.levels[level - 1];
+            DOM.gameArea.innerHTML = `
+                <div class="kies-vraag">Wat vind jij het leukst? 🌟</div>
+                <div id="kies-opties" class="kies-opties"></div>
+            `;
+            this._setupRonde();
+            TTS.speak('Wat vind jij het leukst? Kies maar!');
+        },
+
+        _setupRonde() {
+            const items = Utils.shuffleArray([...Utils.getThemeItems().items]).slice(0, this.config.opties);
+            const optiesEl = document.getElementById('kies-opties');
+
+            optiesEl.innerHTML = items.map(item => `
+                <button class="kies-optie scannable" data-sound="${item.s}" data-naam="${item.n}">
+                    <span class="kies-icon">${item.i}</span>
+                    <span class="kies-naam">${item.n}</span>
+                </button>
+            `).join('');
+
+            optiesEl.querySelectorAll('.kies-optie').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    SoundController.play(btn.dataset.sound);
+                    TTS.speak('Goed gekozen! ' + btn.dataset.naam);
+                    GameController.showFeedback(true);
+                    setTimeout(() => this._setupRonde(), 2000);
+                });
+            });
+
+            Accessibility.restartScanIfActive();
+        },
+
+        destroy() {}
     }
 };
 
