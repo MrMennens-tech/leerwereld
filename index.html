@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <!-- Upgrade naar HTTPS indien beschikbaar (voor beveiligde verbinding) -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests "/>
+    
+    <!-- PWA Manifest -->
+    <script type="text/javascript" nonce="e67e1ece2a0f4982904b2471c55" src="//local.adguard.org?ts=1774403717111&amp;type=content-script&amp;dmn=it14.siteground.eu&amp;url=https%3A%2F%2Fit14.siteground.eu%2Fapi-sgcp%2Fv00%2Ffile%3Ffilename%3D%252Ftools.mytylschoolroosendaal.nl%252Fpublic_html%252Fspellen%252Fleerzone%252Findex.html%26_site_token%3DeyJhbGciOiJFUzM4NCJ9.eyJleHAiOjE3NzQ0NDc1MzgsIl9jayI6IjI2MDMyNS0wMjAwMDAiLCJfaCI6Iml0MTQiLCJfc2siOiIyNjAzMjUtMTMwMDE3Iiwic2l0ZV9pZCI6Im15dHlsc2Nob29scm9vc2VuZGFhbC5ubCIsInJvbGVzIjpbM10sImFwaV91cmwiOiJpdDE0LnNpdGVncm91bmQuZXUiLCJfcyI6ImF2YWxvbiIsInZzZWMiOjE4MDAsImN0cyI6MTc3NDQ0NTczOCwiX2MiOiJ3ZWJkZXYifQ.sIgOSiGVvicQpTu4hWqeCNuF1wzX_aqH8tIr9eJPZDj-SM-h_Du8ntm8w_dy3c9dXizDs0-PyjqdL9SktB3Xpg8sM1C3XAXczslrpHwHI63BcS_9g9aBzbRArbLV842I&amp;app=com.android.chrome&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1&amp;stealth=1&amp;st-dnt"></script><script type="text/javascript" nonce="e67e1ece2a0f4982904b2471c55" src="//local.adguard.org?ts=1774403717111&amp;name=AdGuard%20Extra&amp;type=user-script"></script>
+    
+    <!-- iOS/Safari Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="LeerZone">
+    <!-- iOS App Icons (PNG voor beste resultaat) -->
+    <link rel="apple-touch-icon" href="./icon-180.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icon-180.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="./icon-180.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./icon-180.png">
+    
+    <title>LeerZone 🧩</title>
+    
+    <!-- Favicons (Browser Tab Icons) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16.png">
+    <link rel="shortcut icon" href="./favicon.ico">
+    <!-- Preload kritieke resources voor snellere laadtijden -->
+    <link rel="preload" href="./app.js?v=5" as="script" crossorigin>
+    <link rel="preload" href="./styles.css?v=5" as="style">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Noto+Color+Emoji&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://cdn.jsdelivr.net/gh/tetunori/fluent-emoji-webfont@v0.8.5/dist/FluentEmojiHighContrast.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/gh/tetunori/fluent-emoji-webfont@v0.8.5/dist/FluentEmojiHighContrast.css" rel="stylesheet">
+    </noscript>
+    <link rel="stylesheet" href="./styles.css?v=5">
+</head>
+<body data-theme="sea" data-contrast="normal" data-focus-mode="false">
+    <div class="app-container">
+        <!-- MAIN MENU -->
+        <div id="main-menu-view" class="view active">
+            <!-- Floating Menu Buttons -->
+            <button id="open-settings-from-main" class="floating-button floating-top-right scannable" aria-label="Instellingen">
+                <span class="icon">⚙️</span>
+            </button>
+            <button id="open-theme-selector" class="floating-button floating-bottom-right scannable" aria-label="Thema's">
+                <span class="icon" id="theme-icon">🎨</span>
+            </button>
+            
+            <!-- Content Wrapper voor perfecte centrering -->
+            <div class="main-menu-content">
+                <header class="main-header">
+                    <h1>LeerZone</h1>
+                </header>
+                
+                <div class="game-grid">
+                <div class="game-card scannable" data-game="interactive-scene">
+                    <div class="icon">👆</div>
+                    <h2>Ontdek en Tik</h2>
+                </div>
+                <div class="game-card scannable" data-game="moving-targets">
+                    <div class="icon">🎯</div>
+                    <h2>Vliegende Vangers</h2>
+                </div>
+                <div class="game-card scannable" data-game="same-or-different">
+                    <div class="icon">🎨</div>
+                    <h2>Hetzelfde of Anders</h2>
+                </div>
+                <div class="game-card scannable" data-game="counting">
+                    <div class="icon">🔢</div>
+                    <h2>Tellen</h2>
+                </div>
+                <div class="game-card scannable" data-game="math">
+                    <div class="icon">➕</div>
+                    <h2>Rekenen</h2>
+                </div>
+                <div class="game-card scannable" data-game="memory">
+                    <div class="icon">🧠</div>
+                    <h2>Memory</h2>
+                </div>
+            </div>
+            </div><!-- End main-menu-content -->
+        </div>
+
+        <!-- GAME VIEW -->
+        <div id="game-view" class="view">
+            <div class="top-bar">
+                <button id="back-to-main-button" class="ui-button scannable" aria-label="Terug naar hoofdmenu">
+                    <span class="icon">◀</span>
+                </button>
+                <div id="game-level-selector" class="setting-options"></div>
+                <button id="open-settings-from-game" class="ui-button scannable" aria-label="Open instellingen">
+                    <span class="icon">⚙️</span>
+                </button>
+            </div>
+            <div class="game-area"></div>
+            <div class="game-feedback"></div>
+        </div>
+
+        <!-- THEME SELECTOR VIEW -->
+        <div id="theme-selector-view" class="view">
+            <div class="top-bar">
+                <button id="close-theme-selector-button" class="ui-button scannable" aria-label="Sluit thema kiezer">
+                    <span class="icon">◀</span>
+                </button>
+            </div>
+            <div class="theme-selector-container">
+                <h2>Kies je thema</h2>
+                <div id="theme-grid" class="theme-grid"></div>
+
+                <!-- Eigen thema's sectie -->
+                <div id="custom-themes-section">
+                    <h3 class="custom-themes-header">Mijn Thema's</h3>
+                    <div id="custom-theme-grid" class="theme-grid"></div>
+                    <div class="custom-theme-actions">
+                        <button id="open-theme-editor-new" class="setting-button create-theme-btn">
+                            ✏️ Nieuw thema maken
+                        </button>
+                        <button id="open-theme-import" class="setting-button">
+                            📥 Thema importeren
+                        </button>
+                        <input type="file" id="theme-import-file" accept=".json" hidden>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THEME EDITOR VIEW -->
+        <div id="theme-editor-view" class="view">
+            <div class="top-bar">
+                <button id="close-theme-editor-button" class="ui-button scannable" aria-label="Terug">
+                    <span class="icon">◀</span>
+                </button>
+                <h2 id="theme-editor-title" class="top-bar-title">Thema Bewerken</h2>
+            </div>
+            <div class="theme-editor-container">
+
+                <!-- Sectie 1: Thema Info -->
+                <section class="editor-section">
+                    <h3>📝 Thema Info</h3>
+                    <div class="editor-field">
+                        <label for="te-name">Naam</label>
+                        <input type="text" id="te-name" class="text-input" placeholder="bijv. Jungle Avontuur" maxlength="30">
+                    </div>
+                    <div class="editor-field">
+                        <label>Thema Icoon</label>
+                        <div class="icon-picker-row">
+                            <span id="te-icon-preview" class="icon-preview" data-value="🎨">🎨</span>
+                            <button id="te-theme-emoji-btn" class="setting-button small-btn">🙂 Kies emoji</button>
+                            <button id="te-icon-upload" class="setting-button small-btn" title="Afbeelding uploaden">📁 Afbeelding</button>
+                            <input type="file" id="te-icon-file" accept="image/*" hidden>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sectie 2: Achtergrond -->
+                <section class="editor-section">
+                    <h3>🖼️ Achtergrond</h3>
+                    <div class="editor-field">
+                        <label>Type</label>
+                        <div class="setting-options">
+                            <button class="setting-button active" data-bg-type="gradient">Verloop</button>
+                            <button class="setting-button" data-bg-type="solid">Effen kleur</button>
+                        </div>
+                    </div>
+                    <div id="te-bg-gradient" class="editor-field">
+                        <div class="color-row">
+                            <label>Kleur 1</label>
+                            <input type="color" id="te-bg-color1" value="#89cff0">
+                        </div>
+                        <div class="color-row">
+                            <label>Kleur 2</label>
+                            <input type="color" id="te-bg-color2" value="#005c99">
+                        </div>
+                        <div class="color-row">
+                            <label>Richting</label>
+                            <select id="te-bg-direction" class="text-input">
+                                <option value="to bottom">Naar beneden</option>
+                                <option value="to right">Naar rechts</option>
+                                <option value="135deg">Diagonaal</option>
+                                <option value="radial">Radiaal (midden)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="te-bg-solid" class="editor-field" style="display:none">
+                        <div class="color-row">
+                            <label>Kleur</label>
+                            <input type="color" id="te-bg-solid-color" value="#89cff0">
+                        </div>
+                    </div>
+                    <div id="te-bg-preview" class="bg-preview"></div>
+                </section>
+
+                <!-- Sectie 3: Items -->
+                <section class="editor-section">
+                    <h3>🎯 Items <span class="section-subtitle">(6 stuks – icoon, naam en geluid)</span></h3>
+                    <div id="te-items-container"></div>
+                </section>
+
+                <!-- Actie knoppen -->
+                <div class="editor-actions">
+                    <button id="te-save-btn" class="setting-button editor-primary-btn">💾 Opslaan</button>
+                    <button id="te-export-btn" class="setting-button">📤 Exporteren als JSON</button>
+                    <button id="te-send-btn" class="setting-button">✉️ Insturen bij maker</button>
+                </div>
+
+                <!-- Import sectie -->
+                <section class="editor-section">
+                    <h3>📥 Thema importeren</h3>
+                    <p class="editor-info">Heb je een JSON thema bestand ontvangen? Importeer het hier.</p>
+                    <button id="te-import-btn" class="setting-button">📁 JSON bestand kiezen</button>
+                    <input type="file" id="te-import-file" accept=".json" hidden>
+                </section>
+
+            </div>
+        </div>
+
+        <!-- SETTINGS VIEW -->
+        <div id="settings-view" class="view">
+            <div class="top-bar">
+                <button id="close-settings-button" class="ui-button scannable" aria-label="Sluit instellingen">
+                    <span class="icon">◀</span>
+                </button>
+            </div>
+             <div class="settings-container">
+                <h2>Instellingen</h2>
+                
+                <!-- UITERLIJK SECTIE -->
+                <div class="setting-group">
+                    <h3>🎨 Uiterlijk</h3>
+                    <p><strong>Thema</strong></p>
+                    <div class="setting-options">
+                        <p style="margin: 0; font-style: italic; opacity: 0.8;">Gebruik het thema icoontje in het hoofdmenu om van thema te wisselen.</p>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <p><strong>Icoon Stijl</strong></p>
+                    <div id="emoji-style-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="default">Standaard 🙂</button>
+                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="noto">Duidelijk <span style="font-family: 'Noto Color Emoji', sans-serif;">🙂</span></button>
+                        <button class="setting-button scannable" data-setting="emojiStyle" data-value="fluent-hc">Fluent HC <span style="font-family: 'Fluent Emoji High Contrast', sans-serif;">🙂</span></button>
+                    </div>
+                </div>
+
+                 <div class="setting-group">
+                    <p><strong>Grootte</strong></p>
+                    <div class="slider-container">
+                        <input type="range" id="element-size-slider" class="scannable" min="0.8" max="2.0" step="0.1" data-setting="elementSize">
+                        <span id="element-size-value">1.0x</span>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <p><strong>Contrast</strong></p>
+                    <div id="visual-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="focusMode" data-value="false">Standaard</button>
+                        <button class="setting-button scannable" data-setting="focusMode" data-value="true">Focus</button>
+                        <button class="setting-button scannable" data-setting="contrast" data-value="normal">Normaal</button>
+                        <button class="setting-button scannable" data-setting="contrast" data-value="high">Hoog Contrast</button>
+                    </div>
+                </div>
+
+                <!-- GELUID SECTIE -->
+                <div class="setting-group">
+                    <h3>🔊 Geluid</h3>
+                    <p><strong>Audio Modus</strong></p>
+                    <div id="audio-mode-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="audioMode" data-value="both">Stem + Geluid</button>
+                        <button class="setting-button scannable" data-setting="audioMode" data-value="soundOnly">Alleen Geluid</button>
+                        <button class="setting-button scannable" data-setting="audioMode" data-value="voiceOnly">Alleen Stem</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <p><strong>Geluidseffecten</strong></p>
+                    <div id="audio-engine-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="audioEngine" data-value="webaudio">Synthetisch</button>
+                        <button class="setting-button scannable" data-setting="audioEngine" data-value="jsfxr">8-bit Retro</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <p><strong>Stem</strong></p>
+                    <div id="tts-voice-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="voice" data-value="female">Vrouw</button>
+                        <button class="setting-button scannable" data-setting="voice" data-value="male">Man</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <p><strong>Stemhoogte</strong></p>
+                    <div class="slider-container">
+                        <input type="range" id="voice-pitch-slider" class="scannable" min="0.5" max="2.0" step="0.1" data-setting="voicePitch">
+                        <span id="voice-pitch-value">1.0x</span>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <p><strong>Feedback</strong></p>
+                    <div id="feedback-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="feedbackMode" data-value="both">Alles</button>
+                        <button class="setting-button scannable" data-setting="feedbackMode" data-value="visual">Visueel</button>
+                        <button class="setting-button scannable" data-setting="feedbackMode" data-value="audio">Auditief</button>
+                    </div>
+                </div>
+
+
+                <!-- TOEGANKELIJKHEID SECTIE -->
+                <div class="setting-group">
+                    <h3>♿ Toegankelijkheid</h3>
+                    <p><strong>Besturing</strong></p>
+                    <div id="input-mode-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="inputMode" data-value="touch">Touch/Muis</button>
+                        <button class="setting-button scannable" data-setting="inputMode" data-value="one-button">Eénknops</button>
+                        <button class="setting-button scannable" data-setting="inputMode" data-value="two-button">Tweeknops</button>
+                    </div>
+                </div>
+
+                <!-- KNOP CONFIGURATIE (alleen bij Eénknops/Tweeknops) -->
+                <div id="button-mapping-section" class="setting-group" style="display: none;">
+                    <p><strong>🎮 Knop Configuratie</strong></p>
+                    <div class="button-mapping-config">
+                        <div class="button-mapping-row">
+                            <label for="button1-display">Knop 1 (Selecteren)</label>
+                            <div class="button-mapping-controls">
+                                <span class="button-display" id="button1-display">Spatie</span>
+                                <button class="setting-button scannable" onclick="ButtonMapping.startListening('button1')">✏️ Wijzig</button>
+                            </div>
+                        </div>
+                        <div id="button2-row" class="button-mapping-row" style="display: none;">
+                            <label for="button2-display">Knop 2 (Bevestigen)</label>
+                            <div class="button-mapping-controls">
+                                <span class="button-display" id="button2-display">Enter</span>
+                                <button class="setting-button scannable" onclick="ButtonMapping.startListening('button2')">✏️ Wijzig</button>
+                            </div>
+                        </div>
+                        <button class="setting-button scannable" onclick="ButtonMapping.reset()" style="margin-top: 1vmin;">🔄 Reset naar standaard</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <p><strong>Scansnelheid</strong></p>
+                    <div class="slider-container">
+                        <input type="range" id="scan-speed-slider" class="scannable" min="1" max="5" step="0.5" data-setting="scanSpeed">
+                        <span id="scan-speed-value">3.0s</span>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <p><strong>Scan Bereik</strong></p>
+                    <div id="scan-scope-options" class="setting-options">
+                        <button class="setting-button scannable" data-setting="scanScope" data-value="full">Volledige Controle</button>
+                        <button class="setting-button scannable" data-setting="scanScope" data-value="game-only">Enkel Spel</button>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </div>
+
+    <!-- Button Mapping Modal -->
+    <div id="button-mapping-modal" class="button-mapping-modal">
+        <div class="button-mapping-modal-content">
+            <h3>⏳ Wacht op input...</h3>
+            <p>Druk op een toets, muisknop of controller knop</p>
+            <p style="font-size: 0.9em; opacity: 0.7; margin-top: 1vmin;">Druk op ESC om te annuleren</p>
+        </div>
+    </div>
+
+    <!-- iOS Installatie Banner -->
+    <div id="ios-install-prompt" class="install-banner ios-banner hidden">
+        <div class="banner-content">
+            <div class="banner-icon">📱</div>
+            <div class="banner-text">
+                <p class="banner-title">Installeer LeerZone</p>
+                <p class="banner-description">Tik op <svg class="ios-share-icon" width="18" height="24" viewBox="0 0 18 24" fill="currentColor"><path d="M9 0L4 5h3v7h4V5h3L9 0zm-8 18v4h16v-4h2v6H-1v-6h2z"/></svg> en kies <svg class="ios-add-icon" width="18" height="18" viewBox="0 0 18 18" fill="currentColor"><rect x="0" y="0" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 4v10M4 9h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> "Voeg toe aan beginscherm"</p>
+            </div>
+            <button id="close-ios-prompt" class="banner-close" aria-label="Sluit banner">&times;</button>
+        </div>
+    </div>
+
+    <!-- Android/Windows Installatie Banner -->
+    <div id="android-install-prompt" class="install-banner android-banner hidden">
+        <div class="banner-content">
+            <div class="banner-icon">📲</div>
+            <div class="banner-text">
+                <p class="banner-title">Installeer LeerZone</p>
+                <p class="banner-description">Voor de beste ervaring op je apparaat</p>
+            </div>
+            <button id="android-install-button" class="banner-install-btn">Installeer</button>
+            <button id="close-android-prompt" class="banner-close" aria-label="Sluit banner">&times;</button>
+        </div>
+    </div>
+
+    <script type="module">
+        // Registreer Service Worker voor snelle laadtijden en offline support
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then((registration) => {
+                        console.log('✅ LeerZone Service Worker geregistreerd:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('❌ LeerZone Service Worker registratie mislukt:', error);
+                    });
+            });
+        }
+
+        import { initApp } from './app.js?v=5';
+        
+        // Wacht ALTIJD tot DOM volledig geladen en geparsed is
+        // Dit werkt zowel lokaal als op productie servers
+        function safeInit() {
+            // Check of alle kritieke elementen bestaan
+            const requiredElements = [
+                'main-menu-view',
+                'game-view', 
+                'theme-selector-view',
+                'settings-view'
+            ];
+            
+            const allExist = requiredElements.every(id => document.getElementById(id));
+            
+            if (allExist) {
+                initApp();
+            } else {
+                console.warn('Waiting for DOM elements...');
+                // Probeer het nog een keer na korte delay
+                setTimeout(safeInit, 50);
+            }
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', safeInit);
+        } else {
+            // DOM is mogelijk al geladen, maar check het zeker
+            safeInit();
+        }
+    </script>
+</body>
+</html>
+
