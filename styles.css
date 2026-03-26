@@ -1314,3 +1314,34 @@ body[data-contrast="high"] .math-object {
 .game-card.emb-game {
     border-left: 4px solid var(--accent-color, #e2844a);
 }
+
+/* --- Schilderen nateken-kiezer --- */
+.schilder-nateken-kiezer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 6px 10px;
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(4px);
+    border-bottom: 2px solid rgba(0,0,0,0.08);
+}
+
+.schilder-nateken-keuze {
+    background: rgba(255,255,255,0.6);
+    border: 3px solid transparent;
+    border-radius: 10px;
+    font-size: clamp(1.4rem, 5vmin, 2.2rem);
+    width: clamp(44px, 10vmin, 64px);
+    height: clamp(44px, 10vmin, 64px);
+    cursor: pointer;
+    transition: transform 0.12s, border-color 0.12s, background 0.12s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.schilder-nateken-keuze.actief {
+    border-color: var(--primary-color, #4a90e2);
+    background: rgba(255,255,255,0.95);
+    transform: scale(1.15);
+}

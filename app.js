@@ -2193,7 +2193,10 @@ export const Games = {
             this.natekenBasis = document.getElementById('schilder-nateken-basis');
 
             this._addNatekenToggle();
-            requestAnimationFrame(() => this._initCanvas());
+            requestAnimationFrame(() => {
+                this._renderNatekenKiezer();
+                this._initCanvas();
+            });
 
             document.querySelectorAll('.schilder-kleur').forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -2255,38 +2258,54 @@ export const Games = {
                         b.classList.toggle('active', b.dataset.modus === (this.nateken ? 'nateken' : 'vrij'))
                     );
                     this._initCanvas();
-                    // Toon/verberg volgende-knop
-                    const volgBtn = document.querySelector('.schilder-volgende');
-                    if (volgBtn) volgBtn.style.display = this.nateken ? '' : 'none';
+                    this._renderNatekenKiezer();
                 });
             });
+        },
 
-            // Voeg "Volgend" knop toe aan palet (verborgen tot nateken actief)
-            const volgBtn = document.createElement('button');
-            volgBtn.className = 'schilder-volgende scannable';
-            volgBtn.innerHTML = '➡️';
-            volgBtn.title = 'Volgend plaatje';
-            volgBtn.style.display = 'none';
-            volgBtn.addEventListener('click', () => {
-                const items = Utils.getThemeItems().items;
-                this.natekenItemIdx = (this.natekenItemIdx + 1) % items.length;
-                this.ctx2d.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                this._updateNatekenBasis();
+        _renderNatekenKiezer() {
+            // Verwijder bestaande kiezer
+            document.querySelector('.schilder-nateken-kiezer')?.remove();
+            if (!this.nateken) return;
+
+            const items = Utils.getThemeItems().items;
+            const kiezer = document.createElement('div');
+            kiezer.className = 'schilder-nateken-kiezer';
+
+            items.forEach((item, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'schilder-nateken-keuze scannable' + (idx === this.natekenItemIdx ? ' actief' : '');
+                btn.textContent = item.i;
+                btn.title = item.n;
+                btn.addEventListener('click', () => {
+                    this.natekenItemIdx = idx;
+                    this.ctx2d.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this._updateNatekenBasis();
+                    document.querySelectorAll('.schilder-nateken-keuze').forEach((b, i) =>
+                        b.classList.toggle('actief', i === idx)
+                    );
+                });
+                kiezer.appendChild(btn);
             });
-            document.querySelector('.schilder-palet').appendChild(volgBtn);
+
+            // Voeg in onder het palet, boven het canvas
+            document.querySelector('.schilder-vlak').insertAdjacentElement('beforebegin', kiezer);
         },
 
         _initCanvas() {
             const areaRect = DOM.gameArea.getBoundingClientRect();
             const paletH = document.querySelector('.schilder-palet')?.getBoundingClientRect().height || 60;
+            const kiezerH = document.querySelector('.schilder-nateken-kiezer')?.getBoundingClientRect().height || 0;
             this.canvas.width = areaRect.width;
-            this.canvas.height = Math.max(100, areaRect.height - paletH - 12);
+            this.canvas.height = Math.max(100, areaRect.height - paletH - kiezerH - 12);
 
             if (this.nateken) {
-                // Transparante canvas: emoji is zichtbaar door de tekenlaag heen
+                // Canvas transparant maken zodat de emoji-watermark zichtbaar is
+                this.canvas.style.background = 'transparent';
                 this.ctx2d.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 this._updateNatekenBasis();
             } else {
+                this.canvas.style.background = '';
                 this.natekenBasis.style.display = 'none';
                 this.ctx2d.fillStyle = '#FFFFFF';
                 this.ctx2d.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -2322,104 +2341,12 @@ export const Games = {
                 this.canvas.removeEventListener('touchmove',  this.boundMove);
                 this.canvas.removeEventListener('touchend',   this.boundUp);
             }
-            const toggle = document.querySelector('.schilder-modus-toggle');
-            if (toggle) toggle.remove();
+            document.querySelector('.schilder-modus-toggle')?.remove();
+            document.querySelector('.schilder-nateken-kiezer')?.remove();
             this.canvas = null;
             this.ctx2d = null;
             this.natekenBasis = null;
         }
-    },
-
-    'groot-klein': {
-        name: "Groot of Klein?",
-        levels: [
-            { factor: 4.0 },
-            { factor: 2.5 },
-            { factor: 1.7 }
-        ],
-
-        create(level) {
-            this.config = this.levels[level - 1];
-            DOM.gameArea.innerHTML = `
-                <div id="gk-vraag" class="gk-vraag">Tik op het <strong>GROTE</strong> plaatje!</div>
-                <div id="gk-items" class="gk-items"></div>
-            `;
-            TTS.speak('Tik op het grote plaatje!');
-            this._setupRonde();
-        },
-
-        _setupRonde() {
-            const items = Utils.shuffleArray([...Utils.getThemeItems().items]).slice(0, 2);
-            const grotereIdx = Math.floor(Math.random() * 2);
-            const grootFontSize = 110;
-            const kleinFontSize = Math.round(grootFontSize / this.config.factor);
-
-            const itemsEl = document.getElementById('gk-items');
-            itemsEl.innerHTML = items.map((item, i) => {
-                const isGroot = i === grotereIdx;
-                const fs = isGroot ? grootFontSize : kleinFontSize;
-                return `<button class="gk-item scannable" data-correct="${isGroot}" style="font-size:${fs}px" data-naam="${item.n}" data-sound="${item.s}">${item.i}</button>`;
-            }).join('');
-
-            itemsEl.querySelectorAll('.gk-item').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    SoundController.play(btn.dataset.sound);
-                    const isGoed = btn.dataset.correct === 'true';
-                    GameController.showFeedback(isGoed);
-                    if (isGoed) {
-                        setTimeout(() => this._setupRonde(), 1600);
-                    }
-                });
-            });
-
-            Accessibility.restartScanIfActive();
-        },
-
-        destroy() {}
-    },
-
-    'kies-favoriet': {
-        name: "Kies Je Favoriet!",
-        levels: [
-            { opties: 2 },
-            { opties: 3 },
-            { opties: 4 }
-        ],
-
-        create(level) {
-            this.config = this.levels[level - 1];
-            DOM.gameArea.innerHTML = `
-                <div class="kies-vraag">Wat vind jij het leukst? 🌟</div>
-                <div id="kies-opties" class="kies-opties"></div>
-            `;
-            this._setupRonde();
-            TTS.speak('Wat vind jij het leukst? Kies maar!');
-        },
-
-        _setupRonde() {
-            const items = Utils.shuffleArray([...Utils.getThemeItems().items]).slice(0, this.config.opties);
-            const optiesEl = document.getElementById('kies-opties');
-
-            optiesEl.innerHTML = items.map(item => `
-                <button class="kies-optie scannable" data-sound="${item.s}" data-naam="${item.n}">
-                    <span class="kies-icon">${item.i}</span>
-                    <span class="kies-naam">${item.n}</span>
-                </button>
-            `).join('');
-
-            optiesEl.querySelectorAll('.kies-optie').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    SoundController.play(btn.dataset.sound);
-                    TTS.speak('Goed gekozen! ' + btn.dataset.naam);
-                    GameController.showFeedback(true);
-                    setTimeout(() => this._setupRonde(), 2000);
-                });
-            });
-
-            Accessibility.restartScanIfActive();
-        },
-
-        destroy() {}
     }
 };
 
