@@ -1196,46 +1196,144 @@ export const Games = {
     'moving-targets': {
         name: "Vliegende Vangers",
         levels: [
-            {n: 3, spd: 1},
-            {n: 5, spd: 2},
-            {n: 7, spd: 3}
+            { n: 3, spd: 1, bAantal: 3,  bGrootte: 100, bSnelheid: 4000 },
+            { n: 5, spd: 2, bAantal: 6,  bGrootte: 70,  bSnelheid: 3000 },
+            { n: 7, spd: 3, bAantal: 10, bGrootte: 50,  bSnelheid: 2200 }
         ],
         targets: [],
         animationFrameId: null,
+        bubbelIntervalId: null,
         currentSpeed: 1,
-        
+        modus: 'vliegend',
+
         create(level) {
             this.config = this.levels[level - 1];
             this.currentSpeed = this.config.spd;
-            
-            // Voeg snelheidsslider toe
-            // Slider hoort bij "Volledige Controle", niet bij "Enkel Spel"
-            // Dus GEEN scannable class bij game-only modus
-            const sliderClass = Settings.state.scanScope === 'full' ? 'scannable' : '';
-            DOM.gameArea.innerHTML = `
-                <div class="speed-control">
-                    <label>Snelheid: <span id="speed-value">${this.currentSpeed}x</span></label>
-                    <input type="range" id="speed-slider" class="${sliderClass}" min="0.5" max="5" step="0.5" value="${this.currentSpeed}">
-                </div>
+            this._stopAlles();
+            this._addModusToggle();
+
+            if (this.modus === 'vliegend') {
+                const sliderClass = Settings.state.scanScope === 'full' ? 'scannable' : '';
+                DOM.gameArea.innerHTML = `
+                    <div class="speed-control">
+                        <label>Snelheid: <span id="speed-value">${this.currentSpeed}x</span></label>
+                        <input type="range" id="speed-slider" class="${sliderClass}" min="0.5" max="5" step="0.5" value="${this.currentSpeed}">
+                    </div>
+                `;
+                document.getElementById('speed-slider').addEventListener('input', e => {
+                    this.currentSpeed = parseFloat(e.target.value);
+                    document.getElementById('speed-value').textContent = `${this.currentSpeed}x`;
+                });
+            } else {
+                DOM.gameArea.innerHTML = '';
+            }
+
+            this._startSpel();
+        },
+
+        _addModusToggle() {
+            const levelSelector = DOM.levelSelector;
+            if (!levelSelector) return;
+
+            const oldToggle = document.querySelector('.mt-modus-toggle');
+            if (oldToggle) oldToggle.remove();
+
+            const toggleDiv = document.createElement('div');
+            toggleDiv.className = 'mt-modus-toggle';
+            toggleDiv.innerHTML = `
+                <button class="setting-button toggle-btn scannable ${this.modus === 'vliegend' ? 'active' : ''}" data-modus="vliegend">
+                    <span>🎯</span> Vliegend
+                </button>
+                <button class="setting-button toggle-btn scannable ${this.modus === 'bubbels' ? 'active' : ''}" data-modus="bubbels">
+                    <span>🫧</span> Bubbels
+                </button>
             `;
-            
-            // Event listener voor snelheidsslider
-            document.getElementById('speed-slider').addEventListener('input', e => {
-                this.currentSpeed = parseFloat(e.target.value);
-                document.getElementById('speed-value').textContent = `${this.currentSpeed}x`;
-            });
-            
-            requestAnimationFrame(() => {
-                for (let i = 0; i < this.config.n; i++) {
-                    this.addTarget();
-                }
-                this.gameLoop();
+
+            levelSelector.parentNode.insertBefore(toggleDiv, levelSelector.nextSibling);
+
+            toggleDiv.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    this.modus = btn.dataset.modus;
+                    document.querySelectorAll('.mt-modus-toggle .toggle-btn').forEach(b =>
+                        b.classList.toggle('active', b.dataset.modus === this.modus)
+                    );
+                    this._stopAlles();
+                    if (this.modus === 'vliegend') {
+                        const sliderClass = Settings.state.scanScope === 'full' ? 'scannable' : '';
+                        DOM.gameArea.innerHTML = `
+                            <div class="speed-control">
+                                <label>Snelheid: <span id="speed-value">${this.currentSpeed}x</span></label>
+                                <input type="range" id="speed-slider" class="${sliderClass}" min="0.5" max="5" step="0.5" value="${this.currentSpeed}">
+                            </div>
+                        `;
+                        document.getElementById('speed-slider').addEventListener('input', e => {
+                            this.currentSpeed = parseFloat(e.target.value);
+                            document.getElementById('speed-value').textContent = `${this.currentSpeed}x`;
+                        });
+                    } else {
+                        DOM.gameArea.innerHTML = '';
+                    }
+                    this._startSpel();
+                });
             });
         },
-        
-        destroy() {
+
+        _startSpel() {
+            if (this.modus === 'bubbels') {
+                const vertraging = this.config.bSnelheid / this.config.bAantal;
+                for (let i = 0; i < this.config.bAantal; i++) {
+                    setTimeout(() => this._voegBubbel(), i * vertraging);
+                }
+                this.bubbelIntervalId = setInterval(() => this._voegBubbel(), vertraging);
+                TTS.speak('Tik de bubbels!');
+            } else {
+                requestAnimationFrame(() => {
+                    for (let i = 0; i < this.config.n; i++) {
+                        this.addTarget();
+                    }
+                    this.gameLoop();
+                });
+            }
+            Accessibility.restartScanIfActive();
+        },
+
+        _stopAlles() {
             cancelAnimationFrame(this.animationFrameId);
+            clearInterval(this.bubbelIntervalId);
+            this.animationFrameId = null;
+            this.bubbelIntervalId = null;
             this.targets = [];
+        },
+
+        _voegBubbel() {
+            const kleuren = ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD','#98FB98','#FFB347','#87CEEB','#F0E68C'];
+            const kleur = kleuren[Math.floor(Math.random() * kleuren.length)];
+            const grootte = this.config.bGrootte + Math.random() * 20;
+            const items = Utils.getThemeItems().items;
+            const item = items[Math.floor(Math.random() * items.length)];
+            const breedte = DOM.gameArea.clientWidth || 300;
+
+            const bubbel = document.createElement('div');
+            bubbel.className = 'bubbel scannable';
+            bubbel.style.cssText = `width:${grootte}px;height:${grootte}px;background:radial-gradient(circle at 35% 35%, white 0%, ${kleur} 50%, ${kleur}99 100%);left:${Math.max(0, Math.random() * (breedte - grootte))}px;font-size:${grootte * 0.5}px;animation-duration:${5 + Math.random() * 3}s;display:flex;align-items:center;justify-content:center;`;
+            bubbel.textContent = item.i;
+
+            bubbel.addEventListener('click', () => {
+                SoundController.play(item.s);
+                TTS.speak(item.n);
+                bubbel.classList.add('bubbel-pop');
+                setTimeout(() => bubbel.remove(), 300);
+                Accessibility.restartScanIfActive();
+            });
+
+            DOM.gameArea.appendChild(bubbel);
+            setTimeout(() => { if (bubbel.parentElement) bubbel.remove(); }, 9000);
+        },
+
+        destroy() {
+            this._stopAlles();
+            const toggle = document.querySelector('.mt-modus-toggle');
+            if (toggle) toggle.remove();
         },
         
         addTarget() {
@@ -1996,195 +2094,6 @@ export const Games = {
 
     // === EMB SPELLETJES ===
 
-    'druk-op-mij': {
-        name: "Druk op Mij!",
-        levels: [
-            { aantalKnoppen: 1 },
-            { aantalKnoppen: 2 },
-            { aantalKnoppen: 4 }
-        ],
-
-        create(level) {
-            this.config = this.levels[level - 1];
-            const items = Utils.getThemeItems().items.slice(0, this.config.aantalKnoppen);
-
-            DOM.gameArea.innerHTML = `<div class="druk-container"></div>`;
-            const container = document.querySelector('.druk-container');
-
-            items.forEach(item => {
-                const btn = document.createElement('button');
-                btn.className = 'druk-knop scannable';
-                btn.innerHTML = `<span>${item.i}</span>`;
-                btn.dataset.sound = item.s;
-                btn.addEventListener('click', () => {
-                    SoundController.play(item.s);
-                    TTS.speak(item.n);
-                    this._explosie(btn, item.i);
-                });
-                container.appendChild(btn);
-            });
-
-            TTS.speak('Druk op een knop!');
-            Accessibility.restartScanIfActive();
-        },
-
-        _explosie(btn, emoji) {
-            btn.classList.add('druk-flash');
-            setTimeout(() => btn.classList.remove('druk-flash'), 500);
-
-            const rect = btn.getBoundingClientRect();
-            const areaRect = DOM.gameArea.getBoundingClientRect();
-            const cx = rect.left - areaRect.left + rect.width / 2;
-            const cy = rect.top - areaRect.top + rect.height / 2;
-
-            for (let i = 0; i < 12; i++) {
-                const p = document.createElement('div');
-                p.className = 'druk-deeltje';
-                p.textContent = emoji;
-                const angle = (i / 12) * Math.PI * 2;
-                const dist = 70 + Math.random() * 100;
-                p.style.cssText = `left:${cx}px;top:${cy}px;--dx:${Math.cos(angle) * dist}px;--dy:${Math.sin(angle) * dist}px`;
-                DOM.gameArea.appendChild(p);
-                setTimeout(() => p.remove(), 900);
-            }
-        },
-
-        destroy() {}
-    },
-
-    'bubbels': {
-        name: "Bubbels Tikken",
-        levels: [
-            { aantal: 3, grootte: 100, snelheid: 4000 },
-            { aantal: 6, grootte: 70,  snelheid: 3000 },
-            { aantal: 10, grootte: 50, snelheid: 2200 }
-        ],
-        intervalId: null,
-
-        create(level) {
-            this.config = this.levels[level - 1];
-            DOM.gameArea.innerHTML = '';
-            clearInterval(this.intervalId);
-
-            const vertraging = this.config.snelheid / this.config.aantal;
-            for (let i = 0; i < this.config.aantal; i++) {
-                setTimeout(() => this._voegBubbel(), i * vertraging);
-            }
-            this.intervalId = setInterval(() => this._voegBubbel(), vertraging);
-
-            TTS.speak('Tik de bubbels!');
-            Accessibility.restartScanIfActive();
-        },
-
-        _voegBubbel() {
-            const kleuren = ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD','#98FB98','#FFB347','#87CEEB','#F0E68C'];
-            const kleur = kleuren[Math.floor(Math.random() * kleuren.length)];
-            const grootte = this.config.grootte + Math.random() * 20;
-            const breedte = DOM.gameArea.clientWidth || 300;
-
-            const bubbel = document.createElement('div');
-            bubbel.className = 'bubbel scannable';
-            bubbel.style.width = grootte + 'px';
-            bubbel.style.height = grootte + 'px';
-            bubbel.style.background = `radial-gradient(circle at 35% 35%, white 0%, ${kleur} 50%, ${kleur}99 100%)`;
-            bubbel.style.left = Math.max(0, Math.random() * (breedte - grootte)) + 'px';
-            bubbel.style.animationDuration = (5 + Math.random() * 3) + 's';
-
-            bubbel.addEventListener('click', () => {
-                bubbel.classList.add('bubbel-pop');
-                SoundController.play('plons');
-                setTimeout(() => bubbel.remove(), 300);
-                Accessibility.restartScanIfActive();
-            });
-
-            DOM.gameArea.appendChild(bubbel);
-            setTimeout(() => { if (bubbel.parentElement) bubbel.remove(); }, 9000);
-        },
-
-        destroy() {
-            clearInterval(this.intervalId);
-            this.intervalId = null;
-        }
-    },
-
-    'muziek-maken': {
-        name: "Muziek Maken",
-        levels: [
-            { noten: 4 },
-            { noten: 6 },
-            { noten: 8 }
-        ],
-        audioCtx: null,
-
-        create(level) {
-            this.config = this.levels[level - 1];
-
-            const alleNoten = [
-                { freq: 261.6, naam: 'Do',  kleur: '#FF6B6B' },
-                { freq: 293.7, naam: 'Re',  kleur: '#FF9F43' },
-                { freq: 329.6, naam: 'Mi',  kleur: '#FFC312' },
-                { freq: 349.2, naam: 'Fa',  kleur: '#A3CB38' },
-                { freq: 392.0, naam: 'Sol', kleur: '#12CBC4' },
-                { freq: 440.0, naam: 'La',  kleur: '#1289A7' },
-                { freq: 493.9, naam: 'Si',  kleur: '#9B59B6' },
-                { freq: 523.3, naam: "Do'", kleur: '#E84393' }
-            ];
-
-            const noten = alleNoten.slice(0, this.config.noten);
-
-            DOM.gameArea.innerHTML = `<div class="muziek-balk-container"></div>`;
-            const container = document.querySelector('.muziek-balk-container');
-
-            noten.forEach((noot, i) => {
-                // Xylofoon: langere balk = lagere toon (omgekeerde volgorde)
-                const balkHoogte = 100 + (noten.length - i) * 22;
-                const balk = document.createElement('button');
-                balk.className = 'muziek-balk scannable';
-                balk.style.background = `linear-gradient(to bottom, ${noot.kleur}cc, ${noot.kleur})`;
-                balk.style.height = balkHoogte + 'px';
-                balk.innerHTML = `<span class="muziek-naam">${noot.naam}</span>`;
-
-                balk.addEventListener('click', () => {
-                    this._speelNoot(noot.freq);
-                    balk.classList.add('muziek-hit');
-                    setTimeout(() => balk.classList.remove('muziek-hit'), 200);
-                    TTS.speak(noot.naam);
-                });
-
-                container.appendChild(balk);
-            });
-
-            TTS.speak('Druk op de balken om muziek te maken!');
-            Accessibility.restartScanIfActive();
-        },
-
-        _speelNoot(freq) {
-            try {
-                if (!this.audioCtx) {
-                    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                const ctx = this.audioCtx;
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.type = 'triangle';
-                osc.frequency.value = freq;
-                gain.gain.setValueAtTime(0.5, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
-                osc.start();
-                osc.stop(ctx.currentTime + 1.2);
-            } catch (e) {}
-        },
-
-        destroy() {
-            if (this.audioCtx) {
-                this.audioCtx.close().catch(() => {});
-                this.audioCtx = null;
-            }
-        }
-    },
-
     'vuurwerk': {
         name: "Vuurwerk!",
         levels: [
@@ -2246,7 +2155,7 @@ export const Games = {
     },
 
     'schilderen': {
-        name: "Vrij Schilderen",
+        name: "Schilderen",
         levels: [
             { penGrootte: 40, aantalKleuren: 4 },
             { penGrootte: 25, aantalKleuren: 8 },
@@ -2254,8 +2163,11 @@ export const Games = {
         ],
         canvas: null,
         ctx2d: null,
+        natekenBasis: null,
         schildert: false,
         huidigKleur: '#FF6B6B',
+        nateken: false,
+        natekenItemIdx: 0,
 
         create(level) {
             this.config = this.levels[level - 1];
@@ -2270,20 +2182,18 @@ export const Games = {
                     ${kleuren.map((k, i) => `<button class="schilder-kleur scannable${i === 0 ? ' actief' : ''}" data-kleur="${k}" style="background:${k}" aria-label="Kleur ${k}"></button>`).join('')}
                     <button class="schilder-wis scannable" aria-label="Wissen">🗑️</button>
                 </div>
-                <canvas id="schilder-canvas"></canvas>
+                <div class="schilder-vlak">
+                    <div id="schilder-nateken-basis" class="schilder-nateken-basis"></div>
+                    <canvas id="schilder-canvas"></canvas>
+                </div>
             `;
 
             this.canvas = document.getElementById('schilder-canvas');
             this.ctx2d = this.canvas.getContext('2d');
+            this.natekenBasis = document.getElementById('schilder-nateken-basis');
 
-            requestAnimationFrame(() => {
-                const areaRect = DOM.gameArea.getBoundingClientRect();
-                const paletH = document.querySelector('.schilder-palet')?.getBoundingClientRect().height || 60;
-                this.canvas.width = areaRect.width;
-                this.canvas.height = Math.max(100, areaRect.height - paletH - 12);
-                this.ctx2d.fillStyle = '#FFFFFF';
-                this.ctx2d.fillRect(0, 0, this.canvas.width, this.canvas.height);
-            });
+            this._addNatekenToggle();
+            requestAnimationFrame(() => this._initCanvas());
 
             document.querySelectorAll('.schilder-kleur').forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -2294,8 +2204,12 @@ export const Games = {
             });
 
             document.querySelector('.schilder-wis').addEventListener('click', () => {
-                this.ctx2d.fillStyle = '#FFFFFF';
-                this.ctx2d.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                if (this.nateken) {
+                    this.ctx2d.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                } else {
+                    this.ctx2d.fillStyle = '#FFFFFF';
+                    this.ctx2d.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                }
                 SoundController.play('klik');
             });
 
@@ -2312,6 +2226,80 @@ export const Games = {
 
             TTS.speak('Schilder iets moois!');
             Accessibility.restartScanIfActive();
+        },
+
+        _addNatekenToggle() {
+            const levelSelector = DOM.levelSelector;
+            if (!levelSelector) return;
+
+            const oldToggle = document.querySelector('.schilder-modus-toggle');
+            if (oldToggle) oldToggle.remove();
+
+            const toggleDiv = document.createElement('div');
+            toggleDiv.className = 'schilder-modus-toggle';
+            toggleDiv.innerHTML = `
+                <button class="setting-button toggle-btn scannable ${!this.nateken ? 'active' : ''}" data-modus="vrij">
+                    <span>🎨</span> Vrij
+                </button>
+                <button class="setting-button toggle-btn scannable ${this.nateken ? 'active' : ''}" data-modus="nateken">
+                    <span>✏️</span> Natekenen
+                </button>
+            `;
+
+            levelSelector.parentNode.insertBefore(toggleDiv, levelSelector.nextSibling);
+
+            toggleDiv.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    this.nateken = btn.dataset.modus === 'nateken';
+                    document.querySelectorAll('.schilder-modus-toggle .toggle-btn').forEach(b =>
+                        b.classList.toggle('active', b.dataset.modus === (this.nateken ? 'nateken' : 'vrij'))
+                    );
+                    this._initCanvas();
+                    // Toon/verberg volgende-knop
+                    const volgBtn = document.querySelector('.schilder-volgende');
+                    if (volgBtn) volgBtn.style.display = this.nateken ? '' : 'none';
+                });
+            });
+
+            // Voeg "Volgend" knop toe aan palet (verborgen tot nateken actief)
+            const volgBtn = document.createElement('button');
+            volgBtn.className = 'schilder-volgende scannable';
+            volgBtn.innerHTML = '➡️';
+            volgBtn.title = 'Volgend plaatje';
+            volgBtn.style.display = 'none';
+            volgBtn.addEventListener('click', () => {
+                const items = Utils.getThemeItems().items;
+                this.natekenItemIdx = (this.natekenItemIdx + 1) % items.length;
+                this.ctx2d.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this._updateNatekenBasis();
+            });
+            document.querySelector('.schilder-palet').appendChild(volgBtn);
+        },
+
+        _initCanvas() {
+            const areaRect = DOM.gameArea.getBoundingClientRect();
+            const paletH = document.querySelector('.schilder-palet')?.getBoundingClientRect().height || 60;
+            this.canvas.width = areaRect.width;
+            this.canvas.height = Math.max(100, areaRect.height - paletH - 12);
+
+            if (this.nateken) {
+                // Transparante canvas: emoji is zichtbaar door de tekenlaag heen
+                this.ctx2d.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this._updateNatekenBasis();
+            } else {
+                this.natekenBasis.style.display = 'none';
+                this.ctx2d.fillStyle = '#FFFFFF';
+                this.ctx2d.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+        },
+
+        _updateNatekenBasis() {
+            const items = Utils.getThemeItems().items;
+            if (!items.length) return;
+            const item = items[this.natekenItemIdx % items.length];
+            this.natekenBasis.textContent = item.i;
+            this.natekenBasis.title = item.n;
+            this.natekenBasis.style.display = 'flex';
         },
 
         _verf(e) {
@@ -2334,70 +2322,12 @@ export const Games = {
                 this.canvas.removeEventListener('touchmove',  this.boundMove);
                 this.canvas.removeEventListener('touchend',   this.boundUp);
             }
+            const toggle = document.querySelector('.schilder-modus-toggle');
+            if (toggle) toggle.remove();
             this.canvas = null;
             this.ctx2d = null;
+            this.natekenBasis = null;
         }
-    },
-
-    'geluid-raden': {
-        name: "Wat Hoor Je?",
-        levels: [
-            { opties: 2 },
-            { opties: 3 },
-            { opties: 4 }
-        ],
-        huidigItem: null,
-
-        create(level) {
-            this.config = this.levels[level - 1];
-            DOM.gameArea.innerHTML = `
-                <div class="geluid-speel-wrapper">
-                    <button id="geluid-speel" class="geluid-speel-knop scannable">🔊 Speel geluid</button>
-                </div>
-                <div id="geluid-opties" class="geluid-opties"></div>
-            `;
-
-            document.getElementById('geluid-speel').addEventListener('click', () => {
-                if (this.huidigItem) SoundController.play(this.huidigItem.s);
-            });
-
-            this._setupRonde();
-        },
-
-        _setupRonde() {
-            const alleItems = Utils.getThemeItems().items;
-            const shuffled = Utils.shuffleArray([...alleItems]);
-            const opties = shuffled.slice(0, this.config.opties);
-            this.huidigItem = opties[Math.floor(Math.random() * opties.length)];
-
-            const optiesEl = document.getElementById('geluid-opties');
-            optiesEl.innerHTML = opties.map(item => `
-                <button class="geluid-optie scannable" data-naam="${item.n}" data-sound="${item.s}">
-                    <span class="geluid-optie-icon">${item.i}</span>
-                    <span class="geluid-optie-naam">${item.n}</span>
-                </button>
-            `).join('');
-
-            setTimeout(() => {
-                SoundController.play(this.huidigItem.s);
-                TTS.speak('Welk plaatje hoort bij dit geluid?');
-            }, 500);
-
-            optiesEl.querySelectorAll('.geluid-optie').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const isGoed = btn.dataset.naam === this.huidigItem.n;
-                    GameController.showFeedback(isGoed);
-                    if (isGoed) {
-                        SoundController.play(this.huidigItem.s);
-                        setTimeout(() => this._setupRonde(), 1800);
-                    }
-                });
-            });
-
-            Accessibility.restartScanIfActive();
-        },
-
-        destroy() {}
     },
 
     'groot-klein': {
