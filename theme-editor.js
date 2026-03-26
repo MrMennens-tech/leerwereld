@@ -517,13 +517,31 @@ export const ThemeEditor = {
 
         // Mixkit eigen ID
         const customIdInput = container.querySelector('.te-mixkit-custom-id');
-        container.querySelector('.te-mixkit-custom-preview')?.addEventListener('click', () => {
+        const customPreviewBtn = container.querySelector('.te-mixkit-custom-preview');
+        let _customAudio = null;
+        customPreviewBtn?.addEventListener('click', () => {
+            // Stop indien al spelend
+            if (_customAudio && !_customAudio.paused) {
+                _customAudio.pause();
+                _customAudio.currentTime = 0;
+                customPreviewBtn.textContent = '▶ Test';
+                _customAudio = null;
+                return;
+            }
             const id = customIdInput?.value.trim();
             if (!id) return;
             const url = MixkitSounds.getUrl(id);
-            const audio = new Audio(url);
-            audio.volume = 0.5;
-            audio.play().catch(() => this._showToast('ID niet gevonden of geen verbinding.', true));
+            _customAudio = new Audio(url);
+            _customAudio.volume = 0.5;
+            customPreviewBtn.textContent = '⏹ Stop';
+            _customAudio.play().catch(() => {
+                this._showToast('ID niet gevonden of geen verbinding.', true);
+                customPreviewBtn.textContent = '▶ Test';
+            });
+            _customAudio.addEventListener('ended', () => {
+                customPreviewBtn.textContent = '▶ Test';
+                _customAudio = null;
+            });
         });
         container.querySelector('.te-mixkit-custom-use')?.addEventListener('click', () => {
             const id = customIdInput?.value.trim();
@@ -567,11 +585,38 @@ export const ThemeEditor = {
 
         listEl.querySelectorAll('.mixkit-preview-btn').forEach(btn => {
             btn.addEventListener('click', () => {
+                // Stop eerder spelend geluid in deze lijst
+                if (listEl._activeAudio && !listEl._activeAudio.paused) {
+                    listEl._activeAudio.pause();
+                    listEl._activeAudio.currentTime = 0;
+                    if (listEl._activeBtn) {
+                        listEl._activeBtn.textContent = '▶';
+                        listEl._activeBtn.classList.remove('playing');
+                    }
+                    // Zelfde knop opnieuw → stop alleen
+                    if (listEl._activeBtn === btn) {
+                        listEl._activeAudio = null;
+                        listEl._activeBtn = null;
+                        return;
+                    }
+                }
                 const url = MixkitSounds.getUrl(btn.dataset.id);
                 const audio = new Audio(url);
                 audio.volume = 0.5;
+                listEl._activeAudio = audio;
+                listEl._activeBtn = btn;
+                btn.textContent = '⏹';
+                btn.classList.add('playing');
                 audio.play().catch(() => {
                     this._showToast('Kan geluid niet laden. Controleer internetverbinding.', true);
+                    btn.textContent = '▶';
+                    btn.classList.remove('playing');
+                });
+                audio.addEventListener('ended', () => {
+                    btn.textContent = '▶';
+                    btn.classList.remove('playing');
+                    listEl._activeAudio = null;
+                    listEl._activeBtn = null;
                 });
             });
         });

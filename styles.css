@@ -588,6 +588,7 @@ body[data-contrast="high"] .math-object {
 .lz-toast { position: fixed; bottom: 6vmin; left: 50%; transform: translateX(-50%) translateY(20px); background: #333; color: #fff; padding: 1.5vmin 3vmin; border-radius: 12px; font-size: clamp(0.9rem, 2vmin, 1.1rem); opacity: 0; transition: opacity 0.3s, transform 0.3s; pointer-events: none; z-index: 9999; white-space: nowrap; max-width: 90vw; }
 .lz-toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
 .lz-toast.lz-toast-error { background: #c62828; }
+.mixkit-preview-btn.playing { background: #e53935; color: #fff; }
 
 /* --- EMOJI PICKER --- */
 .emoji-picker { position: fixed; z-index: 9999; background: var(--card-bg, #fff); border: 2px solid var(--border-color, #ddd); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18); width: 280px; max-height: 320px; display: flex; flex-direction: column; overflow: hidden; }
