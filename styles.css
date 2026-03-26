@@ -508,11 +508,14 @@ body[data-contrast="high"] .math-object {
 .custom-theme-actions { display: flex; flex-wrap: wrap; gap: 2vmin; margin-top: 3vmin; justify-content: center; }
 .create-theme-btn { font-weight: 700; background: var(--accent-color); color: #000; border-color: var(--accent-color); }
 .theme-card.custom-theme-card { position: relative; }
-.theme-card-actions { display: flex; gap: 1vmin; margin-top: 1vmin; }
-.theme-card-btn { padding: 0.5vmin 1.5vmin; border: 2px solid currentColor; border-radius: 8px; background: transparent; color: var(--primary-color); font-size: clamp(0.7rem, 1.8vmin, 1rem); cursor: pointer; }
+.theme-card-actions { display: flex; gap: 1vmin; margin-top: 1vmin; justify-content: center; }
+.theme-card-btn { padding: 0.5vmin 1.2vmin; border: 2px solid currentColor; border-radius: 8px; background: transparent; color: var(--primary-color); font-size: clamp(0.7rem, 1.8vmin, 1rem); cursor: pointer; }
 .theme-card-btn:hover { background: var(--primary-color); color: var(--card-bg); }
 .theme-card-btn.delete { color: #c62828; border-color: #c62828; }
 .theme-card-btn.delete:hover { background: #c62828; color: #fff; }
+.theme-card-btn.reset { color: #e65100; border-color: #e65100; }
+.theme-card-btn.reset:hover { background: #e65100; color: #fff; }
+.theme-modified-badge { font-size: 0.7em; vertical-align: super; opacity: 0.7; margin-left: 0.2em; }
 .theme-icon-img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
 
 /* --- THEMA EDITOR --- */

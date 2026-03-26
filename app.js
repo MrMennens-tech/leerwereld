@@ -749,12 +749,29 @@ export const ThemeSelector = {
         document.getElementById('close-theme-selector-button')
             ?.addEventListener('click', () => Navigation.showView('main-menu-view'));
 
-        // Selecteer thema via ingebouwde thema grid
+        // Selecteer of bewerk thema via ingebouwde thema grid
         document.getElementById('theme-grid')
             ?.addEventListener('click', e => {
+                const editBtn = e.target.closest('.theme-card-btn.edit');
+                const resetBtn = e.target.closest('.theme-card-btn.reset');
                 const card = e.target.closest('.theme-card');
-                if (!card || !card.dataset.theme) return;
-                this._selectTheme(card.dataset.theme);
+
+                if (editBtn) {
+                    ThemeEditor.open(editBtn.dataset.themeId);
+                } else if (resetBtn) {
+                    const id = resetBtn.dataset.themeId;
+                    const name = resetBtn.dataset.themeName;
+                    if (confirm(`Aanpassingen aan "${name}" ongedaan maken en terugzetten naar het origineel?`)) {
+                        CustomThemeStore.delete(id);
+                        if (Settings.state.theme === id) {
+                            Settings.apply('theme');
+                        }
+                        this.populateThemes();
+                        document.dispatchEvent(new CustomEvent('leerzone:themes-changed'));
+                    }
+                } else if (card?.dataset.theme) {
+                    this._selectTheme(card.dataset.theme);
+                }
             });
 
         // Eigen thema's: selecteren, bewerken, verwijderen
@@ -822,41 +839,56 @@ export const ThemeSelector = {
     },
 
     populateThemes() {
-        // Ingebouwde thema's
+        const savedCustom = CustomThemeStore.getAll();
+
+        // Ingebouwde thema's — gebruik override als die bestaat
         const grid = document.getElementById('theme-grid');
         if (grid) {
-            grid.innerHTML = Object.entries(Themes).map(([themeId, theme]) =>
-                this._buildThemeCard(themeId, theme, false)
-            ).join('');
+            grid.innerHTML = Object.keys(Themes).map(themeId => {
+                const override = savedCustom[themeId];
+                const theme = override || Themes[themeId];
+                return this._buildThemeCard(themeId, theme, false, !!override);
+            }).join('');
         }
 
-        // Eigen thema's
+        // Eigen thema's — alleen puur nieuwe thema's (niet de ingebouwde overrides)
         const customGrid = document.getElementById('custom-theme-grid');
         if (customGrid) {
-            const customThemes = CustomThemeStore.getAll();
-            customGrid.innerHTML = Object.entries(customThemes).map(([themeId, theme]) =>
-                this._buildThemeCard(themeId, theme, true)
+            const builtinIds = new Set(Object.keys(Themes));
+            const pureCustom = Object.entries(savedCustom).filter(([id]) => !builtinIds.has(id));
+            customGrid.innerHTML = pureCustom.map(([themeId, theme]) =>
+                this._buildThemeCard(themeId, theme, true, false)
             ).join('');
         }
 
         this.updateActiveTheme();
     },
 
-    _buildThemeCard(themeId, theme, isCustom) {
+    _buildThemeCard(themeId, theme, isCustom, isOverridden = false) {
         const iconContent = theme.icon?.startsWith('data:')
             ? `<img src="${theme.icon}" class="theme-icon-img" alt="${theme.displayName}">`
             : `<div class="theme-icon icon">${theme.icon || '🎨'}</div>`;
 
-        const editActions = isCustom ? `
-            <div class="theme-card-actions">
+        let actions = '';
+        if (isCustom) {
+            actions = `<div class="theme-card-actions">
                 <button class="theme-card-btn edit" data-theme-id="${themeId}" title="Bewerken">✏️</button>
                 <button class="theme-card-btn delete" data-theme-id="${themeId}" data-theme-name="${theme.displayName}" title="Verwijderen">🗑️</button>
-            </div>` : '';
+            </div>`;
+        } else {
+            // Ingebouwde thema's krijgen altijd een edit-knop; reset als er een override is
+            actions = `<div class="theme-card-actions">
+                <button class="theme-card-btn edit" data-theme-id="${themeId}" title="Bewerken">✏️</button>
+                ${isOverridden ? `<button class="theme-card-btn reset" data-theme-id="${themeId}" data-theme-name="${theme.displayName}" title="Terugzetten naar origineel">↩️</button>` : ''}
+            </div>`;
+        }
+
+        const modifiedBadge = isOverridden ? '<span class="theme-modified-badge">✎</span>' : '';
 
         return `<div class="theme-card scannable${isCustom ? ' custom-theme-card' : ''}" data-theme="${themeId}">
             ${iconContent}
-            <div class="theme-name">${theme.displayName || themeId}</div>
-            ${editActions}
+            <div class="theme-name">${theme.displayName || themeId}${modifiedBadge}</div>
+            ${actions}
         </div>`;
     },
 

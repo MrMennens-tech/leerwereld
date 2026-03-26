@@ -258,9 +258,14 @@ export const ThemeEditor = {
     open(themeId = null) {
         this.editingId = themeId;
         if (themeId) {
-            const theme = CustomThemeStore.get(themeId);
+            // Laad via Utils.themes zodat ook ingebouwde én overridden thema's werken
+            // Utils wordt geïmporteerd als circulaire dep — gebruik window.Utils of pass via callback
+            // Oplossing: CustomThemeStore.getAllThemes() geeft alles (ingebouwd + custom)
+            const theme = CustomThemeStore.getAllThemes()[themeId];
             if (theme) this._loadTheme(theme);
-            document.getElementById('theme-editor-title').textContent = 'Thema Bewerken';
+            const isBuiltin = !theme?.isCustom;
+            document.getElementById('theme-editor-title').textContent =
+                isBuiltin ? 'Ingebouwd thema aanpassen' : 'Thema Bewerken';
         } else {
             this._resetEditor();
             document.getElementById('theme-editor-title').textContent = 'Nieuw Thema';
